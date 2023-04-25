@@ -1,0 +1,12 @@
+channels:
+  - conda-forge
+dependencies:
+  - attrs
+  - ipykernel
+  - ipython
+  - pytest
+  - pytest-cov
+  - pytest-xdist
+  - python>=3.8
+  - setuptools-scm
+name: module-utilities-env

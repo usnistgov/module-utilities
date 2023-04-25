@@ -1,6 +1,6 @@
 # Changelog
 
-Changelog for `module_utilities`
+Changelog for `module-utilities`
 
 ## Unreleased
 

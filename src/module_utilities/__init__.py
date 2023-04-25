@@ -1,18 +1,10 @@
 """
-.. currentmodule: module_utilities
-
-Top level stuff
-===============
-
-.. autosummary::
-   :toctree: generated/
-
-   a_function - a test function
-   another_func - another test fuction
+Top level API :mod:`module_utilities`
+=====================================
 """
 
-from .core import another_func
-from .module_utilities import a_function
+
+from . import cached
 
 # updated versioning scheme
 try:
@@ -34,6 +26,6 @@ __email__ = "wpk@nist.gov"
 
 
 __all__ = [
-    "a_function",
-    "another_func",
+    "cached",
+    "__version__",
 ]

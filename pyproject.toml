@@ -3,7 +3,7 @@ requires = ["setuptools>=61.2", "setuptools_scm[toml]>=7.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "module_utilities"
+name = "module-utilities"
 authors = [{ name = "William P. Krekelberg", email = "wpk@nist.gov" }]
 license = { text = "NIST license" }
 description = "Collection of utilities to aid working with python modules."
@@ -24,7 +24,8 @@ classifiers = [
 ]
 dynamic = ["readme", "version"]
 requires-python = ">=3.8"
-dependencies = [] # additional packages
+dependencies = []
+
 
 [project.urls]
 homepage = "https://github.com/wpk-nist-gov/module-utilities"
@@ -32,6 +33,7 @@ documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
 test = ["pytest"]
+attrs = ["attrs"]
 
 # dev = []
 # docs = []

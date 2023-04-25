@@ -194,7 +194,7 @@ TOX=CONDA_EXE=mamba SETUPTOOLS_SCM_PRETEND_VERSION=$(version) tox $(tox_posargs)
 
 .PHONY: tox-ipykernel-display-name
 tox-ipykernel-display-name: ## Update display-name for any tox env with ipykernel
-	bash ./scripts/tox-ipykernel-display-name.sh module_utilities
+	bash ./scripts/tox-ipykernel-display-name.sh module-utilities
 
 ## dev env
 .PHONY: dev-env

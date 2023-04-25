@@ -155,7 +155,7 @@ local development.
     make mamba-dev
     ```
 
-    This will create a conda environment 'module_utilities-env' in the default location.
+    This will create a conda environment 'module-utilities-env' in the default location.
 
     To install (an editable version) of the current package:
 

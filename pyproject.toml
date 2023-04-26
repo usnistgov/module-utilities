@@ -26,7 +26,6 @@ dynamic = ["readme", "version"]
 requires-python = ">=3.8"
 dependencies = []
 
-
 [project.urls]
 homepage = "https://github.com/wpk-nist-gov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
@@ -105,7 +104,6 @@ select = [
     # "ISC",
     # # type-checking imports
     "TCH",
-
 ]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 # fixable = ["A", "B", "C", "D", "E", "F", "..."]
@@ -237,3 +235,7 @@ module = []
 [[tool.mypy.overrides]]
 ignore_errors = true
 module = []
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", ".tox/**", "**/.mypy_cache"]

@@ -101,17 +101,6 @@ def prop(*funcs, key=None, check_use_cache=False):
     meth : decorator for cache creation of function
     """
 
-    # if len(funcs) == 1 and callable(funcs[0]):
-    #     func = funcs[0]
-    # else:
-    #     func = None
-
-    # if callable(key):
-    #     func = key
-    #     key = None
-    # else:
-    #     func = None
-
     def cached_lookup(func):
         if key is None:
             key_inner = func.__name__

@@ -96,7 +96,7 @@ def test_doc_from_docstring(template, params, expected):
 def test_DocFiller(template, params, expected):
     d = docfiller.DocFiller()
 
-    @d.dec(template, **params)
+    @d(template, **params)
     def func():
         pass
 
@@ -106,7 +106,7 @@ def test_DocFiller(template, params, expected):
     # NOTE: can't do above in python 3.8
     dd = d.update(**params)
 
-    @dd.dec(template)
+    @dd(template)
     def func():
         pass
 
@@ -115,7 +115,7 @@ def test_DocFiller(template, params, expected):
     # @d.update(params).dec(template)
     dd = d.update(params)
 
-    @dd.dec(template)
+    @dd(template)
     def func():
         pass
 
@@ -123,7 +123,7 @@ def test_DocFiller(template, params, expected):
 
     d = docfiller.DocFiller.from_dict(params)
 
-    @d.dec(template)
+    @d(template)
     def func():
         pass
 
@@ -177,7 +177,27 @@ def test_DocFiller_docstring():
 
         assert docstring == function.__doc__
 
-    @d
+        # @dec
+        # def function():
+        #     """
+        #     {summary}
+
+        #     {extended_summary}
+
+        #     Parameters
+        #     ----------
+        #     {a}
+        #     {b}
+        #     {c}
+
+        #     Returns
+        #     -------
+        #     {returns[:]}
+        #     """
+
+        # assert docstring == function.__doc__
+
+    @d.dec
     def function():
         """
         {summary}
@@ -209,7 +229,7 @@ def test_DocFiller_docstring():
         """,
     ).dedent()
 
-    @dd
+    @dd()
     def function():
         """
         {summary}
@@ -255,7 +275,7 @@ def test_DocFiller_docstring():
 
     dd = d.append(d2)
 
-    @dd.dec(function)
+    @dd(function)
     def func2():
         pass
 
@@ -318,7 +338,7 @@ def test_DocFiller_namespace():
 
     for dd in [dd0, dd1]:
 
-        @dd
+        @dd.dec
         def func():
             """
             Parameters
@@ -348,7 +368,7 @@ def test_DocFiller_namespace():
 
     dd = dd0.append(dd1)
 
-    @dd
+    @dd()
     def func():
         """
         Parameters

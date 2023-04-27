@@ -606,13 +606,7 @@ class DocFiller:
         data.update(*args, **kwargs)
         return type(self)(params=data)
 
-        # self.data.update(*args, **kwargs)
-        # return self
-
-    # this is always a bit confusing.
-    # I'd rather update the templates explicitly
-
-    def dec(self, *templates, **params) -> Callable[[F], F]:
+    def __call__(self, *templates, **params) -> Callable[[F], F]:
         """
         General decorator.
 
@@ -630,17 +624,67 @@ class DocFiller:
             params = self.params
         return docfiller(*templates, **params)
 
-    def __call__(self, _target=None, **params) -> Callable[[F], F]:
-        """
-        Simplified decorator.
+    def dec(self, _target=None, **params) -> Callable[[F], F]:
+        """Special case of no templates."""
 
-        Does not handle templates.
-        """
-
-        dec = self.dec(**params)
+        dec = self(**params)
         if _target is not None:
             dec = dec(_target)
         return dec
+
+    # NOTE: This is dangerous.
+    # if you pass a function as a template, but forget to explicitly pass it,
+    # you overwrite the docstring for that function.  Just really confusing
+    # def dec(self, *funcs, docstrings=None, **params) -> Callable[[F], F]:
+    #     """
+    #     General decorator.
+
+    #     Parameters
+    #     ----------
+    #     *funcs : callable
+
+    #     This should always be used in a callable manner.
+
+    #     If want to call without any parameter use decorate()
+    #     """
+
+    #     nfuncs = len(funcs)
+
+    #     if nfuncs == 0:
+    #         func = None
+    #     elif nfuncs == 1 and callable(funcs[0]):
+    #         func = funcs[0]
+    #     else:
+    #         func = None
+    #         raise ValueError("Must call with zero or one functions.  If trying to set docstrings, be explicit")
+
+    #     if docstrings is None:
+    #         docstrings = ()
+    #     elif callable(docstrings) or isinstance(docstrings, str):
+    #         docstrings = (docstrings,)
+
+    #     ndocstrings, nparams = (len(x) for x in (docstrings, params))
+
+    #     if ndocstrings == nparams == 0:
+    #         dec = self.default_decorator
+    #     else:
+    #         if nparams > 0:
+    #             params = AttributeDict.from_dict({**self.data, **params}, max_level=1)
+    #         else:
+    #             params = self.params
+    #         dec = docfiller(*docstrings, **params)
+
+    #     if func:
+    #         dec = dec(func)
+    #     return dec
+
+    # def __call__(self, *funcs, docstrings=None, **params) -> Callable[[F], F]:
+    #     """
+    #     Simplified decorator.
+
+    #     Does not handle templates.
+    #     """
+    #     return self.dec(*funcs, docstrings=docstrings, **params)
 
     @classmethod
     def from_dict(

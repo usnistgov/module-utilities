@@ -170,7 +170,7 @@ def test_meth():
     do_meth_test(test(1, 2))
 
     class test(Baseclass):
-        @cached.meth("there")
+        @cached.meth(key="there")
         def meth(self, x, y):
             "a doc string"
             return self.get_xy(x, y)
@@ -211,8 +211,12 @@ def test_clear():
         def aprop(self):
             return self._aprop
 
+        @cached.prop
+        def test_prop(self):
+            return [2.0]
+
         @aprop.setter
-        @cached.clear("prop")
+        @cached.clear("prop", "test_prop")
         def aprop(self, val):
             self._aprop = val
 
@@ -269,8 +273,11 @@ def test_clear():
     assert key_prop in x._cache
     assert key_meth in x._cache
 
+    x.test_prop
+    assert "test_prop" in x._cache
     x.aprop = 2
     assert key_prop not in x._cache
+    assert "test_prop" not in x._cache
     assert key_meth in x._cache
 
     x.prop

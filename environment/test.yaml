@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+dependencies:
+  - attrs
+  - pytest
+  - python>=3.8
+name: module-utilities-env

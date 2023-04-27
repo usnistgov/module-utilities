@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Topic :: Scientific/Engineering",
 ]
 dynamic = ["readme", "version"]
@@ -63,8 +64,8 @@ fallback_version = "999"
 test = "pytest"
 
 [tool.pytest.ini_options]
-addopts = "--verbose"
-testpaths = ["tests"]
+addopts = "--verbose --doctest-modules --ignore-glob=**/docfiller.py"
+testpaths = ["tests", "src"]
 
 [tool.isort]
 profile = "black"

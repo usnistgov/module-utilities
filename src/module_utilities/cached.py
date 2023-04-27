@@ -5,6 +5,7 @@ from inspect import signature
 
 __all__ = ["decorate", "prop", "meth", "clear"]
 
+
 def decorate(key=None, as_property=True, check_use_cache=False):
     """General purpose cached decorator."""
     if as_property:
@@ -15,30 +16,77 @@ def decorate(key=None, as_property=True, check_use_cache=False):
 
 def prop(key=None, check_use_cache=False):
     """
-    Decorator to cache a property within a class
+    Decorator to cache a property within a class.
 
-    Notes
-    -----
-    Usage::
+    Parameters
+    ----------
+    key : string, optional
+        Optional key for storage in `_cache`.
+        Default to attribute/method ``__name__``.
+    check_use_cache : bool, default=False
+        If `True`, then only apply caching if
+        ``self._use_cache = True``.
+        Note that the default value of `self._use_cache` is `False`.
+        If `False`, then always apply caching.
 
-        class A(object):
-           def__init__(self):
-               # this isn't strictly needed as it will be created on demand
-               self._cache = dict()
 
-           @property
-           @cached('keyname')
-           def size(self):
-               # This code gets ran only if the lookup of keyname fails
-               # After this code has been ran once, the result is stored in
-               # _cache with the key: 'keyname'
-               size = 10.0
+    Examples
+    --------
+    >>> class A:
+    ...    def __init__(self):
+    ...        # this isn't strictly needed as it will be created on demand
+    ...        self._cache = dict()
+    ...
+    ...    @cached.prop('keyname')
+    ...    def size(self):
+    ...        '''
+    ...        This code gets ran only if the lookup of keyname fails
+    ...        After this code has been ran once, the result is stored in
+    ...        _cache with the key: 'keyname'
+    ...        '''
+    ...        print('set size')
+    ...        return [10]
+    ...
+    ...    #no arguments implies give cache function name
+    ...    @cached.prop
+    ...    def myprop(self):
+    ...        print('set myprop')
+    ...        return [1.0]
+    ...
+    ...    @cached.prop(check_use_cache=True)
+    ...    def checker(self):
+    ...        print('set checker')
+    ...        return [2.0]
 
-            #no arguments implies give cache function name
-            @property
-            @cached()
-            def myprop(self):
-                #results in _cache['myprop']
+    >>> x = A()
+    >>> x.size
+    set size
+    [10]
+    >>> x._cache['keyname'] is x.size
+    True
+
+    >>> x.size
+    [10]
+
+    >>> x.myprop
+    set myprop
+    [1.0]
+    >>> x._cache['myprop'] is x.myprop
+    True
+    >>> x.myprop
+    [1.0]
+
+    If you pass ``check_use_cache=True`` and
+    either `_use_cache=False` or the instance doens't have
+    That property, then caching will NOT be done.
+
+    >>> x.checker
+    set checker
+    [2.0]
+    >>> x.checker
+    set checker
+    [2.0]
+
 
     See Also
     --------
@@ -51,7 +99,6 @@ def prop(key=None, check_use_cache=False):
         key = None
     else:
         func = None
-
 
     def cached_lookup(func):
         if key is None:
@@ -139,7 +186,11 @@ def meth(key=None, check_use_cache=False):
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 params = bind(self, *args, **kwargs)
                 params.apply_defaults()
-                key_func = (key_inner, params.args[1:], frozenset(params.kwargs.items()))
+                key_func = (
+                    key_inner,
+                    params.args[1:],
+                    frozenset(params.kwargs.items()),
+                )
                 try:
                     return self._cache[key_func]
                 except TypeError:

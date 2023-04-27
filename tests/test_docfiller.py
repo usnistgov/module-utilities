@@ -102,13 +102,20 @@ def test_DocFiller(template, params, expected):
 
     assert func.__doc__ == expected
 
-    @d.update(**params).dec(template)
+    # @d.update(**params).dec(template)
+    # NOTE: can't do above in python 3.8
+    dd = d.update(**params)
+
+    @dd.dec(template)
     def func():
         pass
 
     assert func.__doc__ == expected
 
-    @d.update(params).dec(template)
+    # @d.update(params).dec(template)
+    dd = d.update(params)
+
+    @dd.dec(template)
     def func():
         pass
 
@@ -191,18 +198,18 @@ def test_DocFiller_docstring():
     assert docstring == function.__doc__
 
     # update
-    @(
-        d.update(
-            hello="""
+    dd = d.update(
+        hello="""
         hello : int
             Hello param
         """,
-            there="""
+        there="""
         there : float
             There param
         """,
-        ).dedent()
-    )
+    ).dedent()
+
+    @dd
     def function():
         """
         {summary}
@@ -246,7 +253,9 @@ def test_DocFiller_docstring():
         keep_keys=False,
     )
 
-    @d.append(d2).dec(function)
+    dd = d.append(d2)
+
+    @dd.dec(function)
     def func2():
         pass
 

@@ -1,0 +1,19 @@
+channels:
+  - conda-forge
+dependencies:
+  - attrs
+  - ipython
+  - pip
+  - python>=3.8
+  - setuptools-scm
+  - pip:
+      - autodocsumm
+      - ghp-import
+      - myst-nb
+      - pyenchant
+      - sphinx
+      - sphinx-autobuild
+      - sphinx-book-theme
+      - sphinx-copybutton
+      - sphinxcontrib-spelling
+name: module-utilities-env

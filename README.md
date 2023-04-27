@@ -21,28 +21,34 @@
 [docs-link]: https://pages.nist.gov/module-utilities/
 [repo-badge]: https://img.shields.io/badge/--181717?logo=github&logoColor=ffffff
 [repo-link]: https://github.com/wpk-nist-gov/module-utilities
-[conda-badge]:https://img.shields.io/conda/v/wpk-nist/module-utilities
+[conda-badge]: https://img.shields.io/conda/v/wpk-nist/module-utilities
 [conda-link]: https://anaconda.org/wpk-nist/module-utilities
 [license-badge]: https://img.shields.io/pypi/l/cmomy?color=informational
-[license-link]: https://github.com/wpk-nist-gov/module-utilities/blob/main/LICENSE
+[license-link]:
+  https://github.com/wpk-nist-gov/module-utilities/blob/main/LICENSE
 
 <!-- other links -->
 
-[numpy]: https://numpy.org
-[Numba]: https://numba.pydata.org/
-[xarray]: https://docs.xarray.dev/en/stable/
+[cachetools]: https://github.com/tkem/cachetools/
 
 # `module-utilities`
 
-A Python package for stuff.
+A Python package for creating python modules.
 
 ## Overview
 
-Quick overview...
+I was using the same code snippets over and over, so decided to put them in one
+place.
 
 ## Features
 
-Some features...
+- `cached`: A module to cache class attributes and methods. Right now, this uses
+  a standard python dictionary for storage. Future versions will hopefully
+  integrate with something like [cachetools].
+
+- `docfiller`: A module to share documentation. This is addapted from the
+  [pandas `doc` decorator](https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py).
+  There are some convenience functions and classes for sharing documentation.
 
 ## Status
 
@@ -74,8 +80,7 @@ import module_utilities
 
 ## Documentation
 
-See the [documentation][docs-link] for a look at
-`module-utilities` in action.
+See the [documentation][docs-link] for a look at `module-utilities` in action.
 
 ## License
 

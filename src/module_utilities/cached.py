@@ -5,53 +5,101 @@ from inspect import signature
 
 __all__ = ["decorate", "prop", "meth", "clear"]
 
-def decorate(key=None, as_property=True, check_use_cache=False):
+
+def decorate(*funcs, key=None, as_property=True, check_use_cache=False):
     """General purpose cached decorator."""
     if as_property:
-        return prop(key=key, check_use_cache=check_use_cache)
+        return prop(*funcs, key=key, check_use_cache=check_use_cache)
     else:
-        return meth(key=key, check_use_cache=check_use_cache)
+        return meth(*funcs, key=key, check_use_cache=check_use_cache)
 
 
-def prop(key=None, check_use_cache=False):
+def prop(*funcs, key=None, check_use_cache=False):
     """
-    Decorator to cache a property within a class
+    Decorator to cache a property within a class.
+
+    Parameters
+    ----------
+    *funcs : callable
+        This parameter is used in the case that you decorate without ().
+        That is, you can decorate with ``@prop`` or ``@prop()``.
+    key : string, optional
+        Optional key for storage in `_cache`.
+        Default to attribute/method ``__name__``.
+    check_use_cache : bool, default=False
+        If `True`, then only apply caching if
+        ``self._use_cache = True``.
+        Note that the default value of `self._use_cache` is `False`.
+        If `False`, then always apply caching.
 
     Notes
     -----
-    Usage::
+    To set `key` or `check_use_cache`, must pass with keyword.
 
-        class A(object):
-           def__init__(self):
-               # this isn't strictly needed as it will be created on demand
-               self._cache = dict()
 
-           @property
-           @cached('keyname')
-           def size(self):
-               # This code gets ran only if the lookup of keyname fails
-               # After this code has been ran once, the result is stored in
-               # _cache with the key: 'keyname'
-               size = 10.0
+    Examples
+    --------
+    >>> class A:
+    ...    def __init__(self):
+    ...        # this isn't strictly needed as it will be created on demand
+    ...        self._cache = dict()
+    ...
+    ...    @cached.prop(key='keyname')
+    ...    def size(self):
+    ...        '''
+    ...        This code gets ran only if the lookup of keyname fails
+    ...        After this code has been ran once, the result is stored in
+    ...        _cache with the key: 'keyname'
+    ...        '''
+    ...        print('set size')
+    ...        return [10]
+    ...
+    ...    #no arguments implies give cache function name
+    ...    @cached.prop
+    ...    def myprop(self):
+    ...        print('set myprop')
+    ...        return [1.0]
+    ...
+    ...    @cached.prop(check_use_cache=True)
+    ...    def checker(self):
+    ...        print('set checker')
+    ...        return [2.0]
 
-            #no arguments implies give cache function name
-            @property
-            @cached()
-            def myprop(self):
-                #results in _cache['myprop']
+    >>> x = A()
+    >>> x.size
+    set size
+    [10]
+    >>> x._cache['keyname'] is x.size
+    True
+
+    >>> x.size
+    [10]
+
+    >>> x.myprop
+    set myprop
+    [1.0]
+    >>> x._cache['myprop'] is x.myprop
+    True
+    >>> x.myprop
+    [1.0]
+
+    If you pass ``check_use_cache=True`` and
+    either `_use_cache=False` or the instance doens't have
+    That property, then caching will NOT be done.
+
+    >>> x.checker
+    set checker
+    [2.0]
+    >>> x.checker
+    set checker
+    [2.0]
+
 
     See Also
     --------
     clear : corresponding decorator to clear cache
     meth : decorator for cache creation of function
     """
-
-    if callable(key):
-        func = key
-        key = None
-    else:
-        func = None
-
 
     def cached_lookup(func):
         if key is None:
@@ -77,53 +125,57 @@ def prop(key=None, check_use_cache=False):
 
         return wrapper
 
-    if func:
-        return cached_lookup(func)
-    else:
+    if len(funcs) == 0:
         return cached_lookup
+    elif len(funcs) == 1 and callable(funcs[0]):
+        return cached_lookup(funcs[0])
+    else:
+        raise ValueError(
+            "Must call either single callable func or no func. If setting `key`, pass `key=value`."
+        )
 
 
-def meth(key=None, check_use_cache=False):
+def meth(*funcs, key=None, check_use_cache=False):
     """
     Decorator to cache a function within a class
 
     Requires the Class to have a cache dict called ``_cache``.
 
-    Notes
-    -----
-    Usage::
+    Examples
+    --------
+    >>> class A(object):
+    ...    @cached.meth(key='key')
+    ...    def method(self, x, y=2):
+    ...        # This code gets ran only if the lookup of keyname fails
+    ...        # After this code has been ran once, the result is stored in
+    ...        # _cache with the key: 'keyname'
+    ...        # a long calculation....
+    ...        print('calling method')
+    ...        return [x, y]
+    ...
+    ...
 
-        class A(object):
-           def __init__(self):
-              pass
+    >>> x = A()
+    >>> x.method(1, 2)
+    calling method
+    [1, 2]
 
-           @meth('keyname')
-           def amethod(self, *args):
-               # This code gets ran only if the lookup of keyname fails
-               # After this code has been ran once, the result is stored in
-               # _cache with the key: 'keyname'
-               # a long calculation...
-               return long_calc(self,val)
-               # if already executed result in _cache[('keyname',) + args]
+    This will respect default params
+    >>> x.method(1)
+    [1, 2]
 
-            #no arguments implies give cache function name
-            @property
-            @cached()
-            def myprop(self):
-                #results in _cache['myprop']
+    And keyword arguments
+    >>> x.method(y=2, x=1)
+    [1, 2]
 
+    >>> print(x._cache)
+    {('key', (1, 2), frozenset()): [1, 2]}
 
     See Also
     --------
     clear : corresponding decorator to remove cache
     prop : decorator for properties
     """
-
-    if callable(key):
-        func = key
-        key = None
-    else:
-        func = None
 
     def cached_lookup(func):
         if key is None:
@@ -139,7 +191,11 @@ def meth(key=None, check_use_cache=False):
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 params = bind(self, *args, **kwargs)
                 params.apply_defaults()
-                key_func = (key_inner, params.args[1:], frozenset(params.kwargs.items()))
+                key_func = (
+                    key_inner,
+                    params.args[1:],
+                    frozenset(params.kwargs.items()),
+                )
                 try:
                     return self._cache[key_func]
                 except TypeError:
@@ -158,10 +214,14 @@ def meth(key=None, check_use_cache=False):
 
         return wrapper
 
-    if func:
-        return cached_lookup(func)
-    else:
+    if len(funcs) == 0:
         return cached_lookup
+    elif len(funcs) == 1 and callable(funcs[0]):
+        return cached_lookup(funcs[0])
+    else:
+        raise ValueError(
+            "Must call either single callable func or no func. If setting `key`, pass `key=value`."
+        )
 
 
 def clear(*keys):
@@ -170,28 +230,49 @@ def clear(*keys):
 
     Parameters
     ----------
-    *keys : arguments
-        remove these keys from cache.  if len(keys)==0, remove all keys.
+    *keys :
+        Remove these keys from cache.  if len(keys)==0, remove all keys.
 
 
     Examples
     --------
-    Usage::
+    >>> class Example:
+    ...    @cached.prop
+    ...    def a(self):
+    ...        print('calling a')
+    ...        return 'a'
+    ...
+    ...    @cached.prop
+    ...    def b(self):
+    ...        print('calling b')
+    ...        return 'b'
+    ...
+    ...    @cached.clear
+    ...    def method_that_clears_all(self):
+    ...        pass
+    ...
+    ...    @cached.clear('a')
+    ...    def method_that_clears_a(self):
+    ...        pass
 
-        class tmp(object)
-            ...
-
-            @property
-            @cached()
-            def a(self):
-                ...
-
-            @x.setter
-            @clear('a','b')
-            def x(self,val):
-                #....
-                #deletes self._cache['a'],self,_cache['b']
-                #if args are empty, remove all
+    >>> x = Example()
+    >>> x.a, x.b
+    calling a
+    calling b
+    ('a', 'b')
+    >>> x.a, x.b
+    ('a', 'b')
+    >>> x.method_that_clears_all()
+    >>> x.a, x.b
+    calling a
+    calling b
+    ('a', 'b')
+    >>> x.a, x.b
+    ('a', 'b')
+    >>> x.method_that_clears_a()
+    >>> x.a, x.b
+    calling a
+    ('a', 'b')
 
 
     See Also

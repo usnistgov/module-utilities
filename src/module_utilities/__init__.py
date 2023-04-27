@@ -4,7 +4,7 @@ Top level API :mod:`module_utilities`
 """
 
 
-from . import cached
+from . import cached, docfiller
 
 # updated versioning scheme
 try:
@@ -27,5 +27,6 @@ __email__ = "wpk@nist.gov"
 
 __all__ = [
     "cached",
+    "docfiller",
     "__version__",
 ]

@@ -613,6 +613,13 @@ class DocFiller:
         This should always be used in a callable manner.
 
         If want to call without any parameter use decorate()
+
+        Parameters
+        ----------
+        *templates : callable
+            docstrings to be used as templates.
+        **params
+            Extra parameters to be substituted.
         """
         ntemplates, nparams = len(templates), len(params)
 

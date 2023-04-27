@@ -65,7 +65,8 @@ test = "pytest"
 
 [tool.pytest.ini_options]
 addopts = "--verbose --doctest-modules --ignore-glob=**/docfiller.py"
-testpaths = ["tests", "src"]
+# testpaths = ["tests"]#, "src/module_utilities"]
+testpaths = ["src/module_utilities", "tests"]
 
 [tool.isort]
 profile = "black"

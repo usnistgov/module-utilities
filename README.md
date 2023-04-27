@@ -78,9 +78,11 @@ import module_utilities
 
 <!-- end-docs -->
 
-## Documentation
+<!-- ## Documentation -->
 
+<!--
 See the [documentation][docs-link] for a look at `module-utilities` in action.
+-->
 
 ## License
 

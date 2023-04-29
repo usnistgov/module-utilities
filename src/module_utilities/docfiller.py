@@ -411,7 +411,7 @@ class DocFiller:
 
     @cached.prop
     def params(self) -> AttributeDict:
-        """AttributeDict view of parameters."""
+        """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
     @cached.prop

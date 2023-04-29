@@ -1,6 +1,6 @@
 from __future__ import annotations
-import pytest
 
+import pytest
 
 from module_utilities import cached
 

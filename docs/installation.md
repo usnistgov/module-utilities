@@ -14,13 +14,12 @@ or
 conda install -c wpk-nist module_utilities
 ```
 
-This is the preferred method to install module-utilities, as it
-will always install the most recent stable release.
+This is the preferred method to install module-utilities, as it will always
+install the most recent stable release.
 
 ## From sources
 
-The sources for module-utilities can be downloaded from the
-[Github repo].
+The sources for module-utilities can be downloaded from the [Github repo].
 
 You can either clone the public repository:
 
@@ -42,6 +41,7 @@ conda activate {name}
 pip install [-e] --no-deps .
 ```
 
-where options in brackets are options (for environment name, and editable install, repectively).
+where options in brackets are options (for environment name, and editable
+install, repectively).
 
 [github repo]: https://github.com/wpk-nist-gov/module-utilities

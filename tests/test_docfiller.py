@@ -50,7 +50,7 @@ def expected():
 
 @pytest.fixture
 def template(params):
-    @docfiller.doc(**params)
+    @docfiller.doc_decorate(**params)
     def func(*args, **kwargs):
         """
         {summary}
@@ -78,7 +78,7 @@ def test_doc(template, expected):
 
 
 def test_doc_from_template(template, params, expected):
-    @docfiller.doc(template, **params)
+    @docfiller.doc_decorate(template, **params)
     def func():
         pass
 
@@ -86,7 +86,7 @@ def test_doc_from_template(template, params, expected):
 
 
 def test_doc_from_docstring(template, params, expected):
-    @docfiller.doc(template.__doc__, **params)
+    @docfiller.doc_decorate(template.__doc__, **params)
     def func():
         pass
 
@@ -155,49 +155,7 @@ def test_DocFiller_docstring():
 
     docstring = dedent(docstring)
 
-    for dec in [d, d.dec]:
-
-        @dec()
-        def function():
-            """
-            {summary}
-
-            {extended_summary}
-
-            Parameters
-            ----------
-            {a}
-            {b}
-            {c}
-
-            Returns
-            -------
-            {returns[:]}
-            """
-
-        assert docstring == function.__doc__
-
-        # @dec
-        # def function():
-        #     """
-        #     {summary}
-
-        #     {extended_summary}
-
-        #     Parameters
-        #     ----------
-        #     {a}
-        #     {b}
-        #     {c}
-
-        #     Returns
-        #     -------
-        #     {returns[:]}
-        #     """
-
-        # assert docstring == function.__doc__
-
-    @d.dec
+    @d()
     def function():
         """
         {summary}
@@ -217,6 +175,25 @@ def test_DocFiller_docstring():
 
     assert docstring == function.__doc__
 
+    @d.decorate
+    def function():
+        """
+        {summary}
+
+        {extended_summary}
+
+        Parameters
+        ----------
+        {a}
+        {b}
+        {c}
+
+        Returns
+        -------
+        {returns[:]}
+        """
+
+    assert docstring == function.__doc__
     # update
     dd = d.update(
         hello="""
@@ -229,7 +206,7 @@ def test_DocFiller_docstring():
         """,
     ).dedent()
 
-    @dd()
+    @dd.decorate
     def function():
         """
         {summary}
@@ -338,7 +315,7 @@ def test_DocFiller_namespace():
 
     for dd in [dd0, dd1]:
 
-        @dd.dec
+        @dd.decorate
         def func():
             """
             Parameters
@@ -368,7 +345,7 @@ def test_DocFiller_namespace():
 
     dd = dd0.append(dd1)
 
-    @dd()
+    @dd.decorate
     def func():
         """
         Parameters

@@ -1,18 +1,23 @@
 """
-Fill and share documentation (:mod:`module_utilities.docfiller`)
+Fill and share documentation (:mod:`module_utilities.doc_decorate`)
 ================================================================
 """
-# type: ignore
 from __future__ import annotations
 
 import inspect
 import os
-from collections.abc import Mapping
 from textwrap import dedent
-from typing import Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Callable
 
 from . import cached
-from .external.docscrape import NumpyDocString, Parameter
+from ._doc import doc as _pd_doc
+from ._docscrape import NumpyDocString, Parameter  # type: ignore
+from .attributedict import AttributeDict
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
+
+    from ._typing import F
 
 try:
     # Default is DOC_SUB is True
@@ -25,21 +30,8 @@ except KeyError:
     DOC_SUB = True
 
 
-# Taken directly from pandas.utils._decorators.doc
-# See https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py
-# would just use the pandas version, but since it's a private
-# module, feel it's better to have static version here.
-
-
-# to maintain type information across generic functions and parametrization
-T = TypeVar("T")
-# used in decorators to preserve the signature of the function it decorates
-# see https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
-FuncType = Callable[..., Any]
-F = TypeVar("F", bound=FuncType)
-
-
-def doc(*docstrings: str | Callable, **params) -> Callable[[F], F]:
+# Factory method to create doc_decorate
+def doc_decorate(*docstrings: str | Callable, **params) -> Callable[[F], F]:
     """
     A decorator take docstring templates, concatenate them and perform string
     substitution on it.
@@ -57,53 +49,15 @@ def doc(*docstrings: str | Callable, **params) -> Callable[[F], F]:
         after default docstring under callable.
     **params
         The string which would be used to format docstring template.
-    """
 
-    def decorator(decorated: F) -> F:
-        # collecting docstring and docstring templates
-        docstring_components: list[str | Callable] = []
-        if decorated.__doc__:
-            docstring_components.append(dedent(decorated.__doc__))
-
-        for docstring in docstrings:
-            if hasattr(docstring, "_docstring_components"):
-                # error: Item "str" of "Union[str, Callable[..., Any]]" has no attribute
-                # "_docstring_components"
-                # error: Item "function" of "Union[str, Callable[..., Any]]" has no
-                # attribute "_docstring_components"
-                docstring_components.extend(docstring._docstring_components)
-            elif isinstance(docstring, str) or docstring.__doc__:
-                docstring_components.append(docstring)
-
-        # formatting templates and concatenating docstring
-        decorated.__doc__ = "".join(
-            [
-                # change to format_map to avoid converting to a dict.
-                # component.format(**params)
-                component.format_map(params)
-                if isinstance(component, str)
-                else dedent(component.__doc__ or "")
-                for component in docstring_components
-            ]
-        )
-
-        # error: "F" has no attribute "_docstring_components"
-        decorated._docstring_components = docstring_components
-        return decorated
-
-    return decorator
-
-
-# Factory method to create docfiller
-def docfiller(*templates, **params):
-    """
-    To fill common docs.
-
-    Taken from pandas.utils._decorators
+    Notes
+    -----
+    Doc filling can be turned off by setting the environment variable
+    ``DOCFILLER_SUB`` to one of ``0, f, false``.
     """
 
     if DOC_SUB:
-        return doc(*templates, **params)
+        return _pd_doc(*docstrings, **params)
     else:
 
         def decorated(func):
@@ -112,186 +66,7 @@ def docfiller(*templates, **params):
         return decorated
 
 
-def _get_nested_values(d, join_string="\n"):
-    out = []
-    for k in d:
-        v = d[k]
-        if isinstance(v, str):
-            out.append(v)
-        else:
-            out.extend(_get_nested_values(v, join_string=None))
-
-    if join_string is not None:
-        out = join_string.join(out)
-
-    return out
-
-
-class AttributeDict(Mapping):
-    """
-    Dictionary with recursive attribute like access.
-
-    To be used in str.format calls, so can expand on fields like
-    `{name.property}` in a nested manner.
-
-    Parameters
-    ----------
-    entries : dict
-    recursive : bool, default=True
-        If True, recursively return ``AttributeDict`` for nested dicts.
-
-    Example
-    -------
-    >>> d = AttributeDict({"a": 1, "b": {"c": 2}})
-    >>> d.a
-    1
-    >>> d.b
-    AttributeDict({'c': 2})
-    >>> d.b.c
-    2
-    """
-
-    __slots__ = ("_entries", "_recursive", "_allow_missing")
-
-    def __init__(self, entries=None, recursive=True, allow_missing=True):
-        if entries is None:
-            entries = {}
-        self._entries = entries
-        self._recursive = recursive
-        self._allow_missing = allow_missing
-
-    def __getitem__(self, key):
-        if isinstance(key, slice):
-            return _get_nested_values(self._getslice(key), join_string="\n")
-
-        if key == ":":
-            return _get_nested_values(self._entries, join_string="\n")
-
-        elif "," in key:
-            return "\n".join(self[x] for x in (x.strip() for x in key.split(",")))
-
-        if self._allow_missing and key not in self._entries:
-            return f"{{{key}}}"
-        else:
-            return self._entries[key]
-
-    def _getslice(self, s):
-        start = s.start
-        stop = s.stop
-
-        keys = list(self._entries.keys())
-
-        if isinstance(s.start, int) or s.start is None and isinstance(s.stop, int):
-            slc = s
-
-        else:
-            if s.start is None:
-                start = 0
-            else:
-                start = keys.index(s.start)
-
-            if s.stop is None:
-                stop = len(self) + 1
-            else:
-                stop = keys.index(s.stop) + 1
-
-            slc = slice(start, stop, s.step)
-
-        subset = {k: self._entries[k] for k in keys[slc]}
-        return subset
-
-    def __setitem__(self, key, value):
-        self._entries[key] = value
-
-    def __iter__(self):
-        return iter(self._entries)
-
-    def __len__(self):
-        return len(self._entries)
-
-    def _items(self):
-        yield from self._entries.items()
-
-    def __dir__(self):
-        return list(self.keys()) + super().__dir__()
-
-    def _update(self, *args, **kwargs):
-        self._entries.update(*args, **kwargs)
-
-    def __getattr__(self, attr):
-        if attr in self._entries:
-            out = self._entries[attr]
-            if self._recursive and isinstance(out, dict):
-                out = type(self)(out)
-            return out
-        else:
-            try:
-                return self.__getattribute__(attr)
-            except AttributeError as err:
-                # If Python is run with -OO, it will strip docstrings and our lookup
-                # from self._entries will fail. We check for __debug__, which is actually
-                # set to False by -O (it is True for normal execution).
-                # But we only want to see an error when building the docs;
-                # not something users should see, so this slight inconsistency is fine.
-                if __debug__:
-                    raise err
-                else:
-                    pass
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({repr(self._entries)})"
-
-    @classmethod
-    def _from_dict(cls, params, max_level=1, level=0, recursive=True):
-        # to hide level parameter
-        out = cls(recursive=recursive)
-        for k in params:
-            v = params[k]
-            if isinstance(v, dict) and level < max_level:
-                v = cls._from_dict(
-                    v, max_level=max_level, level=level + 1, recursive=recursive
-                )
-            out[k] = v
-        return out
-
-    @classmethod
-    def from_dict(cls, params, max_level=1, recursive=True):
-        """
-        Create AttributeDict recursively for nested dictionaries.
-
-        To be used in cases where need to apply AttibuteDict to parameters
-        passed with ``func(**params)``.
-
-
-        Parameters
-        ----------
-        params : mapping
-            Mapping to apply cls to.
-        max_level : int, default=1
-            How deep to apply cls to.
-        recursive : bool, default=True
-            ``recursive`` parameter of resulting object.
-
-        Returns
-        -------
-        AttributeDict
-
-        Examples
-        --------
-        >>> d = {"a": "p0", "b": {"c": {"d": "d0"}}}
-        >>> AttributeDict.from_dict(d, max_level=1)
-        AttributeDict({'a': 'p0', 'b': AttributeDict({'c': {'d': 'd0'}})})
-
-        >>> AttributeDict.from_dict(d, max_level=2)
-        AttributeDict({'a': 'p0', 'b': AttributeDict({'c': AttributeDict({'d': 'd0'})})})
-
-        """
-        return cls._from_dict(
-            params=params, max_level=max_level, level=0, recursive=recursive
-        )
-
-
-def _build_param_docstring(name, ptype, desc):
+def _build_param_docstring(name: str, ptype: str, desc: str | Sequence[str]) -> str:
     """
     Create multiline documentation of single name, type, desc.
 
@@ -336,19 +111,18 @@ def _build_param_docstring(name, ptype, desc):
     return s
 
 
-def _params_to_string(params, key_char="|"):
+def _params_to_string(params, key_char: str = "|") -> str | dict[str, Any]:
     """
     Parse list of Parameters objects to string
 
     Examples
     --------
-    >>> from module_utilities.docscrape import Parameter
+    >>> from module_utilities.docfiller import Parameter
     >>> p = Parameter(name="a", type="int", desc=["A parameter"])
-    >>> out = _parse_params_to_string(p)
+    >>> out = _params_to_string(p)
     >>> print(out["a"])
     a : int
         A parameter
-
     """
 
     if len(params) == 0:
@@ -376,7 +150,9 @@ def _params_to_string(params, key_char="|"):
     return out
 
 
-def parse_docstring(func_or_doc, key_char="|", expand=True):
+def _parse_docstring(
+    func_or_doc: Callable | str, key_char: str = "|", expand: bool = True
+):
     """
     Parse numpy style docstring from function or string to dictionary.
 
@@ -416,7 +192,7 @@ def parse_docstring(func_or_doc, key_char="|", expand=True):
     ...     an output
     ... '''
 
-    >>> p = parse_docstring(doc_string)
+    >>> p = _parse_docstring(doc_string)
     >>> print(p["parameters"]["x"])
     x : int
         x parameter
@@ -458,9 +234,37 @@ def parse_docstring(func_or_doc, key_char="|", expand=True):
     return parsed
 
 
-def dedent_recursive(data):
-    """Dedent nested mapping of strings."""
-    out = type(data)()
+def dedent_recursive(data: Mapping[str, Any]) -> dict[str, Any]:
+    """
+    Dedent nested mapping of strings.
+
+    Parameters
+    ----------
+    data : dict
+
+    Returns
+    -------
+    output : object
+        Same type of ``data``, with dedented values
+
+    Examples
+    --------
+    >>> data = {
+    ...     'a': {'value' : '''
+    ...      a : int
+    ...          A thing
+    ...      '''}}
+    >>> print(data['a']['value'])
+    <BLANKLINE>
+         a : int
+             A thing
+    <BLANKLINE>
+    >>> data = dedent_recursive(data)
+    >>> print(data['a']['value'])
+    a : int
+        A thing
+    """
+    out = {}
     for k in data:
         v = data[k]
         if isinstance(v, str):
@@ -471,7 +275,7 @@ def dedent_recursive(data):
     return out
 
 
-def _recursive_keys(data):
+def _recursive_keys(data) -> list[str]:
     keys = []
     for k, v in data.items():
         if isinstance(v, dict):
@@ -488,6 +292,7 @@ def _recursive_keys(data):
 
 class DocFiller:
     """
+    Class to handle doc filling.
 
     Parameters
     ----------
@@ -497,38 +302,45 @@ class DocFiller:
         Optional string to split name into key/name pair.
     """
 
-    def __init__(self, params=None):
+    def __init__(self, params: Mapping[str, Any] | None = None) -> None:
         if params is None:
-            params = {}
-        self.data = params
+            self.data = {}
+        elif isinstance(params, dict):
+            self.data = params
+        else:
+            self.data = dict(params)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.data)})"
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         val = self.data[key]
         if isinstance(val, dict):
             return type(self)(val)
         else:
             return val
 
-    def dedent(self):
+    def dedent(self) -> DocFiller:
+        """Recursively dedent params"""
         return type(self)(dedent_recursive(self.data))
 
     @cached.meth
-    def keys(self):
+    def keys(self) -> list[str]:
+        """List of keys"""
         return _recursive_keys(self.data)
 
-    def assign_combined_key(self, new_key, keys):
+    def assign_combined_key(self, new_key: str, keys: Sequence[str]):
         """Combine multiple keys into single key"""
-
         data = self.data.copy()
-
         data[new_key] = "\n".join([self.data[k] for k in keys])
         return type(self)(data)
 
     @classmethod
-    def concat(cls, *args, **kwargs):
+    def concat(
+        cls,
+        *args: Mapping[str, Any] | DocFiller,
+        **kwargs: Mapping[str, Any] | DocFiller,
+    ) -> DocFiller:
         """
         Create new object from multiple DocFiller or dict objects.
 
@@ -550,7 +362,7 @@ class DocFiller:
 
         # create
 
-        data = {}
+        data: dict[str, Any] = {}
 
         def _update_data(x):
             if isinstance(x, DocFiller):
@@ -568,16 +380,19 @@ class DocFiller:
         _update_data(kwargs)
         return cls(data)
 
-    def append(self, *args, **kwargs):
+    def append(
+        self,
+        *args: Mapping[str, Any] | DocFiller,
+        **kwargs: Mapping[str, Any] | DocFiller,
+    ) -> DocFiller:
         """Calls ``concat`` method with ``self`` as first argument."""
-
         return type(self).concat(self, *args, **kwargs)
 
-    def insert_level(self, name):
+    def insert_level(self, name: str) -> DocFiller:
         """Insert a level/namespace."""
         return type(self)({name: self.data})
 
-    def levels_to_top(self, *names):
+    def levels_to_top(self, *names: str) -> DocFiller:
         """Make a level top level accessible"""
 
         params = dict(self.data)
@@ -586,7 +401,8 @@ class DocFiller:
                 params[k] = v
         return type(self)(params)
 
-    def rename_levels(self, **kws):
+    def rename_levels(self, **kws: str) -> DocFiller:
+        """Rename a keys at top level."""
         params = {}
         for k, v in self.data.items():
             key = kws.get(k, k)
@@ -594,19 +410,31 @@ class DocFiller:
         return type(self)(params)
 
     @cached.prop
-    def params(self):
+    def params(self) -> AttributeDict:
+        """AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
     @cached.prop
-    def default_decorator(self) -> Callable[[F], F]:
-        return docfiller(**self.params)
+    def _default_decorator(self) -> Callable[[F], F]:
+        return doc_decorate(**self.params)
 
-    def update(self, *args, **kwargs):
+    def update(
+        self, *args: Mapping[str, Any], **kwargs: Mapping[str, Any]
+    ) -> DocFiller:
+        """Update parameters"""
         data = self.data.copy()
         data.update(*args, **kwargs)
         return type(self)(params=data)
 
-    def __call__(self, *templates, **params) -> Callable[[F], F]:
+    def decorate(self, func: F) -> F:
+        """
+        Default decorator.
+
+        This uses `self.params` and the decorated funciton docstring as a template.
+        """
+        return self._default_decorator(func)  # type: ignore
+
+    def __call__(self, *templates: Callable | str, **params) -> Callable[[F], F]:
         """
         General decorator.
 
@@ -624,20 +452,17 @@ class DocFiller:
         ntemplates, nparams = len(templates), len(params)
 
         if ntemplates == nparams == 0:
-            return self.default_decorator
-        if nparams > 0:
-            params = AttributeDict.from_dict({**self.data, **params}, max_level=1)
+            return self.decorate
+        elif nparams == 0:
+            return doc_decorate(*templates, **self.params)
         else:
-            params = self.params
-        return docfiller(*templates, **params)
+            return self.update(params)(*templates)
 
-    def dec(self, _target=None, **params) -> Callable[[F], F]:
-        """Special case of no templates."""
-
-        dec = self(**params)
-        if _target is not None:
-            dec = dec(_target)
-        return dec
+        # if nparams > 0:
+        #     params = AttributeDict.from_dict({**self.data, **params}, max_level=1)
+        # else:
+        #     params = self.params
+        # return doc_decorate(*templates, **params)
 
     # NOTE: This is dangerous.
     # if you pass a function as a template, but forget to explicitly pass it,
@@ -662,8 +487,7 @@ class DocFiller:
     #     elif nfuncs == 1 and callable(funcs[0]):
     #         func = funcs[0]
     #     else:
-    #         func = None
-    #         raise ValueError("Must call with zero or one functions.  If trying to set docstrings, be explicit")
+    #         func = None    #         raise ValueError("Must call with zero or one functions.  If trying to set docstrings, be explicit")
 
     #     if docstrings is None:
     #         docstrings = ()
@@ -679,7 +503,7 @@ class DocFiller:
     #             params = AttributeDict.from_dict({**self.data, **params}, max_level=1)
     #         else:
     #             params = self.params
-    #         dec = docfiller(*docstrings, **params)
+    #         dec = doc_decorate(*docstrings, **params)
 
     #     if func:
     #         dec = dec(func)
@@ -696,18 +520,18 @@ class DocFiller:
     @classmethod
     def from_dict(
         cls,
-        params,
-        namespace=None,
-        combine_keys=None,
-        keep_keys=True,
-        key_map=None,
-    ):
+        params: Mapping[str, Any],
+        namespace: str | None = None,
+        combine_keys: str | Sequence[str] | None = None,
+        keep_keys: bool | str | Sequence[str] = True,
+        key_map: Mapping[str, str] | Callable | None = None,
+    ) -> DocFiller:
         """
         Create a Docfiller instance from a dictionary.
 
         Parameters
         ----------
-        params : mapkping
+        params : mapping
         namespace : str, optional
             Top level namespace for DocFiller.
         combine_keys : str, sequence of str, mapping, optional.
@@ -728,7 +552,7 @@ class DocFiller:
         if not keep_keys:
             keep_keys = []
         elif keep_keys is True:
-            keep_keys = params.keys()
+            keep_keys = [k for k in params]
         elif isinstance(keep_keys, str):
             keep_keys = [keep_keys]
 
@@ -752,11 +576,13 @@ class DocFiller:
         else:
             updated_params = {k: params[k] for k in keep_keys}
 
-        if key_map:
-            if not callable(key_map):
-                key_map = lambda x: key_map[x]
+        if key_map is not None:
+            if callable(key_map):
+                mapper = key_map
+            else:
+                mapper = lambda x: key_map[x]  # type: ignore
 
-            updated_params = {key_map(k): updated_params[k] for k in updated_params}
+            updated_params = {mapper(k): updated_params[k] for k in updated_params}
 
         if namespace:
             updated_params = {namespace: updated_params}
@@ -766,21 +592,43 @@ class DocFiller:
     @classmethod
     def from_docstring(
         cls,
-        func_or_doc,
-        namespace=None,
-        combine_keys=None,
-        key_char="|",
-        keep_keys=True,
-        key_map=None,
-    ):
+        func_or_doc: Callable | str,
+        namespace: str | None = None,
+        combine_keys: str | Sequence[str] | None = None,
+        key_char: str = "|",
+        keep_keys: bool = True,
+        key_map: Mapping | Callable | None = None,
+    ) -> DocFiller:
         """
         Create a Docfiller instance from a function or docstring.
 
         Parameters
         ----------
-        func_or_doc
+        func_or_doc : str or callable
+            Docstring to parse to get parameters.
+        namespace : str, optional
+            Top level namespace for DocFiller.
+        combine_keys : str, sequence of str, mapping, optional.
+            If str or sequence of str, Keys of ``params`` to at the top level.
+            If mapping, should be of form {namespace: key(s)}
+        key_char : str, default="|"
+            Character to split names.  By default, for parameters, the key will be parsed from
+            The docstring. If you want to override this, you can use
+            `key | name : ....` in the definition (where `'|'` is the value of `key_char`).
+        keep_keys : str, sequence of str, bool
+            If False, then don't keep any keys at top level.  This is useful with the
+            ``combine_keys`` parameter.
+            If True, keep all keys, regardless of combine_keys.
+            If str or sequence of str, keep these keys in output.
+        key_map : mapping or callable
+            Function or mapping to new keys in resulting dict.
+
+        Returns
+        -------
+        DocFiller
+
         """
-        params = parse_docstring(
+        params = _parse_docstring(
             func_or_doc=func_or_doc, key_char=key_char, expand=True
         )
         return cls.from_dict(

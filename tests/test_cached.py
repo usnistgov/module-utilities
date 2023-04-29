@@ -74,32 +74,47 @@ def do_prop_test(x, key=None, docstring="a doc string", check_empty=True):
 
 
 def test_prop():
-    for dec in [cached.decorate, cached.prop]:
+    class test(Baseclass):
+        @cached.prop
+        def prop(self):
+            "a doc string"
+            return self.get_value()
 
-        class test(Baseclass):
-            @dec
-            def prop(self):
-                "a doc string"
-                return self.get_value()
+    do_prop_test(test(1, 2))
 
-        do_prop_test(test(1, 2))
+    class test(Baseclass):
+        @cached.prop()
+        def prop(self):
+            "a doc string"
+            self._hello = 1
+            return self.get_value()
 
-        class test(Baseclass):
-            @dec()
-            def prop(self):
-                "a doc string"
-                self._hello = 1
-                return self.get_value()
+    do_prop_test(test(1, 2))
 
-        do_prop_test(test(1, 2))
+    class test(Baseclass):
+        @cached.prop(key="there")
+        def prop(self):
+            "a doc string"
+            return self.get_value()
 
-        class test(Baseclass):
-            @dec(key="there")
-            def prop(self):
-                "a doc string"
-                return self.get_value()
+    do_prop_test(test(1, 2), key="there")
 
-        do_prop_test(test(1, 2), key="there")
+    class test(Baseclass):
+        @cached.decorate()
+        def prop(self):
+            "a doc string"
+            self._hello = 1
+            return self.get_value()
+
+    do_prop_test(test(1, 2))
+
+    class test(Baseclass):
+        @cached.decorate(key="there")
+        def prop(self):
+            "a doc string"
+            return self.get_value()
+
+    do_prop_test(test(1, 2), key="there")
 
 
 def do_meth_test(x, key=None, docstring="a doc string", check_empty=True):
@@ -311,7 +326,7 @@ def test_use_cache():
         def prop2(self):
             return [1, 2]
 
-        @cached.decorate
+        @cached.decorate()
         def prop3(self):
             return [1, 2]
 
@@ -340,7 +355,7 @@ def test_use_cache():
         def prop2(self):
             return [1, 2]
 
-        @cached.decorate
+        @cached.decorate()
         def prop3(self):
             return [1, 2]
 
@@ -364,7 +379,7 @@ def test_use_cache():
         def prop2(self):
             return [1, 2]
 
-        @cached.decorate
+        @cached.decorate()
         def prop3(self):
             return [1, 2]
 
@@ -410,3 +425,18 @@ def test_error_with_slots():
 
     x = test(1, 2)
     do_prop_test(x)
+
+
+def test_typing():
+    class Example:
+        @cached.prop
+        def aprop(self) -> list[float]:
+            return [1.0, 2.0]
+
+        @cached.meth
+        def ameth(self, a: float = 1.0, b: float = 2.0) -> list[float]:
+            return [a, b]
+
+    x = Example()
+    assert x.aprop == [1.0, 2.0]
+    assert x.ameth(2.0, 3.0) == [2.0, 3.0]

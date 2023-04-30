@@ -18,7 +18,7 @@ class Baseclass:
         return self.get_value() + (x, y)
 
 
-def prop_test(obj, prop, value, key=None, docstring=None) -> None:
+def prop_test(obj, prop, value, key=None, docstring=None):
     """test a single property"""
     if key is None:
         key = prop
@@ -33,7 +33,7 @@ def prop_test(obj, prop, value, key=None, docstring=None) -> None:
         assert getattr(type(obj), prop).__doc__ == docstring
 
 
-def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None) -> None:
+def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None):
     """test a single property"""
 
     if args is None:
@@ -75,7 +75,7 @@ def do_prop_test(x, key=None, docstring="a doc string", check_empty=True) -> Non
     prop_test(x, prop="prop", value=(2, 4), key=key, docstring=docstring)
 
 
-def test_prop() -> None:
+def test_prop():
     class test(Baseclass):
         @cached.prop
         def prop(self):
@@ -85,7 +85,7 @@ def test_prop() -> None:
     do_prop_test(test(1, 2))
 
 
-def test_prop2() -> None:
+def test_prop2():
     class test(Baseclass):
         @cached.prop()
         def prop(self):
@@ -106,7 +106,7 @@ def test_prop3() -> None:
     do_prop_test(test(1, 2), key="there")
 
 
-def test_prop4() -> None:
+def test_prop4():
     class test(Baseclass):
         @cached.decorate()
         def prop(self):
@@ -117,7 +117,7 @@ def test_prop4() -> None:
     do_prop_test(test(1, 2))
 
 
-def test_prop5() -> None:
+def test_prop5():
     class test(Baseclass):
         @cached.decorate(key="there")
         def prop(self):
@@ -458,37 +458,3 @@ def test_error_with_slots2():
 
     x = test(1, 2)
     do_prop_test(x)
-
-
-# testing mypy stuff
-# def test_typing() -> None:
-#     class Example:
-#         @cached.prop
-#         def aprop(self) -> list[int]:
-#             return [1, 2]
-
-#         @cached.meth
-#         def ameth(self, a: int = 1, b: int = 2) -> list[int]:
-#             return [a, b]
-
-#         @cached.prop
-#         def aprop_wrong(self) -> list[int]:
-#             return [1.]
-
-#         @property
-#         def another(self) -> list[int]:
-#             return [1.]
-
-#     x = Example()
-#     assert x.aprop == [1, 2]
-#     assert x.ameth(2, 3) == [2, 3]
-#     assert x.aprop_wrong == [1.]
-#     assert x.ameth(1., 2.) == [1., 2.]
-#     assert x.another == [1.]
-
-#     if TYPE_CHECKING:
-#         reveal_type(x.aprop)
-#         reveal_type(x.aprop_wrong)
-#         reveal_type(x.ameth(1, 2))
-#         reveal_type(x.ameth(1., 2.))
-#         reveal_type(x.another)

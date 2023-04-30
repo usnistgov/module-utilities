@@ -1,4 +1,8 @@
+from __future__ import annotations
 from textwrap import dedent
+
+# from typing import TYPE_CHECKING
+# from typing_extensions import reveal_type
 
 import pytest
 
@@ -252,11 +256,11 @@ def test_DocFiller_docstring():
 
     dd = d.append(d2)
 
-    @dd(function)
-    def func2():
+    @dd(function3)
+    def function4():
         pass
 
-    assert func2.__doc__ == expected
+    assert function4.__doc__ == expected
 
 
 def test_DocFiller_namespace() -> None:
@@ -346,7 +350,7 @@ def test_DocFiller_namespace() -> None:
     dd = dd0.append(dd1)
 
     @dd.decorate
-    def func2() -> None:
+    def func2(a: int, b: int) -> tuple[int, int]:
         """
         Parameters
         ----------
@@ -358,6 +362,8 @@ def test_DocFiller_namespace() -> None:
         {b.r.out}
         """
 
-        pass
+        return a, b
 
-    assert func.__doc__ == expected
+    assert func2.__doc__ == expected
+
+    assert func2(1, 1) == (1, 1)

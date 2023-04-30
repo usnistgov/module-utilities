@@ -3,32 +3,34 @@ from __future__ import annotations
 
 from functools import wraps
 from inspect import signature
-from typing import Callable, Literal, TypeVar, cast, overload
+from typing import Any, Callable, TypeVar, cast, overload
+
+from typing_extensions import ParamSpec
 
 __all__ = ["decorate", "prop", "meth", "clear"]
 
-from ._typing import F
+# from ._typing import F
 
+P = ParamSpec("P")
 R = TypeVar("R")
 
 
-@overload
-def decorate(
-    *, key=..., as_property: Literal[True] = ..., check_use_cache=...
-) -> Callable[[Callable[..., R]], R]:
-    ...
+# @overload
+# def decorate(
+#     *, key=..., as_property: Literal[True] = ..., check_use_cache=...
+# ) -> Callable[[Callable[[Any], R]], R]:
+#     ...
 
-
-@overload
-def decorate(
-    *, key=..., as_property: Literal[False] = ..., check_use_cache=...
-) -> Callable[[F], F]:
-    ...
+# @overload
+# def decorate(
+#     *, key=..., as_property: Literal[False] = ..., check_use_cache=...
+# ) -> Callable[[Callable[P, R]], Callable[P, R]]:
+#     ...
 
 
 def decorate(
     *, key: str | None = None, as_property: bool = True, check_use_cache: bool = False
-):
+):  # -> Callable[[Callable[[Any], R]], R] | Callable[[Callable[P, R]], Callable[P, R]]:
     """
     General purpose cached decorator.
 
@@ -41,23 +43,23 @@ def decorate(
 
 
 @overload
-def prop(func: Callable[..., R]) -> R:
+def prop(func: Callable[[Any], R]) -> R:
     ...
 
 
 @overload
 def prop(
     *, key: str | None = None, check_use_cache: bool = False
-) -> Callable[[Callable[..., R]], R]:
+) -> Callable[[Callable[[Any], R]], R]:
     ...
 
 
 def prop(
-    func: Callable[..., R] | None = None,
+    func: Callable[[Any], R] | None = None,
     *,
     key: str | None = None,
     check_use_cache: bool = False,
-) -> R | Callable[[Callable[..., R]], R]:
+) -> R | Callable[[Callable[[Any], R]], R]:
     """
     Decorator to cache a property within a class.
 
@@ -144,17 +146,17 @@ def prop(
     meth : decorator for cache creation of function
     """
 
-    def cached_lookup(_func: Callable[..., R]) -> R:
+    def cached_lookup(_func: Callable[[Any], R]) -> R:
         if key is None:
             key_inner = _func.__name__
         else:
             key_inner = key
 
         @wraps(_func)
-        def wrapper(self):
+        def wrapper(self) -> R:
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 try:
-                    return self._cache[key_inner]
+                    return cast(R, self._cache[key_inner])
                 except AttributeError:
                     self._cache = dict()
                 except KeyError:
@@ -174,18 +176,23 @@ def prop(
 
 
 @overload
-def meth(func: F) -> F:
+def meth(func: Callable[P, R]) -> Callable[P, R]:
     ...
 
 
 @overload
-def meth(*, key: str | None = None, check_use_cache: bool = False) -> Callable[[F], F]:
+def meth(
+    *, key: str | None = None, check_use_cache: bool = False
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
     ...
 
 
 def meth(
-    func: F | None = None, *, key: str | None = None, check_use_cache: bool = False
-) -> F | Callable[[F], F]:
+    func: Callable[P, R] | None = None,
+    *,
+    key: str | None = None,
+    check_use_cache: bool = False,
+) -> Callable[P, R] | Callable[[Callable[P, R]], Callable[P, R]]:
     """
     Decorator to cache a function within a class
 
@@ -227,7 +234,7 @@ def meth(
     prop : decorator for properties
     """
 
-    def cached_lookup(_func: F) -> F:
+    def cached_lookup(_func: Callable[P, R]) -> Callable[P, R]:
         if key is None:
             key_inner = _func.__name__
         else:
@@ -237,9 +244,10 @@ def meth(
         bind = signature(_func).bind
 
         @wraps(_func)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            self = args[0]
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
-                params = bind(self, *args, **kwargs)
+                params = bind(*args, **kwargs)
                 params.apply_defaults()
                 key_func = (
                     key_inner,
@@ -247,23 +255,22 @@ def meth(
                     frozenset(params.kwargs.items()),
                 )
                 try:
-                    return self._cache[key_func]
+                    return cast(R, self._cache[key_func])  # type: ignore
                 except TypeError:
                     # this means that key_func is bad hash
-                    return _func(self, *args, **kwargs)
+                    return _func(*args, **kwargs)
                 except AttributeError:
-                    self._cache = dict()
+                    self._cache = dict()  # type: ignore
                 except KeyError:
                     pass
 
-                self._cache[key_func] = ret = _func(self, *args, **kwargs)
+                self._cache[key_func] = ret = _func(*args, **kwargs)  # type: ignore
                 return ret
 
             else:
-                return _func(self, *args, **kwargs)
+                return _func(*args, **kwargs)
 
-        return cast(F, wrapper)
-        # return wrapper
+        return wrapper
 
     if func:
         return cached_lookup(func)
@@ -272,16 +279,18 @@ def meth(
 
 
 @overload
-def clear(key_or_func: F) -> F:
+def clear(key_or_func: Callable[P, R]) -> Callable[P, R]:
     ...
 
 
 @overload
-def clear(key_or_func: str, *keys: str) -> Callable[[F], F]:
+def clear(key_or_func: str, *keys: str) -> Callable[[Callable[P, R]], Callable[P, R]]:
     ...
 
 
-def clear(key_or_func: str | F, *keys: str | F) -> F | Callable[[F], F]:
+def clear(
+    key_or_func: str | Callable[P, R], *keys: str
+) -> Callable[P, R] | Callable[[Callable[P, R]], Callable[P, R]]:
     """
     Decorator to clear self._cache of specified properties
 
@@ -339,17 +348,18 @@ def clear(key_or_func: str | F, *keys: str | F) -> F | Callable[[F], F]:
     """
 
     if callable(key_or_func):
-        function = cast(F, key_or_func)
+        function = key_or_func
         keys_inner = keys
     else:
         function = None
         keys_inner = (key_or_func,) + keys
 
-    def decorator(func: F) -> F:
+    def decorator(func: Callable[P, R]) -> Callable[P, R]:
         @wraps(func)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             # self._clear_caches(*keys_inner)
             # clear out keys_inner
+            self = args[0]
             if hasattr(self, "_cache"):
                 if len(keys_inner) == 0:
                     self._cache = dict()
@@ -368,9 +378,9 @@ def clear(key_or_func: str | F, *keys: str | F) -> F | Callable[[F], F]:
                     ]
                     for k in keys_tuples:
                         del self._cache[k]
-            return func(self, *args, **kwargs)
+            return func(*args, **kwargs)
 
-        return cast(F, wrapper)
+        return wrapper
 
     if function:
         return decorator(function)

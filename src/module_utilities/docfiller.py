@@ -347,7 +347,8 @@ class DocFiller:
         Parameters
         ----------
         *args : dict or Docfiller objects
-        **kwargs : named dict or Docfiller objects
+        **kwargs : dict or Docfiller objects
+            The passed name will be used as the top level.
 
         Returns
         -------
@@ -397,8 +398,12 @@ class DocFiller:
 
         params = dict(self.data)
         for name in names:
-            for k, v in self.data[name].items():
-                params[k] = v
+            d = self.data[name]
+            if isinstance(d, str):
+                raise ValueError(f"level {name} is not a dict")
+            else:
+                for k, v in self.data[name].items():
+                    params[k] = v
         return type(self)(params)
 
     def rename_levels(self, **kws: str) -> DocFiller:

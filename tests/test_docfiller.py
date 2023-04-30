@@ -107,27 +107,27 @@ def test_DocFiller(template, params, expected):
     dd = d.update(**params)
 
     @dd(template)
-    def func():
+    def func2():
         pass
 
-    assert func.__doc__ == expected
+    assert func2.__doc__ == expected
 
     # @d.update(params).dec(template)
     dd = d.update(params)
 
     @dd(template)
-    def func():
+    def func3():
         pass
 
-    assert func.__doc__ == expected
+    assert func3.__doc__ == expected
 
     d = docfiller.DocFiller.from_dict(params)
 
     @d(template)
-    def func():
+    def func4():
         pass
 
-    assert func.__doc__ == expected
+    assert func4.__doc__ == expected
 
 
 def test_DocFiller_docstring():
@@ -176,7 +176,7 @@ def test_DocFiller_docstring():
     assert docstring == function.__doc__
 
     @d.decorate
-    def function():
+    def function2():
         """
         {summary}
 
@@ -193,7 +193,7 @@ def test_DocFiller_docstring():
         {returns[:]}
         """
 
-    assert docstring == function.__doc__
+    assert docstring == function2.__doc__
     # update
     dd = d.update(
         hello="""
@@ -207,7 +207,7 @@ def test_DocFiller_docstring():
     ).dedent()
 
     @dd.decorate
-    def function():
+    def function3():
         """
         {summary}
 
@@ -235,7 +235,7 @@ def test_DocFiller_docstring():
         There param
     """
     )
-    assert function.__doc__ == expected
+    assert function3.__doc__ == expected
 
     d2 = docfiller.DocFiller.from_docstring(
         """
@@ -259,7 +259,7 @@ def test_DocFiller_docstring():
     assert func2.__doc__ == expected
 
 
-def test_DocFiller_namespace():
+def test_DocFiller_namespace() -> None:
     s0 = """
     Parameters
     ----------
@@ -346,7 +346,7 @@ def test_DocFiller_namespace():
     dd = dd0.append(dd1)
 
     @dd.decorate
-    def func():
+    def func2() -> None:
         """
         Parameters
         ----------

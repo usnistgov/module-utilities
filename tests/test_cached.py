@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any
 
 import pytest
 
@@ -6,18 +7,18 @@ from module_utilities import cached
 
 
 class Baseclass:
-    def __init__(self, a, b):
+    def __init__(self, a, b) -> None:
         self.a = a
         self.b = b
 
-    def get_value(self):
+    def get_value(self) -> tuple[Any, ...]:
         return self.a, self.b
 
-    def get_xy(self, x, y):
+    def get_xy(self, x, y) -> tuple[Any, ...]:
         return self.get_value() + (x, y)
 
 
-def prop_test(obj, prop, value, key=None, docstring=None):
+def prop_test(obj, prop, value, key=None, docstring=None) -> None:
     """test a single property"""
     if key is None:
         key = prop
@@ -32,7 +33,7 @@ def prop_test(obj, prop, value, key=None, docstring=None):
         assert getattr(type(obj), prop).__doc__ == docstring
 
 
-def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None):
+def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None) -> None:
     """test a single property"""
 
     if args is None:
@@ -53,7 +54,7 @@ def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None):
         assert getattr(type(obj), meth).__doc__ == docstring
 
 
-def do_prop_test(x, key=None, docstring="a doc string", check_empty=True):
+def do_prop_test(x, key=None, docstring="a doc string", check_empty=True) -> None:
     if key is None:
         key = "prop"
 
@@ -74,7 +75,7 @@ def do_prop_test(x, key=None, docstring="a doc string", check_empty=True):
     prop_test(x, prop="prop", value=(2, 4), key=key, docstring=docstring)
 
 
-def test_prop():
+def test_prop() -> None:
     class test(Baseclass):
         @cached.prop
         def prop(self):
@@ -83,6 +84,8 @@ def test_prop():
 
     do_prop_test(test(1, 2))
 
+
+def test_prop2() -> None:
     class test(Baseclass):
         @cached.prop()
         def prop(self):
@@ -92,6 +95,8 @@ def test_prop():
 
     do_prop_test(test(1, 2))
 
+
+def test_prop3() -> None:
     class test(Baseclass):
         @cached.prop(key="there")
         def prop(self):
@@ -100,6 +105,8 @@ def test_prop():
 
     do_prop_test(test(1, 2), key="there")
 
+
+def test_prop4() -> None:
     class test(Baseclass):
         @cached.decorate()
         def prop(self):
@@ -109,6 +116,8 @@ def test_prop():
 
     do_prop_test(test(1, 2))
 
+
+def test_prop5() -> None:
     class test(Baseclass):
         @cached.decorate(key="there")
         def prop(self):
@@ -118,11 +127,11 @@ def test_prop():
     do_prop_test(test(1, 2), key="there")
 
 
-def do_meth_test(x, key=None, docstring="a doc string", check_empty=True):
+def do_meth_test(x, key=None, docstring="a doc string", check_empty=True) -> None:
     if key is None:
         key = "meth"
 
-    key_tot = (key, (3, 4), frozenset())
+    key_tot: tuple[str, tuple[Any, ...], frozenset[Any]] = (key, (3, 4), frozenset())
 
     target = (1, 2, 3, 4)
     if check_empty:
@@ -160,7 +169,7 @@ def do_meth_test(x, key=None, docstring="a doc string", check_empty=True):
     assert tuple(x._cache.keys()) == (key_tot,)
 
 
-def test_meth():
+def test_meth() -> None:
     class test(Baseclass):
         @cached.decorate(as_property=False)
         def meth(self, x, y):
@@ -169,6 +178,8 @@ def test_meth():
 
     do_meth_test(test(1, 2))
 
+
+def test_meth2() -> None:
     class test(Baseclass):
         @cached.meth
         def meth(self, x, y):
@@ -177,6 +188,8 @@ def test_meth():
 
     do_meth_test(test(1, 2))
 
+
+def test_meth3() -> None:
     class test(Baseclass):
         @cached.meth()
         def meth(self, x, y):
@@ -185,6 +198,8 @@ def test_meth():
 
     do_meth_test(test(1, 2))
 
+
+def test_meth4() -> None:
     class test(Baseclass):
         @cached.meth(key="there")
         def meth(self, x, y):
@@ -194,11 +209,13 @@ def test_meth():
     do_meth_test(test(1, 2), key="there")
 
 
-def test_clear():
+def test_clear() -> None:
     class test(Baseclass):
         def __init__(self, a, b):
             self._a = a
             self._b = b
+
+            self._cache = {}
 
         @property
         def a(self):
@@ -227,14 +244,14 @@ def test_clear():
         def aprop(self):
             return self._aprop
 
-        @cached.prop
-        def test_prop(self):
-            return [2.0]
-
         @aprop.setter
         @cached.clear("prop", "test_prop")
         def aprop(self, val):
             self._aprop = val
+
+        @cached.prop
+        def test_prop(self):
+            return [2.0]
 
         @cached.prop
         def prop(self):
@@ -252,7 +269,7 @@ def test_clear():
 
     x = test(1, 2)
     key_prop = "prop"
-    key_meth = ("meth", (3, 4), frozenset())
+    key_meth = ("meth", (3, 4), frozenset())  # type: ignore
     docstring = "a doc string"
     prop_test(x, prop="prop", value=(1, 2), key=key_prop, docstring=docstring)
     meth_test(
@@ -299,7 +316,7 @@ def test_clear():
     x.prop
     x.meth(3, 4)
     x.meth(5, 6)
-    key_meth2 = ("meth", (5, 6), frozenset())
+    key_meth2 = ("meth", (5, 6), frozenset())  # type: ignore
 
     assert key_prop in x._cache
     assert key_meth in x._cache
@@ -311,9 +328,12 @@ def test_clear():
     assert key_prop in x._cache
 
 
-def test_use_cache():
+def test_use_cache() -> None:
     class tmp:
         _use_cache = False
+
+        def __init__(self):
+            self._cache = {}
 
         @cached.prop(check_use_cache=True)
         def prop0(self):
@@ -341,8 +361,13 @@ def test_use_cache():
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
+
+def test_use_cache2() -> None:
     class tmp:
         _use_cache = True
+
+        def __init__(self):
+            self._cache = {}
 
         @cached.prop(check_use_cache=True)
         def prop0(self):
@@ -366,8 +391,13 @@ def test_use_cache():
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
+
+def test_use_cache3() -> None:
     # if not have _use_cache parameter
     class tmp:
+        def __init__(self):
+            self._cache = {}
+
         @cached.prop(check_use_cache=True)
         def prop0(self):
             return [1, 2]
@@ -412,6 +442,8 @@ def test_error_with_slots():
     with pytest.raises(AttributeError):
         x.prop
 
+
+def test_error_with_slots2():
     class test:
         __slots__ = ["a", "b", "_cache"]
 
@@ -428,16 +460,35 @@ def test_error_with_slots():
     do_prop_test(x)
 
 
-def test_typing():
-    class Example:
-        @cached.prop
-        def aprop(self) -> list[float]:
-            return [1.0, 2.0]
+# testing mypy stuff
+# def test_typing() -> None:
+#     class Example:
+#         @cached.prop
+#         def aprop(self) -> list[int]:
+#             return [1, 2]
 
-        @cached.meth
-        def ameth(self, a: float = 1.0, b: float = 2.0) -> list[float]:
-            return [a, b]
+#         @cached.meth
+#         def ameth(self, a: int = 1, b: int = 2) -> list[int]:
+#             return [a, b]
 
-    x = Example()
-    assert x.aprop == [1.0, 2.0]
-    assert x.ameth(2.0, 3.0) == [2.0, 3.0]
+#         @cached.prop
+#         def aprop_wrong(self) -> list[int]:
+#             return [1.]
+
+#         @property
+#         def another(self) -> list[int]:
+#             return [1.]
+
+#     x = Example()
+#     assert x.aprop == [1, 2]
+#     assert x.ameth(2, 3) == [2, 3]
+#     assert x.aprop_wrong == [1.]
+#     assert x.ameth(1., 2.) == [1., 2.]
+#     assert x.another == [1.]
+
+#     if TYPE_CHECKING:
+#         reveal_type(x.aprop)
+#         reveal_type(x.aprop_wrong)
+#         reveal_type(x.ameth(1, 2))
+#         reveal_type(x.ameth(1., 2.))
+#         reveal_type(x.another)

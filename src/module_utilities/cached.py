@@ -263,6 +263,7 @@ def meth(
                 return _func(self, *args, **kwargs)
 
         return cast(F, wrapper)
+        # return wrapper
 
     if func:
         return cached_lookup(func)
@@ -270,7 +271,17 @@ def meth(
         return cached_lookup
 
 
-def clear(*keys: str | Callable) -> Callable[[F], F]:
+@overload
+def clear(key_or_func: F) -> F:
+    ...
+
+
+@overload
+def clear(key_or_func: str, *keys: str) -> Callable[[F], F]:
+    ...
+
+
+def clear(key_or_func: str | F, *keys: str | F) -> F | Callable[[F], F]:
     """
     Decorator to clear self._cache of specified properties
 
@@ -327,22 +338,23 @@ def clear(*keys: str | Callable) -> Callable[[F], F]:
     meth : decorator for cache creation of function
     """
 
-    if len(keys) == 1 and callable(keys[0]):
-        function = keys[0]
-        keys = ()
+    if callable(key_or_func):
+        function = cast(F, key_or_func)
+        keys_inner = keys
     else:
         function = None
+        keys_inner = (key_or_func,) + keys
 
     def decorator(func: F) -> F:
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            # self._clear_caches(*keys)
-            # clear out keys
+            # self._clear_caches(*keys_inner)
+            # clear out keys_inner
             if hasattr(self, "_cache"):
-                if len(keys) == 0:
+                if len(keys_inner) == 0:
                     self._cache = dict()
                 else:
-                    for name in keys:
+                    for name in keys_inner:
                         try:
                             del self._cache[name]
                         except KeyError:
@@ -350,10 +362,12 @@ def clear(*keys: str | Callable) -> Callable[[F], F]:
 
                     # functions
                     keys_tuples = [
-                        k for k in self._cache if isinstance(k, tuple) and k[0] in keys
+                        k
+                        for k in self._cache
+                        if isinstance(k, tuple) and k[0] in keys_inner
                     ]
-                    for name in keys_tuples:
-                        del self._cache[name]
+                    for k in keys_tuples:
+                        del self._cache[k]
             return func(self, *args, **kwargs)
 
         return cast(F, wrapper)

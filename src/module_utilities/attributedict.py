@@ -120,7 +120,7 @@ class AttributeDict(MutableMapping):
         yield from self._entries.items()
 
     def __dir__(self):
-        return list(self.keys()) + super().__dir__()
+        return list(self.keys()) + list(super().__dir__())
 
     def _update(self, *args, **kwargs):
         self._entries.update(*args, **kwargs)

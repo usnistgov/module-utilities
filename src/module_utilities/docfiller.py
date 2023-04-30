@@ -418,9 +418,7 @@ class DocFiller:
     def _default_decorator(self) -> Callable[[F], F]:
         return doc_decorate(**self.params)
 
-    def update(
-        self, *args: Mapping[str, Any], **kwargs: Mapping[str, Any]
-    ) -> DocFiller:
+    def update(self, *args, **kwargs) -> DocFiller:
         """Update parameters"""
         data = self.data.copy()
         data.update(*args, **kwargs)

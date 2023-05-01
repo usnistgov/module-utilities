@@ -1,17 +1,20 @@
-package_name?=module-utilities
+project_name?=module-utilities
 
-.PHONY: help clean recipe build command
+.PHONY: help clean-recipe clean-build recipe build command
 
 help:
 	@echo Makefile for building conda dist
-clean:
-	find . -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} +
+clean-recipe:
+	rm -rf $(project_name)
 
-recipe:
-	grayskull pypi $(package_name)     && \
-	cat $(package_name)/meta.yaml
+clean-build:
+	rm -rf build
 
-build:
+recipe: clean-recipe
+	grayskull pypi $(project_name)     && \
+	cat $(project_name)/meta.yaml
+
+build: clean-build
 	conda mambabuild --output-folder=build --no-anaconda-upload .
 
 command:

@@ -267,8 +267,3 @@ reportUnboundVariable = false
 
 [tool.pytype]
 inputs = ["src", "tests"]
-# inputs = ["src/module_utilites"]
-# keep_going = true
-# jobs =
-# output = '.pytype'
-# python_version = '3.10'

@@ -142,11 +142,11 @@ version: version-scm version-import
 # Environment files
 ################################################################################
 ENVIRONMENTS = $(addsuffix .yaml,$(addprefix environment/, dev docs test))
-PRETTIER = pre-commit run prettier --files
+PRETTIER = bash ./scripts/run-prettier.sh
 
 environment/%.yaml: environment.yaml environment/%-extras.yaml ## create combined environment/{dev,docs,test}.yaml
 	conda-merge $^ > $@
-	-$(PRETTIER) $@ &> /dev/null || true
+	$(PRETTIER) $@
 
 environment/dev.yaml: ## development environment yaml file
 environment/test.yaml: ## testing environment yaml file
@@ -157,7 +157,7 @@ enviornment/docs.yaml: ## docs environment yaml file
 environment/lint.yaml: environment.yaml $(addsuffix .yaml, $(addprefix environment/, test-extras lint-extras)) ## mypy environment
 	echo $^
 	conda-merge $^ > $@
-	-$(PRETTIER) $@ &> /dev/null || true
+	$(PRETTIER) $@
 
 ENVIRONMENTS += environment/lint.yaml
 
@@ -213,48 +213,56 @@ docs-examples-symlink: ## create symlinks to notebooks from /examples/ to /docs/
 	bash ./scripts/docs-examples-symlinks.sh
 
 
-.PHONY: docs-build docs-release docs-clean docs-spelling docs-nist-pages docs-open docs-live docs-clean-build docs-linkcheck
-posargs=
+.PHONY: docs-build docs-release docs-clean docs-command
+
+posargs?=
 docs-build: ## build docs in isolation
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e docs -- build $(posargs)
 docs-clean: ## clean docs
 	rm -rf docs/_build/*
 	rm -rf docs/generated/*
 	rm -rf docs/reference/generated/*
 docs-clean-build: docs-clean docs-build ## clean and build
 docs-release: ## release docs.  use posargs=... to override stuff
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e docs -- release $(posargs)
+docs-command: ## run command with command=...
+	$(TOX) -e docs -- command $(posargs)
+
+.PHONY: .docs-spelling docs-nist-pages docs-open docs-live docs-clean-build docs-linkcheck
 docs-spelling: ## run spell check with sphinx
-	$(TOX) -e $@ -- $(posargs)
-docs-nist-pages: ## do both build and releas
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e docs -- spelling $(posargs)
 docs-live: ## use autobuild for docs
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e docs -- livehtml $(posargs)
 docs-open: ## open the build
 	$(BROWSER) docs/_build/html/index.html
 docs-linkcheck: ## check links
-	$(TOX) -e docs-build -- linkcheck
+	$(TOX) -e docs -- linkcheck $(posargs)
 
-docs-build docs-release docs-clean docs-spelling docs-nist-pages docs-live: environment/docs.yaml
+docs-build docs-release docs-command docs-clean docs-spelling docs-nist-pages docs-live: environment/docs.yaml
 
 
 ## distribution
-.PHONY: dist-pypi-build dist-pypi-testrelease dist-pypi-release dist-conda-recipe dist-conda-build
+.PHONY: dist-pypi-build dist-pypi-testrelease dist-pypi-release dist-pypi-command
 
-posargs=
+posargs?=
 dist-pypi-build: ## build dist, can pass posargs=... and tox_posargs=...
-	$(TOX) -e $@ -- $(posargs)
-dist-pypi-testrelease: ## test release on testpypi. can pass posargs=... and tox_posargs=...
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e dist-pypi -- build $(posargs)
+dist-pypi-testrelease: ## test release o
+	$(TOX) -e dist-pypi -- testrelease $(posargs)
 dist-pypi-release: ## release to pypi, can pass posargs=...
-	$(TOX) -e $@ -- $(posargs)
-dist-pypi-build dist-pypi-testrelease dist-pypi-release: environment/dist-pypi.yaml
+	$(TOX) -e dist-pypi -- release $(posargs)
+dist-pypi-command: ## run command with command=...
+	$(TOX) -e dist-pypi -- command $(posargs)
+dist-pypi-build dist-pypi-testrelease dist-pypi-release dist-pypi-command: environment/dist-pypi.yaml
 
+.PHONY: dist-conda-recipe dist-conda-build dist-conda-command
 dist-conda-recipe: ## build conda recipe can pass posargs=...
-	$(TOX) -e $@ -- $(posargs)
+	$(TOX) -e dist-conda -- recipe $(posargs)
 dist-conda-build: ## build conda recipe can pass posargs=...
-	$(TOX) -e $@ -- $(pasargs)
-dist-conda-build dist-conda-recipe: environment/dist-conda.yaml
+	$(TOX) -e dist-conda -- build $(posargs)
+dist-conda-command: ## run command with command=...
+	$(TOX) -e dist-conda -- command $(posargs)
+dist-conda-build dist-conda-recipe dist-conda-command: environment/dist-conda.yaml
 
 
 ## test distribution

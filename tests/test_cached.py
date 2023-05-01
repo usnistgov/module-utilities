@@ -63,7 +63,7 @@ def do_prop_test(x, key=None, docstring="a doc string", check_empty=True) -> Non
         assert not hasattr(x, "_cache") or len(x._cache) == 0
     prop_test(x, prop="prop", value=(1, 2), key=key, docstring=docstring)
 
-    assert tuple(x._cache.keys()) == (key,)
+    assert tuple(x._cache.keys()) == (key,)  # pytype: disable=attribute-error
 
     # change value
     x.a, x.b = 2, 4
@@ -138,35 +138,35 @@ def do_meth_test(x, key=None, docstring="a doc string", check_empty=True) -> Non
         assert not hasattr(x, "_cache") or len(x._cache) == 0
     meth_test(x, "meth", target, args=(3, 4), key=key_tot, docstring=docstring)
 
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
     # change value
     x.a = 2
     x.b = 4
 
     meth_test(x, "meth", target, args=(3, 4), key=key_tot, docstring=docstring)
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
     # remove cache:
     del x._cache
     target = (2, 4, 3, 4)
     meth_test(x, "meth", target, args=(3, 4), key=key_tot, docstring=docstring)
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
     # getting write signature
     del x._cache
     meth_test(x, "meth", target, kws=dict(x=3, y=4), key=key_tot, docstring=docstring)
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
     del x._cache
     meth_test(x, "meth", target, kws=dict(y=4, x=3), key=key_tot, docstring=docstring)
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
     del x._cache
     meth_test(
         x, "meth", target, args=(3,), kws=dict(y=4), key=key_tot, docstring=docstring
     )
-    assert tuple(x._cache.keys()) == (key_tot,)
+    assert tuple(x._cache.keys()) == (key_tot,)  # pytype: disable=attribute-error
 
 
 def test_meth() -> None:
@@ -242,7 +242,10 @@ def test_clear() -> None:
 
         @property
         def aprop(self):
-            return self._aprop
+            if hasattr(self, "_aprop"):
+                return self._aprop
+            else:
+                raise ValueError("must set aprop")
 
         @aprop.setter
         @cached.clear("prop", "test_prop")

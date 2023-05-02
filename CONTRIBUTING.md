@@ -29,13 +29,14 @@ and "help wanted" is open to whoever wants to implement it.
 
 ### Write Documentation
 
-`module-utilities` could always use more documentation, whether
-as part of the official `module-utilities` docs, in docstrings,
-or even on the web in blog posts, articles, and such.
+`module-utilities` could always use more documentation, whether as part of the
+official `module-utilities` docs, in docstrings, or even on the web in blog
+posts, articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at <https://github.com/wpk-nist-gov/module-utilities/issues>.
+The best way to send feedback is to file an issue at
+<https://github.com/wpk-nist-gov/module-utilities/issues>.
 
 If you are proposing a feature:
 
@@ -99,8 +100,8 @@ conda env update -n {env-name} environment/tools.yaml
 
 ### Getting the repo
 
-Ready to contribute? Here's how to set up `module_utilities` for
-local development.
+Ready to contribute? Here's how to set up `module_utilities` for local
+development.
 
 - Fork the `module_utilities` repo on GitHub.
 
@@ -155,7 +156,8 @@ local development.
     make mamba-dev
     ```
 
-    This will create a conda environment 'module-utilities-env' in the default location.
+    This will create a conda environment 'module-utilities-env' in the default
+    location.
 
     To install (an editable version) of the current package:
 
@@ -292,19 +294,19 @@ We use [tox] to isolate the documentation build. Useful commands are as follows.
 - Build the docs:
 
   ```bash
-  tox -e docs-build
+  tox -e docs -- build
   ```
 
 - Spellcheck the docs:
 
   ```bash
-  tox -e docs-spelling
+  tox -e docs -- spelling
   ```
 
 - Create a release of the docs:
 
   ```bash
-  tox -e docs-release
+  tox -e docs -- release
   ```
 
   If you make any changes to `docs/examples`, you should run:
@@ -318,6 +320,10 @@ We use [tox] to isolate the documentation build. Useful commands are as follows.
   After this, the docs can be pushed to the correct branch for distribution.
 
 - Live documentation updates using
+
+  ```bash
+  make docs-livehtml
+  ```
 
 ## Using tox
 
@@ -338,7 +344,7 @@ make docs-build
 To release the documentation use:
 
 ```bash
-make docs-release posargs='-m "commit message" -r origin -p'
+make docs-release release_args='-m "commit message" -r origin -p'
 ```
 
 Where posargs is are passed to ghp-import. Note that the branch created is

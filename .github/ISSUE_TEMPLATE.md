@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD041 -->
 
--   module-utilities version:
--   Python version:
--   Operating System:
+- module-utilities version:
+- Python version:
+- Operating System:
 
 ### Description
 
-Describe what you were trying to get done.
-Tell us what happened, what went wrong, and what you expected to happen.
+Describe what you were trying to get done. Tell us what happened, what went
+wrong, and what you expected to happen.
 
 ### What I Did
 

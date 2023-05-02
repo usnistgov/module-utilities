@@ -1,11 +1,11 @@
 channels:
   - conda-forge
 dependencies:
-  - attrs
   - ipython
   - pip
   - python>=3.8
   - setuptools-scm
+  - typing-extensions
   - pip:
       - autodocsumm
       - ghp-import

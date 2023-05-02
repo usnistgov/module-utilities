@@ -3,5 +3,5 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8
-  - attrs
+  - typing-extensions
   # cli

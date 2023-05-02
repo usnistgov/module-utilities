@@ -1,4 +1,8 @@
+from __future__ import annotations
 from textwrap import dedent
+
+# from typing import TYPE_CHECKING
+# from typing_extensions import reveal_type
 
 import pytest
 
@@ -50,7 +54,7 @@ def expected():
 
 @pytest.fixture
 def template(params):
-    @docfiller.doc(**params)
+    @docfiller.doc_decorate(**params)
     def func(*args, **kwargs):
         """
         {summary}
@@ -78,7 +82,7 @@ def test_doc(template, expected):
 
 
 def test_doc_from_template(template, params, expected):
-    @docfiller.doc(template, **params)
+    @docfiller.doc_decorate(template, **params)
     def func():
         pass
 
@@ -86,7 +90,7 @@ def test_doc_from_template(template, params, expected):
 
 
 def test_doc_from_docstring(template, params, expected):
-    @docfiller.doc(template.__doc__, **params)
+    @docfiller.doc_decorate(template.__doc__, **params)
     def func():
         pass
 
@@ -107,27 +111,27 @@ def test_DocFiller(template, params, expected):
     dd = d.update(**params)
 
     @dd(template)
-    def func():
+    def func2():
         pass
 
-    assert func.__doc__ == expected
+    assert func2.__doc__ == expected
 
     # @d.update(params).dec(template)
     dd = d.update(params)
 
     @dd(template)
-    def func():
+    def func3():
         pass
 
-    assert func.__doc__ == expected
+    assert func3.__doc__ == expected
 
     d = docfiller.DocFiller.from_dict(params)
 
     @d(template)
-    def func():
+    def func4():
         pass
 
-    assert func.__doc__ == expected
+    assert func4.__doc__ == expected
 
 
 def test_DocFiller_docstring():
@@ -155,49 +159,7 @@ def test_DocFiller_docstring():
 
     docstring = dedent(docstring)
 
-    for dec in [d, d.dec]:
-
-        @dec()
-        def function():
-            """
-            {summary}
-
-            {extended_summary}
-
-            Parameters
-            ----------
-            {a}
-            {b}
-            {c}
-
-            Returns
-            -------
-            {returns[:]}
-            """
-
-        assert docstring == function.__doc__
-
-        # @dec
-        # def function():
-        #     """
-        #     {summary}
-
-        #     {extended_summary}
-
-        #     Parameters
-        #     ----------
-        #     {a}
-        #     {b}
-        #     {c}
-
-        #     Returns
-        #     -------
-        #     {returns[:]}
-        #     """
-
-        # assert docstring == function.__doc__
-
-    @d.dec
+    @d()
     def function():
         """
         {summary}
@@ -217,6 +179,25 @@ def test_DocFiller_docstring():
 
     assert docstring == function.__doc__
 
+    @d.decorate
+    def function2():
+        """
+        {summary}
+
+        {extended_summary}
+
+        Parameters
+        ----------
+        {a}
+        {b}
+        {c}
+
+        Returns
+        -------
+        {returns[:]}
+        """
+
+    assert docstring == function2.__doc__
     # update
     dd = d.update(
         hello="""
@@ -229,8 +210,8 @@ def test_DocFiller_docstring():
         """,
     ).dedent()
 
-    @dd()
-    def function():
+    @dd.decorate
+    def function3():
         """
         {summary}
 
@@ -258,7 +239,7 @@ def test_DocFiller_docstring():
         There param
     """
     )
-    assert function.__doc__ == expected
+    assert function3.__doc__ == expected
 
     d2 = docfiller.DocFiller.from_docstring(
         """
@@ -275,14 +256,14 @@ def test_DocFiller_docstring():
 
     dd = d.append(d2)
 
-    @dd(function)
-    def func2():
+    @dd(function3)
+    def function4():
         pass
 
-    assert func2.__doc__ == expected
+    assert function4.__doc__ == expected
 
 
-def test_DocFiller_namespace():
+def test_DocFiller_namespace() -> None:
     s0 = """
     Parameters
     ----------
@@ -338,7 +319,7 @@ def test_DocFiller_namespace():
 
     for dd in [dd0, dd1]:
 
-        @dd.dec
+        @dd.decorate
         def func():
             """
             Parameters
@@ -368,8 +349,8 @@ def test_DocFiller_namespace():
 
     dd = dd0.append(dd1)
 
-    @dd()
-    def func():
+    @dd.decorate
+    def func2(a: int, b: int) -> tuple[int, int]:
         """
         Parameters
         ----------
@@ -381,6 +362,8 @@ def test_DocFiller_namespace():
         {b.r.out}
         """
 
-        pass
+        return a, b
 
-    assert func.__doc__ == expected
+    assert func2.__doc__ == expected
+
+    assert func2(1, 1) == (1, 1)

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>docfiller &#8212; module-utilities 0.2.0 documentation</title>
+    <title>docfiller &#8212; module-utilities 0.3.0 documentation</title>
   
   
   
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.2.0 documentation</p>
+    <p class="title logo__title">module-utilities 0.3.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -157,11 +157,11 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.doc_decorate</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attibutedict</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
 
 </ul>
 </li>
@@ -370,6 +370,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-templates">Using templates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-shared-docs">General shared docs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-parameters-returns-that-have-different-key-values">Define parameters/returns that have different key values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#works-with-classes">Works with classes</a></li>
 </ul>
             </nav>
         </div>
@@ -383,6 +384,10 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="docfiller">
 <h1>docfiller<a class="headerlink" href="#docfiller" title="Permalink to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html#module-module_utilities.docfiller" title="module_utilities.docfiller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code></a> assumes Numpy style docstrings</p>
+</div>
 <p>It is common to want to share documentation information across functions/methods.  The module <a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html#module-module_utilities.docfiller" title="module_utilities.docfiller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code></a> provides a way to do this:</p>
 <p>For example, if you have these function:</p>
 <div class="cell docutils container">
@@ -593,19 +598,15 @@ output : float
 <p>Better still is to generalize the template:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A function.&quot;</span><span class="p">,</span>
-    <span class="n">extended_summary</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    A longer description</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    y : int</span>
-<span class="s2">        A y param</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    output : float</span>
-<span class="s2">        An output</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">@</span> <span class="p">(</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A function.&quot;</span><span class="p">,</span>
+        <span class="n">extended_summary</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        A longer description</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">assign_param</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="s2">&quot;A y param&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">assign_param</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;An output&quot;</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">dedent</span><span class="p">()</span><span class="o">.</span><span class="n">decorate</span>
 <span class="k">def</span> <span class="nf">a_function3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -630,17 +631,13 @@ output : float
 <span class="k">assert</span> <span class="n">a_function3</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">==</span> <span class="n">a_function2</span><span class="o">.</span><span class="vm">__doc__</span>
 
 
-<span class="nd">@d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A different function.&quot;</span><span class="p">,</span>
-    <span class="n">extended_summary</span><span class="o">=</span><span class="s2">&quot;A longer description of b_function&quot;</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    y : float</span>
-<span class="s2">        A different y param</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    output : float</span>
-<span class="s2">        An different output</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+<span class="o">@</span> <span class="p">(</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A different function.&quot;</span><span class="p">,</span>
+        <span class="n">extended_summary</span><span class="o">=</span><span class="s2">&quot;A longer description of b_function&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">assign_param</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;A different y param&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">assign_param</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;An different output&quot;</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">dedent</span><span class="p">()(</span><span class="n">a_function3</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">b_function3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -651,8 +648,8 @@ output : float
 </div>
 </div>
 </div>
-<p>Note that for <code class="docutils literal notranslate"><span class="pre">b_function3</span></code>, we used the template/docstring from <code class="docutils literal notranslate"><span class="pre">a_function3</span></code>.  <code class="xref py py-class docutils literal notranslate"><span class="pre">docfiller.DocFiller</span></code> defaults to using
-the functions docstring for replacement.  But you can pass a string or function to use as the template to be filled.</p>
+<p>Note that for <code class="docutils literal notranslate"><span class="pre">b_function3</span></code>, we used the template/docstring from <code class="docutils literal notranslate"><span class="pre">a_function3</span></code>.  <a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code></a> defaults to using
+the functions docstring for replacement.  But you can pass a string or function to use as the template to be filled.  Above, we also used <a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html#module_utilities.docfiller.DocFiller.assign_param" title="module_utilities.docfiller.DocFiller.assign_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DocFiller.assign_param()</span></code></a> to create a correctly formatted parameter.</p>
 </section>
 <section id="general-shared-docs">
 <h2>General shared docs<a class="headerlink" href="#general-shared-docs" title="Permalink to this heading">#</a></h2>
@@ -815,6 +812,8 @@ beta : array-like
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># back to call because passing parameters</span>
+
+
 <span class="nd">@d</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;beta_float&quot;</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A thing&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">func_float2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -840,7 +839,7 @@ beta : array-like
 </div>
 </div>
 </div>
-<p>Better still, you can use <code class="xref py py-meth docutils literal notranslate"><span class="pre">docfiller.Docfiller.assign_keys()</span></code>:</p>
+<p>Better still, you can use <a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html#module_utilities.docfiller.DocFiller.assign_keys" title="module_utilities.docfiller.DocFiller.assign_keys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DocFiller.assign_keys()</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">beta</span><span class="o">=</span><span class="s2">&quot;beta_float&quot;</span><span class="p">)(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;A thing&quot;</span><span class="p">)</span>
@@ -918,6 +917,102 @@ z : int
 </div>
 </div>
 </section>
+<section id="works-with-classes">
+<h2>Works with classes<a class="headerlink" href="#works-with-classes" title="Permalink to this heading">#</a></h2>
+<p>This also works with classes</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">A summary</span>
+
+<span class="s2">A longer summary</span>
+
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">x : float</span>
+<span class="s2">    x param</span>
+<span class="s2">    some other stuff</span>
+<span class="s2">y : float</span>
+<span class="s2">    y param</span>
+
+<span class="s2">Returns</span>
+<span class="s2">-------</span>
+<span class="s2">out : float</span>
+<span class="s2">    output</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="o">.</span><span class="n">from_docstring</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">combine_keys</span><span class="o">=</span><span class="s2">&quot;parameters&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@d</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">hello</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    {summary}</span>
+
+<span class="sd">    {extended_summary}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    {x}</span>
+<span class="sd">    {y}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    {returns.out}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">assert</span> <span class="n">hello</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="nd">@d</span><span class="p">(</span><span class="n">hello</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">hello2</span><span class="p">(</span><span class="n">hello</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">assert</span> <span class="n">hello2</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">==</span> <span class="n">expected</span>
+
+<span class="n">help</span><span class="p">(</span><span class="n">hello</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on class hello in module __main__:
+
+class hello(builtins.object)
+ |  A summary
+ |  
+ |  A longer summary
+ |  
+ |  Parameters
+ |  ----------
+ |  x : float
+ |      x param
+ |      some other stuff
+ |  y : float
+ |      y param
+ |  
+ |  Returns
+ |  -------
+ |  out : float
+ |      output
+ |  
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
 
@@ -971,6 +1066,7 @@ z : int
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-templates">Using templates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-shared-docs">General shared docs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-parameters-returns-that-have-different-key-values">Define parameters/returns that have different key values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#works-with-classes">Works with classes</a></li>
 </ul>
   </nav></div>
 
@@ -1003,7 +1099,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-05-02.
+  Last updated on 2023-05-03.
   <br/>
 </p>
   </div>

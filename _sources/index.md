@@ -7,7 +7,6 @@
 ```{toctree}
 :maxdepth: 1
 
-<!-- example -->
 installation
 examples/index
 reference/index

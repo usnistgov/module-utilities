@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Attribute dictionary (attibutedict) &#8212; module-utilities 0.2.0 documentation</title>
+    <title>Attribute dictionary (attributedict) &#8212; module-utilities 0.3.0 documentation</title>
   
   
   
@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="License" href="../../license.html" />
-    <link rel="prev" title="Fill and share documentation (module_utilities.doc_decorate)" href="module_utilities.docfiller.html" />
+    <link rel="prev" title="Fill and share documentation (module_utilities.docfiller)" href="module_utilities.docfiller.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.2.0 documentation</p>
+    <p class="title logo__title">module-utilities 0.3.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -157,11 +157,11 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.doc_decorate</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
 
 
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attibutedict</span></code>)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
 
 </ul>
 </li>
@@ -357,7 +357,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Attribute dictionary (attibutedict)</h1>
+    <h1>Attribute dictionary (attributedict)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -367,7 +367,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attibutedict</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.attributedict.AttributeDict"><code class="docutils literal notranslate"><span class="pre">AttributeDict</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.attributedict.AttributeDict.from_dict"><code class="docutils literal notranslate"><span class="pre">AttributeDict.from_dict()</span></code></a></li>
 </ul>
@@ -384,8 +384,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <span class="target" id="module-module_utilities.attributedict"></span><section id="attribute-dictionary-attibutedict">
-<h1>Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attibutedict</span></code>)<a class="headerlink" href="#attribute-dictionary-attibutedict" title="Permalink to this heading">#</a></h1>
+  <span class="target" id="module-module_utilities.attributedict"></span><section id="attribute-dictionary-attributedict">
+<h1>Attribute dictionary (<a class="reference internal" href="#module-module_utilities.attributedict" title="module_utilities.attributedict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code></a>)<a class="headerlink" href="#attribute-dictionary-attributedict" title="Permalink to this heading">#</a></h1>
 </section>
 <p><strong>Classes:</strong></p>
 <table class="autosummary longtable table autosummary">
@@ -407,7 +407,7 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entries</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>)</p></li>
 <li><p><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>default</em> <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>) – If True, recursively return <code class="docutils literal notranslate"><span class="pre">AttributeDict</span></code> for nested dicts.</p></li>
-<li><p><strong>allow_missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">defualt=True</span></code>) – If True, allow missing keys.</p></li>
+<li><p><strong>allow_missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>default</em> <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>) – If True, allow missing keys.</p></li>
 </ul>
 </dd>
 </dl>
@@ -433,7 +433,7 @@ document.write(`
 <dt class="sig sig-object py" id="module_utilities.attributedict.AttributeDict.from_dict">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/attributedict.py#L169-L205"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.attributedict.AttributeDict.from_dict" title="Permalink to this definition">#</a></dt>
 <dd><p>Create AttributeDict recursively for nested dictionaries.</p>
-<p>To be used in cases where need to apply AttibuteDict to parameters
+<p>To be used in cases where need to apply AttributeDict to parameters
 passed with <code class="docutils literal notranslate"><span class="pre">func(**params)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -480,7 +480,7 @@ passed with <code class="docutils literal notranslate"><span class="pre">func(**
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.doc_decorate</span></code>)</p>
+        <p class="prev-next-title">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</p>
       </div>
     </a>
     <a class="right-next"
@@ -510,7 +510,7 @@ passed with <code class="docutils literal notranslate"><span class="pre">func(**
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attibutedict</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.attributedict.AttributeDict"><code class="docutils literal notranslate"><span class="pre">AttributeDict</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.attributedict.AttributeDict.from_dict"><code class="docutils literal notranslate"><span class="pre">AttributeDict.from_dict()</span></code></a></li>
 </ul>
@@ -548,7 +548,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-05-02.
+  Last updated on 2023-05-03.
   <br/>
 </p>
   </div>

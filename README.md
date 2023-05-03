@@ -69,13 +69,6 @@ or
 conda install -c wpk-nist module-utilities
 ```
 
-## Example usage
-
-```python
-import module_utilities
-
-```
-
 <!-- end-docs -->
 
 <!-- ## Documentation -->

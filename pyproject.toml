@@ -178,7 +178,7 @@ known-first-party = ["module_utilities"]
 max-complexity = 10
 
 [tool.nbqa.addopts]
-ruff = ["--fix", "--extend-ignore=D100,B018"]
+ruff = ["--fix", "--extend-ignore=D100,B018,D101"]
 
 [tool.flake8]
 docstring-convention = "numpy"

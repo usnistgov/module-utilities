@@ -1,4 +1,7 @@
-"""AttributeDict module"""
+"""
+Attribute dictionary (:mod:`~module_utilities.attibutedict`)
+============================================================
+"""
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping

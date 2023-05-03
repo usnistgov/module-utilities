@@ -7,38 +7,115 @@ kernelspec:
   name: python3
 ---
 
-# Usage
+<!-- markdownlint-disable MD041 -->
 
-An example for using ipython directives or jupytext
+# Quick start
 
-## jupytext
-
-```{code-cell} ipython3
-
-import module_utilities
-
-a = 1
-```
+## Cached
 
 ```{code-cell} ipython3
 
-print(a)
+from module_utilities import cached
+
+class Example:
+    @cached.prop
+    def aprop(self):
+        print('setting prop')
+        return ['aprop']
+    @cached.meth
+    def ameth(self, x=1):
+        print('seeting ameth')
+        return [x]
+    @cached.clear
+    def method_that_clears(self):
+        pass
+
+x = Example()
+print(x.aprop)
+print(x.aprop)
+
+print(x.ameth(1))
+print(x.ameth(x=1))
+
+x.method_that_clears()
+
+print(x.aprop)
+
 ```
 
-## ipython directive
+## docfiller
 
-To use Python Boilerplate in a project:
+```{code-cell} ipython3
 
-```python
-import module_utilities
+
+from module_utilities.docfiller import DocFiller
+
+d = DocFiller.from_docstring(
+    """
+    Parameters
+    ----------
+    x : int
+        x param
+    y : int
+        y param
+    z0 | z : int
+        z int param
+    z1 | z : float
+        z float param
+
+    Returns
+    -------
+    output0 | output : int
+        Integer output.
+    output1 | output : float
+        Float output
+    """,
+    combine_keys='parameters'
+)
+
+def func(x, y, z):
+    """
+    Parameters
+    ----------
+    {x}
+    {y}
+    {z0}
+    Returns
+    --------
+    {returns.output0}
+    """
+    return x + y + z
+
+func = d()(func)
+
+print(func.__doc__)
+
 ```
 
-see, e.g., {py:meth}`~module_utilities.core.another_func`
+```{code-cell} ipython3
+@d.assign_keys(z='z0', out='returns.output0')()
+def func1(x, y, z):
+    """
+    Parameters
+    ----------
+    {x}
+    {y}
+    {z}
 
-ipython example...
+    Returns
+    -------
+    {out}
+    """
+    pass
 
-```{eval-rst}
-.. ipython:: python
+print(func1.__doc__)
+```
 
-    import module_utilities
+```{code-cell} ipython3
+
+@d.assign_keys(z='z1', out='returns.output1')(func1)
+def func2(x, y, z):
+    pass
+
+print(func2.__doc__)
 ```

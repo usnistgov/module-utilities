@@ -329,10 +329,38 @@ class DocFiller:
         """List of keys"""
         return _recursive_keys(self.data)
 
-    def assign_combined_key(self, new_key: str, keys: Sequence[str]):
+    def assign_combined_key(self, new_key: str, keys: Sequence[str]) -> DocFiller:
         """Combine multiple keys into single key"""
         data = self.data.copy()
         data[new_key] = "\n".join([self.data[k] for k in keys])
+        return type(self)(data)
+
+    def _gen_get_val(self, key):
+        from operator import attrgetter
+
+        f = attrgetter(key)
+
+        return f(self.params)
+
+    def assign_keys(self, **kwargs: str | Sequence[str]) -> DocFiller:
+        """
+        Create new key from other keys.
+
+        Parameters
+        ----------
+        **kwargs
+            new_key=old_key or new_key=[old_key0, old_key1, ...]
+            Note that dot notation is accepted.
+        """
+        data = self.data.copy()
+        for new_key, old_keys in kwargs.items():
+            if isinstance(old_keys, str):
+                keys = [old_keys]
+            else:
+                keys = list(old_keys)
+
+            data[new_key] = "\n".join([self._gen_get_val(k) for k in keys])
+
         return type(self)(data)
 
     @classmethod
@@ -413,6 +441,22 @@ class DocFiller:
             key = kws.get(k, k)
             params[key] = v
         return type(self)(params)
+
+    # def rename(self, mapping: Mapping[Any, Hashable] | None = None, **kwargs) -> DocFiller:
+    #     """
+    #     New DocFiller with new names at top level.
+    #     """
+
+    #     if mapping is not None:
+    #         m = dict(mapping)
+    #     else:
+    #         m = {}
+
+    #     m = dict(m, **kwargs)
+
+    #     data = self.data.copy()
+    #     for old_name, v in m.items():
+    #         data[]
 
     @cached.prop
     def params(self) -> AttributeDict:

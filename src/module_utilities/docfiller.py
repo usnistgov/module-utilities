@@ -1,6 +1,6 @@
 """
 Fill and share documentation (:mod:`module_utilities.doc_decorate`)
-================================================================
+===================================================================
 """
 from __future__ import annotations
 
@@ -104,6 +104,9 @@ def _build_param_docstring(name: str, ptype: str, desc: str | Sequence[str]) -> 
             desc = []
         else:
             desc = [desc]
+
+    elif len(desc) == 1 and desc[0] == "":
+        desc = []
 
     if len(desc) > 0:
         desc = "\n    ".join(desc)
@@ -360,6 +363,45 @@ class DocFiller:
                 keys = list(old_keys)
 
             data[new_key] = "\n".join([self._gen_get_val(k) for k in keys])
+
+        return type(self)(data)
+
+    def assign_param(
+        self,
+        name: str,
+        ptype: str = "",
+        desc: str | list[str] = [],
+        key: str | None = None,
+    ):
+        """
+        Add in a new parameter
+
+        Parameters
+        ----------
+        name : str
+            Parameters name
+        key : str, optional
+            Optional key for placement in `self`.  This is like using `key | name`.
+        ptype : str, default=''
+            Optional type.
+        desc : str or list of str, default=''
+            Parameter description.
+
+        Returns
+        -------
+        output : DocFiller
+            New DocFiller instance.
+        """
+
+        data = self.data.copy()
+
+        # cleanup desc
+        if isinstance(desc, str):
+            desc = dedent(desc).strip().split("\n")
+
+        key = name if key is None else key
+
+        data[key] = _build_param_docstring(name=name, ptype=ptype, desc=desc)
 
         return type(self)(data)
 

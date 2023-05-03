@@ -448,3 +448,104 @@ def test_assign_key():
     )
 
     assert test2.__doc__ == expected
+
+
+def test_DocFiller_assign_param():
+    expected = dedent(
+        """
+    A summary
+
+    A longer summary
+
+    Parameters
+    ----------
+    x : float
+        x param
+        With an extra line
+    y : int
+        y param
+    z : float
+    """
+    )
+
+    d = DocFiller()
+
+    dd = (
+        d.assign_param(
+            "x",
+            ptype="float",
+            desc="""
+            x param
+            With an extra line
+            """,
+        )
+        .assign_param("y", ptype="int", desc="y param")
+        .assign_param("z", ptype="float")
+    )
+
+    @dd()
+    def func():
+        """
+        A summary
+
+        A longer summary
+
+        Parameters
+        ----------
+        {x}
+        {y}
+        {z}
+        """
+        pass
+
+    assert func.__doc__ == expected
+
+
+def test_DocFiller_on_class():
+    expected = """
+    A summary
+
+    A longer summary
+
+    Parameters
+    ----------
+    x : float
+        x param
+        some other stuff
+    y : float
+        y param
+
+    Returns
+    -------
+    out : float
+        output
+    """
+
+    expected = dedent(expected)
+
+    d = DocFiller.from_docstring(expected, combine_keys="parameters")
+
+    @d()
+    class hello:
+        """
+        {summary}
+
+        {extended_summary}
+
+        Parameters
+        ----------
+        {x}
+        {y}
+
+        Returns
+        -------
+        {returns.out}
+        """
+
+    assert hello.__doc__ == expected
+
+    @d(hello)
+    class hello2(hello):
+        pass
+
+    assert hello.__doc__ == expected

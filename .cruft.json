@@ -1,12 +1,12 @@
 {
   "template": "https://github.com/wpk-nist-gov/cookiecutter-pypackage.git",
-  "commit": "38e14cd6d21fdc444081dcb1e34c15d0ebdc3683",
+  "commit": "cb20a32f67dadb4142be54898a87de1efdce6bd6",
   "checkout": "feature/markdown",
   "context": {
     "cookiecutter": {
       "full_name": "William P. Krekelberg",
       "email": "wpk@nist.gov",
-      "github_username": "wpk-nist-gov",
+      "github_username": "usnistgov",
       "pypi_username": "wpk-nist",
       "conda_channel": "wpk-nist",
       "project_name": "module-utilities",

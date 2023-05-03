@@ -5,7 +5,10 @@
 
 .. autosummary::
    :toctree: generated/
+   :template: autodocsumm/module.rst
 
-   a_function
-   another_func
+   cached
+   docfiller
+   attributedict
+
 ```

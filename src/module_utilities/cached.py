@@ -1,4 +1,9 @@
-"""Routines to define cached properties/methods in a class."""
+"""
+Cached class properties/methods (:mod:`~module_utilites.cached`)
+================================================================
+
+Routines to define cached properties/methods in a class.
+"""
 from __future__ import annotations
 
 from functools import wraps

@@ -316,16 +316,22 @@ class DocFiller:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.data)})"
 
+    def new_like(self, data: dict | None = None) -> DocFiller:
+        """Create new object with optional data."""
+        if data is None:
+            data = self.data.copy()
+        return type(self)(data)
+
     def __getitem__(self, key: str):
         val = self.data[key]
         if isinstance(val, dict):
-            return type(self)(val)
+            return self.new_like(val)
         else:
             return val
 
     def dedent(self) -> DocFiller:
         """Recursively dedent params"""
-        return type(self)(dedent_recursive(self.data))
+        return self.new_like(dedent_recursive(self.data))
 
     @cached.meth
     def keys(self) -> list[str]:
@@ -334,15 +340,14 @@ class DocFiller:
 
     def assign_combined_key(self, new_key: str, keys: Sequence[str]) -> DocFiller:
         """Combine multiple keys into single key"""
-        data = self.data.copy()
-        data[new_key] = "\n".join([self.data[k] for k in keys])
-        return type(self)(data)
+        new = self.new_like()
+        new.data[new_key] = "\n".join([self.data[k] for k in keys])
+        return new
 
     def _gen_get_val(self, key):
         from operator import attrgetter
 
         f = attrgetter(key)
-
         return f(self.params)
 
     def assign_keys(self, **kwargs: str | Sequence[str]) -> DocFiller:
@@ -354,17 +359,31 @@ class DocFiller:
         **kwargs
             new_key=old_key or new_key=[old_key0, old_key1, ...]
             Note that dot notation is accepted.
+
+
+        Examples
+        --------
+        >>> d = DocFiller({'a0': 'a0', 'a1': 'a1', 'b': 'b'})
+        >>> dn = d.assign_keys(a='a0', c=['a0','b']).data
+        >>> print(dn['a'])
+        a0
+
+        >>> print(dn['c'])
+        a0
+        b
+
+
         """
-        data = self.data.copy()
+        new = self.new_like()
         for new_key, old_keys in kwargs.items():
             if isinstance(old_keys, str):
                 keys = [old_keys]
             else:
                 keys = list(old_keys)
 
-            data[new_key] = "\n".join([self._gen_get_val(k) for k in keys])
+            new.data[new_key] = "\n".join([self._gen_get_val(k) for k in keys])
 
-        return type(self)(data)
+        return new
 
     def assign_param(
         self,
@@ -391,9 +410,25 @@ class DocFiller:
         -------
         output : DocFiller
             New DocFiller instance.
+
+        Examples
+        --------
+        >>> d = DocFiller()
+        >>> dn = d.assign_param(
+        ...     name='x',
+        ...     ptype='float',
+        ...     desc='''
+        ...     A parameter
+        ...     with multiple levels
+        ...     ''',
+        ... )
+        >>> print(dn['x'])
+        x : float
+            A parameter
+            with multiple levels
         """
 
-        data = self.data.copy()
+        new = self.new_like()
 
         # cleanup desc
         if isinstance(desc, str):
@@ -401,9 +436,9 @@ class DocFiller:
 
         key = name if key is None else key
 
-        data[key] = _build_param_docstring(name=name, ptype=ptype, desc=desc)
+        new.data[key] = _build_param_docstring(name=name, ptype=ptype, desc=desc)
 
-        return type(self)(data)
+        return new
 
     @classmethod
     def concat(
@@ -468,15 +503,15 @@ class DocFiller:
     def levels_to_top(self, *names: str) -> DocFiller:
         """Make a level top level accessible"""
 
-        params = dict(self.data)
+        new = self.new_like()
         for name in names:
             d = self.data[name]
             if isinstance(d, str):
                 raise ValueError(f"level {name} is not a dict")
             else:
                 for k, v in self.data[name].items():
-                    params[k] = v
-        return type(self)(params)
+                    new.data[k] = v
+        return new
 
     def rename_levels(self, **kws: str) -> DocFiller:
         """Rename a keys at top level."""
@@ -484,7 +519,7 @@ class DocFiller:
         for k, v in self.data.items():
             key = kws.get(k, k)
             params[key] = v
-        return type(self)(params)
+        return self.new_like(params)
 
     # def rename(self, mapping: Mapping[Any, Hashable] | None = None, **kwargs) -> DocFiller:
     #     """
@@ -513,9 +548,13 @@ class DocFiller:
 
     def update(self, *args, **kwargs) -> DocFiller:
         """Update parameters"""
-        data = self.data.copy()
-        data.update(*args, **kwargs)
-        return type(self)(params=data)
+        new = self.new_like()
+        new.data.update(*args, **kwargs)
+        return new
+
+    def assign(self, **kwargs) -> DocFiller:
+        """Assign new key/value pairs"""
+        return self.update(**kwargs)
 
     def decorate(self, func: F) -> F:
         """
@@ -548,12 +587,6 @@ class DocFiller:
             return doc_decorate(*templates, **self.params)
         else:
             return self.update(params)(*templates)
-
-        # if nparams > 0:
-        #     params = AttributeDict.from_dict({**self.data, **params}, max_level=1)
-        # else:
-        #     params = self.params
-        # return doc_decorate(*templates, **params)
 
     # NOTE: This is dangerous.
     # if you pass a function as a template, but forget to explicitly pass it,

@@ -205,6 +205,7 @@ napoleon_type_aliases = {
     # objects with abbreviated namespace (from pandas)
     "pd.Index": "~pandas.Index",
     "pd.NaT": "~pandas.NaT",
+    "DocFiller": "~module_utilities.docfiller.DocFiller",
 }
 
 

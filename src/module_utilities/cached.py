@@ -1,6 +1,6 @@
 """
-Cached class properties/methods (:mod:`~module_utilites.cached`)
-================================================================
+Cached class properties/methods (:mod:`~module_utilities.cached`)
+=================================================================
 
 Routines to define cached properties/methods in a class.
 """

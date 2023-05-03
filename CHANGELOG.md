@@ -11,6 +11,12 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.3.0 — 2023-05-03
+
+### Added
+
+- Added `DocFiller.assign_param` to more easily add a new parameter.
+
 ## v0.2.0 — 2023-05-02
 
 ### Added

@@ -1,6 +1,6 @@
 """
-Fill and share documentation (:mod:`module_utilities.doc_decorate`)
-===================================================================
+Fill and share documentation (:mod:`module_utilities.docfiller`)
+================================================================
 """
 from __future__ import annotations
 
@@ -416,8 +416,10 @@ class DocFiller:
 
         Parameters
         ----------
-        *args : dict or Docfiller objects
-        **kwargs : dict or Docfiller objects
+        *args
+            dict or Docfiller
+        **kwargs
+            dict or Docfiller objects
             The passed name will be used as the top level.
 
         Returns
@@ -623,7 +625,7 @@ class DocFiller:
         params : mapping
         namespace : str, optional
             Top level namespace for DocFiller.
-        combine_keys : str, sequence of str, mapping, optional.
+        combine_keys : str, sequence of str, mapping, optional
             If str or sequence of str, Keys of ``params`` to at the top level.
             If mapping, should be of form {namespace: key(s)}
 
@@ -697,7 +699,7 @@ class DocFiller:
             Docstring to parse to get parameters.
         namespace : str, optional
             Top level namespace for DocFiller.
-        combine_keys : str, sequence of str, mapping, optional.
+        combine_keys : str, sequence of str, mapping, optional
             If str or sequence of str, Keys of ``params`` to at the top level.
             If mapping, should be of form {namespace: key(s)}
         key_char : str, default="|"

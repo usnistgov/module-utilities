@@ -1,6 +1,6 @@
 """
-Attribute dictionary (:mod:`~module_utilities.attibutedict`)
-============================================================
+Attribute dictionary (:mod:`~module_utilities.attributedict`)
+=============================================================
 """
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ class AttributeDict(MutableMapping):
     entries : dict
     recursive : bool, default=True
         If True, recursively return ``AttributeDict`` for nested dicts.
-    allow_missing : bool, defualt=True
+    allow_missing : bool, default=True
         If True, allow missing keys.
 
     Example
@@ -173,7 +173,7 @@ class AttributeDict(MutableMapping):
         """
         Create AttributeDict recursively for nested dictionaries.
 
-        To be used in cases where need to apply AttibuteDict to parameters
+        To be used in cases where need to apply AttributeDict to parameters
         passed with ``func(**params)``.
 
 

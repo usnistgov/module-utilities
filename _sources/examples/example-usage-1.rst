@@ -10,15 +10,18 @@ cached
 
        from module_utilities import cached
 
+
        class Example:
            @cached.prop
            def aprop(self):
                print("setting prop")
                return ["aprop"]
+
            @cached.meth
            def ameth(self, x=1):
                print("seeting ameth")
                return [x]
+
            @cached.clear
            def method_that_clears(self):
                pass

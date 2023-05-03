@@ -20,12 +20,11 @@
 [docs-badge]: https://img.shields.io/badge/docs-sphinx-informational
 [docs-link]: https://pages.nist.gov/module-utilities/
 [repo-badge]: https://img.shields.io/badge/--181717?logo=github&logoColor=ffffff
-[repo-link]: https://github.com/wpk-nist-gov/module-utilities
+[repo-link]: https://github.com/usnistgov/module-utilities
 [conda-badge]: https://img.shields.io/conda/v/wpk-nist/module-utilities
 [conda-link]: https://anaconda.org/wpk-nist/module-utilities
 [license-badge]: https://img.shields.io/pypi/l/cmomy?color=informational
-[license-link]:
-  https://github.com/wpk-nist-gov/module-utilities/blob/main/LICENSE
+[license-link]: https://github.com/usnistgov/module-utilities/blob/main/LICENSE
 
 <!-- other links -->
 
@@ -93,6 +92,6 @@ The author can be reached at wpk@nist.gov.
 
 This package was created with
 [Cookiecutter](https://github.com/audreyr/cookiecutter) and the
-[wpk-nist-gov/cookiecutter-pypackage](https://github.com/wpk-nist-gov/cookiecutter-pypackage)
+[usnistgov/cookiecutter-pypackage](https://github.com/usnistgov/cookiecutter-pypackage)
 Project template forked from
 [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage).

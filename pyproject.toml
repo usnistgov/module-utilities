@@ -28,7 +28,7 @@ requires-python = ">=3.8"
 dependencies = ["typing-extensions"]
 
 [project.urls]
-homepage = "https://github.com/wpk-nist-gov/module-utilities"
+homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]

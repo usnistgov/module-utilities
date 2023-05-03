@@ -4,6 +4,7 @@
 :maxdepth: 2
 
 example-usage
-usage/demo
+usage/cached
+usage/docfiller
 
 ```

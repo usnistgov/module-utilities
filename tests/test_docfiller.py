@@ -367,3 +367,84 @@ def test_DocFiller_namespace() -> None:
     assert func2.__doc__ == expected
 
     assert func2(1, 1) == (1, 1)
+
+
+def test_assign_key():
+    d = DocFiller.from_docstring(
+        """
+        Parameters
+        ----------
+        x_float | x : float
+            x float
+        x_array | x : array-like
+            x array
+        y : int
+            y val
+        """,
+        combine_keys="parameters",
+    )
+
+    dd = d.assign_keys(x="x_float")
+
+    @dd.decorate
+    def test0():
+        """
+        Parameters
+        ----------
+        {x}
+        """
+
+    expected = dedent(
+        """
+        Parameters
+        ----------
+        x : float
+            x float
+        """
+    )
+
+    assert test0.__doc__ == expected
+
+    dd = d.assign_keys(x="x_array")
+
+    @dd.decorate
+    def test1():
+        """
+        Parameters
+        ----------
+        {x}
+        """
+
+    expected = dedent(
+        """
+        Parameters
+        ----------
+        x : array-like
+            x array
+        """
+    )
+
+    assert test1.__doc__ == expected
+
+    dd = d.assign_keys(x=["x_array", "y"])
+
+    @dd.decorate
+    def test2():
+        """
+        Parameters
+        ----------
+        {x}
+        """
+
+    expected = dedent(
+        """
+        Parameters
+        ----------
+        x : array-like
+            x array
+        y : int
+            y val
+        """
+    )
+
+    assert test2.__doc__ == expected

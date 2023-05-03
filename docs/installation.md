@@ -24,7 +24,7 @@ The sources for module-utilities can be downloaded from the [Github repo].
 You can either clone the public repository:
 
 ```bash
-git clone git://github.com/wpk-nist-gov/module-utilities.git
+git clone git://github.com/usnistgov/module-utilities.git
 ```
 
 Once you have a copy of the source, you can install it with:
@@ -44,4 +44,4 @@ pip install [-e] --no-deps .
 where options in brackets are options (for environment name, and editable
 install, repectively).
 
-[github repo]: https://github.com/wpk-nist-gov/module-utilities
+[github repo]: https://github.com/usnistgov/module-utilities

@@ -1,0 +1,21 @@
+test:
+  imports:
+    - module_utilities
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://github.com/usnistgov/module-utilities
+  summary: Collection of utilities to aid working with python modules.
+  description: |
+    `cached`: A module to cache class attributes and methods. Right now, this uses
+    a standard python dictionary for storage.
+    `docfiller`: A module to share documentation between methods.
+  license: NIST-PD
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - wpk-nist-gov

@@ -72,7 +72,7 @@ conda install -c wpk-nist module-utilities
 
 Simple example of using `cached` module.
 
-```pycon
+```python
 >>> from module_utilities import cached
 >>>
 >>> class Example:
@@ -114,7 +114,7 @@ setting ameth
 
 Simple example of using `DocFiller`.
 
-```pycon
+```python
 >>> from module_utilities.docfiller import DocFiller
 >>> d = DocFiller.from_docstring(
 ...     """

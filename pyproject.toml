@@ -64,9 +64,9 @@ fallback_version = "999"
 test = "pytest"
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules"
-# testpaths = ["src/module_utilities", "tests"]
-testpaths = ["src", "tests"]
+addopts = "--doctest-modules --doctest-glob='*.md'"
+# testpaths = ["src/module_utilities", "tests", "./README.md"]
+testpaths = ["src", "tests", "README.md"]
 
 [tool.isort]
 profile = "black"

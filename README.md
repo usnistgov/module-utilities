@@ -82,7 +82,7 @@ Simple example of using `cached` module.
 ...         return ['aprop']
 ...     @cached.meth
 ...     def ameth(self, x=1):
-...         print('seeting ameth')
+...         print('setting ameth')
 ...         return [x]
 ...     @cached.clear
 ...     def method_that_clears(self):
@@ -96,7 +96,7 @@ setting prop
 ['aprop']
 
 >>> x.ameth(1)
-seeting ameth
+setting ameth
 [1]
 >>> x.ameth(x=1)
 [1]
@@ -107,7 +107,7 @@ seeting ameth
 setting prop
 ['aprop']
 >>> x.ameth(1)
-seeting ameth
+setting ameth
 [1]
 
 ```

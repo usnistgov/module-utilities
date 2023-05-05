@@ -62,7 +62,6 @@ d = DocFiller.from_docstring(
         z int param
     z1 | z : float
         z float param
-
     Returns
     -------
     output0 | output : int

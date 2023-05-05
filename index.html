@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>module-utilities &#8212; module-utilities 0.3.0 documentation</title>
+    <title>module-utilities &#8212; module-utilities latest documentation</title>
   
   
   
@@ -129,7 +129,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.3.0 documentation</p>
+    <p class="title logo__title">module-utilities latest documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -145,7 +145,6 @@
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/example-usage.html">Quick start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/usage/cached.html">Cached methods/attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/usage/docfiller.html">docfiller</a></li>
 </ul>
@@ -370,6 +369,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#status">Status</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>
 </ul>
             </nav>
         </div>
@@ -427,6 +427,152 @@ request for wanted features and suggestions!</p>
 </div>
 <p>or</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>wpk-nist<span class="w"> </span>module-utilities
+</pre></div>
+</div>
+</section>
+<section id="example-usage">
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h2>
+<p>Simple example of using <code class="docutils literal notranslate"><span class="pre">cached</span></code> module.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">module_utilities</span> <span class="kn">import</span> <span class="n">cached</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Example</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">prop</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">aprop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting prop&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;aprop&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">meth</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">ameth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;seeting ameth&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">clear</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">method_that_clears</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Example</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">aprop</span>
+<span class="go">setting prop</span>
+<span class="go">[&#39;aprop&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">aprop</span>
+<span class="go">[&#39;aprop&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">seeting ameth</span>
+<span class="go">[1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[1]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">method_that_clears</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">aprop</span>
+<span class="go">setting prop</span>
+<span class="go">[&#39;aprop&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">seeting ameth</span>
+<span class="go">[1]</span>
+
+</pre></div>
+</div>
+<p>Simple example of using <code class="docutils literal notranslate"><span class="pre">DocFiller</span></code>.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">module_utilities.docfiller</span> <span class="kn">import</span> <span class="n">DocFiller</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="o">.</span><span class="n">from_docstring</span><span class="p">(</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="sd">    Parameters</span>
+<span class="gp">... </span><span class="sd">    ----------</span>
+<span class="gp">... </span><span class="sd">    x : int</span>
+<span class="gp">... </span><span class="sd">        x param</span>
+<span class="gp">... </span><span class="sd">    y : int</span>
+<span class="gp">... </span><span class="sd">        y param</span>
+<span class="gp">... </span><span class="sd">    z0 | z : int</span>
+<span class="gp">... </span><span class="sd">        z int param</span>
+<span class="gp">... </span><span class="sd">    z1 | z : float</span>
+<span class="gp">... </span><span class="sd">        z float param</span>
+<span class="gp">...</span>
+<span class="gp">... </span><span class="sd">    Returns</span>
+<span class="gp">... </span><span class="sd">    -------</span>
+<span class="gp">... </span><span class="sd">    output0 | output : int</span>
+<span class="gp">... </span><span class="sd">        Integer output.</span>
+<span class="gp">... </span><span class="sd">    output1 | output : float</span>
+<span class="gp">... </span><span class="sd">        Float output</span>
+<span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">combine_keys</span><span class="o">=</span><span class="s1">&#39;parameters&#39;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">decorate</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="sd">    Parameters</span>
+<span class="gp">... </span><span class="sd">    ----------</span>
+<span class="gp">... </span><span class="sd">    {x}</span>
+<span class="gp">... </span><span class="sd">    {y}</span>
+<span class="gp">... </span><span class="sd">    {z0}</span>
+<span class="gp">... </span><span class="sd">    Returns</span>
+<span class="gp">... </span><span class="sd">    --------</span>
+<span class="gp">... </span><span class="sd">    {returns.output0}</span>
+<span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go">Parameters</span>
+<span class="go">----------</span>
+<span class="go">x : int</span>
+<span class="go">    x param</span>
+<span class="go">y : int</span>
+<span class="go">    y param</span>
+<span class="go">z : int</span>
+<span class="go">    z int param</span>
+<span class="go">Returns</span>
+<span class="go">--------</span>
+<span class="go">output : int</span>
+<span class="go">    Integer output.</span>
+
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z0&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output0&#39;</span><span class="p">)()</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="sd">    Parameters</span>
+<span class="gp">... </span><span class="sd">    ----------</span>
+<span class="gp">... </span><span class="sd">    {x}</span>
+<span class="gp">... </span><span class="sd">    {y}</span>
+<span class="gp">... </span><span class="sd">    {z}</span>
+<span class="gp">... </span><span class="sd">    Returns</span>
+<span class="gp">... </span><span class="sd">    -------</span>
+<span class="gp">... </span><span class="sd">    {out}</span>
+<span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func1</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go">Parameters</span>
+<span class="go">----------</span>
+<span class="go">x : int</span>
+<span class="go">    x param</span>
+<span class="go">y : int</span>
+<span class="go">    y param</span>
+<span class="go">z : int</span>
+<span class="go">    z int param</span>
+<span class="go">Returns</span>
+<span class="go">-------</span>
+<span class="go">output : int</span>
+<span class="go">    Integer output.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output1&#39;</span><span class="p">)(</span><span class="n">func1</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func2</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go">Parameters</span>
+<span class="go">----------</span>
+<span class="go">x : int</span>
+<span class="go">    x param</span>
+<span class="go">y : int</span>
+<span class="go">    y param</span>
+<span class="go">z : float</span>
+<span class="go">    z float param</span>
+<span class="go">Returns</span>
+<span class="go">-------</span>
+<span class="go">output : float</span>
+<span class="go">    Float output</span>
+
+
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">
@@ -487,6 +633,7 @@ request for wanted features and suggestions!</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#status">Status</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>
 </ul>
   </nav></div>
 
@@ -519,7 +666,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-05-03.
+  Last updated on 2023-05-05.
   <br/>
 </p>
   </div>

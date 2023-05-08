@@ -229,7 +229,17 @@ This is free software. See [LICENSE][license-link].
 
 ## Related work
 
-Any other stuff to metion....
+`module-utilities` is used in the following packages
+
+- [cmomy]
+- [analphipy]
+- [tmmc-lnpy]
+- [thermoextrap]
+
+[cmomy]: https://github.com/usnistgov/cmomy
+[analphipy]: https://github.com/usnistgov/analphipy
+[tmmc-lnpy]: https://github.com/usnistgov/tmmc-lnpy
+[thermoextrap]: https://github.com/usnistgov/thermoextrap
 
 ## Contact
 

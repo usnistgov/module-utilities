@@ -21,8 +21,8 @@
 [docs-link]: https://pages.nist.gov/module-utilities/
 [repo-badge]: https://img.shields.io/badge/--181717?logo=github&logoColor=ffffff
 [repo-link]: https://github.com/usnistgov/module-utilities
-[conda-badge]: https://img.shields.io/conda/v/wpk-nist/module-utilities
-[conda-link]: https://anaconda.org/wpk-nist/module-utilities
+[conda-badge]: https://img.shields.io/conda/v/conda-forge/module-utilities
+[conda-link]: https://anaconda.org/conda-forge/module-utilities
 [license-badge]: https://img.shields.io/pypi/l/cmomy?color=informational
 [license-link]: https://github.com/usnistgov/module-utilities/blob/main/LICENSE
 
@@ -65,7 +65,7 @@ pip install module-utilities
 or
 
 ```bash
-conda install -c wpk-nist module-utilities
+conda install -c conda-forge module-utilities
 ```
 
 ## Example usage

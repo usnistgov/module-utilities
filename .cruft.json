@@ -8,7 +8,7 @@
       "email": "wpk@nist.gov",
       "github_username": "usnistgov",
       "pypi_username": "wpk-nist",
-      "conda_channel": "wpk-nist",
+      "conda_channel": "conda-forge",
       "project_name": "module-utilities",
       "project_slug": "module_utilities",
       "_copy_without_render": [

@@ -11,7 +11,7 @@ pip install module_utilities
 or
 
 ```bash
-conda install -c wpk-nist module_utilities
+conda install -c conda-forge module_utilities
 ```
 
 This is the preferred method to install module-utilities, as it will always

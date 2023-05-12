@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>module-utilities &#8212; module-utilities latest documentation</title>
+    <title>module-utilities &#8212; module-utilities 0.3.1 documentation</title>
   
   
   
@@ -129,7 +129,7 @@
   
   
   
-    <p class="title logo__title">module-utilities latest documentation</p>
+    <p class="title logo__title">module-utilities 0.3.1 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -386,7 +386,7 @@ document.write(`
 <p><a class="reference external" href="https://github.com/usnistgov/module-utilities"><img alt="Repo" src="https://img.shields.io/badge/--181717?logo=github&amp;logoColor=ffffff" /></a> <a class="reference external" href="https://pages.nist.gov/module-utilities/"><img alt="Docs" src="https://img.shields.io/badge/docs-sphinx-informational" /></a>
 <a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/LICENSE"><img alt="PyPI license" src="https://img.shields.io/pypi/l/cmomy?color=informational" /></a>
 <a class="reference external" href="https://pypi.org/project/module-utilities"><img alt="PyPI version" src="https://img.shields.io/pypi/v/module-utilities" /></a>
-<a class="reference external" href="https://anaconda.org/wpk-nist/module-utilities"><img alt="Conda (channel only)" src="https://img.shields.io/conda/v/wpk-nist/module-utilities" /></a>
+<a class="reference external" href="https://anaconda.org/conda-forge/module-utilities"><img alt="Conda (channel only)" src="https://img.shields.io/conda/v/conda-forge/module-utilities" /></a>
 <a class="reference external" href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a></p>
 <!--
   For more badges, see
@@ -426,7 +426,7 @@ request for wanted features and suggestions!</p>
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>wpk-nist<span class="w"> </span>module-utilities
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>module-utilities
 </pre></div>
 </div>
 </section>
@@ -438,11 +438,11 @@ request for wanted features and suggestions!</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Example</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">prop</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">aprop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting prop&#39;</span><span class="p">)</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;aprop&#39;</span><span class="p">]</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setting prop&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;aprop&quot;</span><span class="p">]</span>
 <span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">meth</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">ameth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;seeting ameth&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setting ameth&quot;</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
 <span class="gp">... </span>    <span class="nd">@cached</span><span class="o">.</span><span class="n">clear</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">method_that_clears</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -456,7 +456,7 @@ request for wanted features and suggestions!</p>
 <span class="go">[&#39;aprop&#39;]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">seeting ameth</span>
+<span class="go">setting ameth</span>
 <span class="go">[1]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">[1]</span>
@@ -467,7 +467,7 @@ request for wanted features and suggestions!</p>
 <span class="go">setting prop</span>
 <span class="go">[&#39;aprop&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">ameth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">seeting ameth</span>
+<span class="go">setting ameth</span>
 <span class="go">[1]</span>
 
 </pre></div>
@@ -525,8 +525,11 @@ request for wanted features and suggestions!</p>
 <span class="go">output : int</span>
 <span class="go">    Integer output.</span>
 
-
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z0&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output0&#39;</span><span class="p">)()</span>
+<span class="go"># Note that for python version &lt;= 3.8 that method chaining</span>
+<span class="go"># in decorators doesn&#39;t work, so have to do the following.</span>
+<span class="go"># For newer python, you can inline this.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z0&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dd</span><span class="o">.</span><span class="n">decorate</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    Parameters</span>
@@ -554,7 +557,8 @@ request for wanted features and suggestions!</p>
 <span class="go">output : int</span>
 <span class="go">    Integer output.</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output1&#39;</span><span class="p">)(</span><span class="n">func1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dd</span><span class="p">(</span><span class="n">func1</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">func2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 
@@ -666,7 +670,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-05-05.
+  Last updated on 2023-05-12.
   <br/>
 </p>
   </div>

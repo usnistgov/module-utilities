@@ -167,8 +167,11 @@ Returns
 output : int
     Integer output.
 
-
->>> @d.assign_keys(z='z0', out='returns.output0')()
+# Note that for python version <= 3.8 that method chaining
+# in decorators doesn't work, so have to do the following.
+# For newer python, you can inline this.
+>>> dd = d.assign_keys(z='z0', out='returns.output0')
+>>> @dd.decorate
 ... def func1(x, y, z):
 ...     """
 ...     Parameters
@@ -196,7 +199,8 @@ Returns
 output : int
     Integer output.
 
->>> @d.assign_keys(z='z1', out='returns.output1')(func1)
+>>> dd = d.assign_keys(z='z1', out='returns.output1')
+>>> @dd(func1)
 ... def func2(x, y, z):
 ...     pass
 

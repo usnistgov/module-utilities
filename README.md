@@ -253,6 +253,6 @@ The author can be reached at wpk@nist.gov.
 
 This package was created with
 [Cookiecutter](https://github.com/audreyr/cookiecutter) and the
-[usnistgov/cookiecutter-pypackage](https://github.com/usnistgov/cookiecutter-pypackage)
+[wpk-nist-gov/cookiecutter-pypackage](https://github.com/wpk-nist-gov/cookiecutter-pypackage)
 Project template forked from
 [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage).

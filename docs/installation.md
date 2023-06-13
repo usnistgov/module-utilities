@@ -5,13 +5,13 @@
 To install module-utilities, run this command in your terminal:
 
 ```bash
-pip install module_utilities
+pip install module-utilities
 ```
 
 or
 
 ```bash
-conda install -c conda-forge module_utilities
+conda install -c conda-forge module-utilities
 ```
 
 This is the preferred method to install module-utilities, as it will always

@@ -32,11 +32,64 @@ homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
-test = ["pytest"]
-attrs = ["attrs"]
+test = ["pytest", "python-xdist", "pytest-cov", "pytest-sugar"]
+dev-extras = [
+    "ipython",
+    "ipykernel",
+    "setuptools-scm",
+    "pytest-accept", # p2c: -p
 
-# dev = []
-# docs = []
+]
+typing-extras = [
+    "mypy",
+    # "pytype; python_version < '3.11'",
+
+]
+typing = ["module-utilities[typing-extras]", "module-utilities[test]"]
+nox = [
+    "nox",
+    "noxopt", # p2c: -p
+    "ruamel.yaml",
+]
+dev = [
+    "module-utilities[test]",
+    "module-utilities[typing-extras]",
+    "module-utilities[dev-extras]",
+]
+tools = ["pre-commit", "cruft", "scriv"]
+dev-complete = [
+    "module-utilities[dev]",
+    "module-utilities[tools]",
+    "module-utilities[nox]",
+]
+docs = [
+    "setuptools-scm",
+    "ipython",
+    "pyenchant",
+    "ghp-import",
+    "sphinx",
+    "sphinx-copybutton",
+    "sphinxcontrib-spelling",
+    "sphinx-autobuild",
+    "myst-nb",
+    "sphinx-book-theme",
+    "autodocsumm",
+]
+
+[tool.pyproject2conda]
+channels = ["conda-forge"]
+
+[tool.pyproject2conda.isolated-dependencies]
+dist-pypi = ["twine", "build"]
+dist-conda = [
+    "anaconda-client",
+    "grayskull",
+    "conda-build",
+    "conda-verify",
+    "boa",
+    "setuptools-scm",
+]
+
 ## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]
 zip-safe = true # if using mypy, must be False

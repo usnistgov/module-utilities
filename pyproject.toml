@@ -75,11 +75,6 @@ docs = [
     "sphinx-book-theme",
     "autodocsumm",
 ]
-
-[tool.pyproject2conda]
-channels = ["conda-forge"]
-
-[tool.pyproject2conda.isolated-dependencies]
 dist-pypi = ["twine", "build"]
 dist-conda = [
     "anaconda-client",
@@ -89,6 +84,9 @@ dist-conda = [
     "boa",
     "setuptools-scm",
 ]
+
+[tool.pyproject2conda]
+channels = ["conda-forge"]
 
 ## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]

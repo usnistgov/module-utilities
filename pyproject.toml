@@ -32,18 +32,21 @@ homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
-test = ["pytest", "python-xdist", "pytest-cov", "pytest-sugar"]
+test = [
+    "pytest", #
+    "python-xdist",
+    "pytest-cov",
+    "pytest-sugar",
+]
 dev-extras = [
+    "pytest-accept", # p2c: -p
+    "setuptools-scm",
     "ipython",
     "ipykernel",
-    "setuptools-scm",
-    "pytest-accept", # p2c: -p
-
 ]
 typing-extras = [
-    "mypy",
     # "pytype; python_version < '3.11'",
-
+    "mypy",
 ]
 typing = ["module-utilities[typing-extras]", "module-utilities[test]"]
 nox = [
@@ -52,18 +55,22 @@ nox = [
     "ruamel.yaml",
 ]
 dev = [
-    "module-utilities[test]",
+    "module-utilities[test]", #
     "module-utilities[typing-extras]",
     "module-utilities[dev-extras]",
 ]
-tools = ["pre-commit", "cruft", "scriv"]
+tools = [
+    "pre-commit", #
+    "cruft",
+    "scriv",
+]
 dev-complete = [
-    "module-utilities[dev]",
+    "module-utilities[dev]", #
     "module-utilities[tools]",
     "module-utilities[nox]",
 ]
 docs = [
-    "setuptools-scm",
+    "setuptools-scm", #
     "ipython",
     "pyenchant",
     "ghp-import",
@@ -77,7 +84,7 @@ docs = [
 ]
 dist-pypi = ["twine", "build"]
 dist-conda = [
-    "anaconda-client",
+    "anaconda-client", #
     "grayskull",
     "conda-build",
     "conda-verify",

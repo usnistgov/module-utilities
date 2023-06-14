@@ -133,7 +133,7 @@ def run_annotated(**kwargs):
 
 LOCK_CLI = Annotated[bool, LOCK_OPT]
 RUN_CLI = Annotated[list[list[str]], RUN_OPT]
-TEST_OPTS_CLI = opts_annotated(help="extra arguments/flags to pytest")  # type: ignore
+TEST_OPTS_CLI = opts_annotated(help="extra arguments/flags to pytest")
 
 # CMD_CLI = Annotated[list[str], CMD_OPT]
 
@@ -448,7 +448,7 @@ def test(
 
 
 @group.session(python=PYTHON_ALL_VERSIONS)  # type: ignore
-def test_pip(
+def test_venv(
     session: Session,
     test_no_pytest: bool = False,
     test_opts: TEST_OPTS_CLI = (),  # type: ignore

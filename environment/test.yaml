@@ -9,6 +9,6 @@ dependencies:
   - python>=3.8
   - typing-extensions
   - pytest
-  - python-xdist
+  - pytest-xdist
   - pytest-cov
   - pytest-sugar

@@ -10,6 +10,6 @@ dependencies:
   - typing-extensions
   - mypy
   - pytest
-  - python-xdist
+  - pytest-xdist
   - pytest-cov
   - pytest-sugar

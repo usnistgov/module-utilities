@@ -48,7 +48,10 @@ typing-extras = [
     # "pytype; python_version < '3.11'",
     "mypy",
 ]
-typing = ["module-utilities[typing-extras]", "module-utilities[test]"]
+typing = [
+    "module-utilities[typing-extras]", #
+    "module-utilities[test]",
+]
 nox = [
     "nox",
     "noxopt", # p2c: -p
@@ -82,6 +85,7 @@ docs = [
     "sphinx-book-theme",
     "autodocsumm",
 ]
+# to be parsed with pyproject2conda with --no-base option
 dist-pypi = ["twine", "build"]
 dist-conda = [
     "anaconda-client", #
@@ -107,7 +111,6 @@ where = ["src"]
 
 ## include = []
 ## exclude = []
-##
 [tool.setuptools.dynamic]
 readme = { file = [
     "README.md",

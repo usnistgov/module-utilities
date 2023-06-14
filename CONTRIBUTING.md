@@ -114,10 +114,10 @@ pip install noxopt
 
 ### Getting the repo
 
-Ready to contribute? Here's how to set up `module_utilities` for local
+Ready to contribute? Here's how to set up `module-utilities` for local
 development.
 
-- Fork the `module_utilities` repo on GitHub.
+- Fork the `module=utilities` repo on GitHub.
 
 - Clone your fork locally:
 

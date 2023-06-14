@@ -32,11 +32,73 @@ homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
-test = ["pytest"]
-attrs = ["attrs"]
+test = [
+    "pytest", #
+    "pytest-xdist",
+    "pytest-cov",
+    "pytest-sugar",
+]
+dev-extras = [
+    "pytest-accept", # p2c: -p
+    "setuptools-scm",
+    "ipython",
+    "ipykernel",
+]
+typing-extras = [
+    # "pytype; python_version < '3.11'",
+    "mypy",
+]
+typing = [
+    "module-utilities[typing-extras]", #
+    "module-utilities[test]",
+]
+nox = [
+    "nox",
+    "noxopt", # p2c: -p
+    "ruamel.yaml",
+]
+dev = [
+    "module-utilities[test]", #
+    "module-utilities[typing-extras]",
+    "module-utilities[dev-extras]",
+]
+tools = [
+    "pre-commit", #
+    "cruft",
+    "scriv",
+]
+dev-complete = [
+    "module-utilities[dev]", #
+    "module-utilities[tools]",
+    "module-utilities[nox]",
+]
+docs = [
+    "setuptools-scm", #
+    "ipython",
+    "pyenchant",
+    "ghp-import",
+    "sphinx",
+    "sphinx-copybutton",
+    "sphinxcontrib-spelling",
+    "sphinx-autobuild",
+    "myst-nb",
+    "sphinx-book-theme",
+    "autodocsumm",
+]
+# to be parsed with pyproject2conda with --no-base option
+dist-pypi = ["twine", "build"]
+dist-conda = [
+    "anaconda-client", #
+    "grayskull",
+    "conda-build",
+    "conda-verify",
+    "boa",
+    "setuptools-scm",
+]
 
-# dev = []
-# docs = []
+[tool.pyproject2conda]
+channels = ["conda-forge"]
+
 ## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]
 zip-safe = true # if using mypy, must be False
@@ -49,7 +111,6 @@ where = ["src"]
 
 ## include = []
 ## exclude = []
-##
 [tool.setuptools.dynamic]
 readme = { file = [
     "README.md",
@@ -134,6 +195,7 @@ exclude = [
     "venv",
     "tests/",
     "src/module_utilities/tests",
+    "src/module_utilities/vendored",
 ]
 ignore = [
     # # whitespace before ':' - doesn't work well with black
@@ -229,7 +291,7 @@ show_error_codes = true
 warn_unused_ignores = true
 warn_return_any = true
 warn_unused_configs = true
-exclude = [".eggs", ".tox", "doc", "docs"]
+exclude = [".eggs", ".tox", "doc", "docs", ".nox"]
 check_untyped_defs = true
 
 [[tool.mypy.overrides]]
@@ -238,11 +300,16 @@ module = []
 
 [[tool.mypy.overrides]]
 ignore_errors = true
-module = []
+module = ["module_utilities.vendored.docscrape"]
 
 [tool.pyright]
 include = ["src", "tests"]
-exclude = ["**/__pycache__", ".tox/**", "**/.mypy_cache"]
+exclude = [
+    "**/__pycache__",
+    ".tox/**",
+    "**/.mypy_cache",
+    "src/module-utilities/vendored"
+]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"
 # enable subset of "strict"

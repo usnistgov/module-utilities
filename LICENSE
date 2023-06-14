@@ -22,3 +22,8 @@ OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 Distributions of NIST software should also include copyright and licensing
 statements of any third-party software that are legally bundled with the code in
 compliance with the conditions of those licenses.
+
+---
+
+module-utilities vendors a copy of docscrape.py from numpydoc.
+The license is BSD and include at "module_utilities/vendored/LICENSE.txt".

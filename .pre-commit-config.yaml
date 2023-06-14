@@ -45,6 +45,7 @@ repos:
       # - id: black-jupyter
       # Move to just black.  use nbqa for notebook formatting
       - id: black
+        exclude: ^src/module-utilities/vendored/docscrape.py
   - repo: https://github.com/adamchainz/blacken-docs
     rev: "1.13.0"
     hooks:

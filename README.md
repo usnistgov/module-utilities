@@ -21,8 +21,8 @@
 [docs-link]: https://pages.nist.gov/module-utilities/
 [repo-badge]: https://img.shields.io/badge/--181717?logo=github&logoColor=ffffff
 [repo-link]: https://github.com/usnistgov/module-utilities
-[conda-badge]: https://img.shields.io/conda/v/wpk-nist/module-utilities
-[conda-link]: https://anaconda.org/wpk-nist/module-utilities
+[conda-badge]: https://img.shields.io/conda/v/conda-forge/module-utilities
+[conda-link]: https://anaconda.org/conda-forge/module-utilities
 [license-badge]: https://img.shields.io/pypi/l/cmomy?color=informational
 [license-link]: https://github.com/usnistgov/module-utilities/blob/main/LICENSE
 
@@ -65,7 +65,7 @@ pip install module-utilities
 or
 
 ```bash
-conda install -c wpk-nist module-utilities
+conda install -c conda-forge module-utilities
 ```
 
 ## Example usage
@@ -167,8 +167,11 @@ Returns
 output : int
     Integer output.
 
-
->>> @d.assign_keys(z='z0', out='returns.output0')()
+# Note that for python version <= 3.8 that method chaining
+# in decorators doesn't work, so have to do the following.
+# For newer python, you can inline this.
+>>> dd = d.assign_keys(z='z0', out='returns.output0')
+>>> @dd.decorate
 ... def func1(x, y, z):
 ...     """
 ...     Parameters
@@ -196,7 +199,8 @@ Returns
 output : int
     Integer output.
 
->>> @d.assign_keys(z='z1', out='returns.output1')(func1)
+>>> dd = d.assign_keys(z='z1', out='returns.output1')
+>>> @dd(func1)
 ... def func2(x, y, z):
 ...     pass
 
@@ -249,6 +253,6 @@ The author can be reached at wpk@nist.gov.
 
 This package was created with
 [Cookiecutter](https://github.com/audreyr/cookiecutter) and the
-[usnistgov/cookiecutter-pypackage](https://github.com/usnistgov/cookiecutter-pypackage)
+[wpk-nist-gov/cookiecutter-pypackage](https://github.com/wpk-nist-gov/cookiecutter-pypackage)
 Project template forked from
 [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage).

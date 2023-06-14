@@ -1,5 +1,0 @@
-dependencies:
-  - mypy
-  - pytype
-  ## stubs
-  # - pandas-stubs

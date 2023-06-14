@@ -8,14 +8,8 @@ channels:
 dependencies:
   - python>=3.8
   - typing-extensions
-  - setuptools-scm
-  - ipython
-  - pyenchant
-  - ghp-import
-  - sphinx
-  - sphinx-copybutton
-  - sphinxcontrib-spelling
-  - sphinx-autobuild
-  - myst-nb
-  - sphinx-book-theme
-  - autodocsumm
+  - mypy
+  - pytest
+  - pytest-xdist
+  - pytest-cov
+  - pytest-sugar

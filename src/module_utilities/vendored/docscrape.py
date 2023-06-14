@@ -1,22 +1,17 @@
-# type: ignore
-# flake8: noqa
 """Extract reference documentation from the NumPy source tree.
+
 """
-import copy
 import inspect
-import pydoc
-import re
-import sys
 import textwrap
+import re
+import pydoc
+from warnings import warn
 from collections import namedtuple
 from collections.abc import Callable, Mapping
-from warnings import warn
+import copy
+import sys
 
-# TODO: Remove try-except when support for Python 3.7 is dropped
-try:
-    from functools import cached_property
-except ImportError:  # cached_property added in Python 3.8
-    cached_property = property
+from functools import cached_property
 
 
 def strip_blank_lines(l):
@@ -37,6 +32,7 @@ class Reader:
         ----------
         data : str
            String with lines separated by '\\n'.
+
         """
         if isinstance(data, list):
             self._str = data
@@ -116,7 +112,9 @@ Parameter = namedtuple("Parameter", ["name", "type", "desc"])
 
 class NumpyDocString(Mapping):
     """Parses a numpydoc string to an abstract representation
+
     Instances define a mapping from section title to structured data.
+
     """
 
     sections = {
@@ -296,6 +294,7 @@ class NumpyDocString(Mapping):
             continued text
         another_func_name : Descriptive text
         func_name1, func_name2, :meth:`func_name`, func_name3
+
         """
 
         content = dedent_lines(content)
@@ -349,6 +348,7 @@ class NumpyDocString(Mapping):
         """
         .. index: default
            :refguide: something, else, and more
+
         """
 
         def strip_each_in(lst):
@@ -722,7 +722,15 @@ class ClassDoc(NumpyDocString):
         return True
 
 
-def get_doc_object(obj, what=None, doc=None, config=None):
+def get_doc_object(
+    obj,
+    what=None,
+    doc=None,
+    config=None,
+    class_doc=ClassDoc,
+    func_doc=FunctionDoc,
+    obj_doc=ObjDoc,
+):
     if what is None:
         if inspect.isclass(obj):
             what = "class"
@@ -736,10 +744,10 @@ def get_doc_object(obj, what=None, doc=None, config=None):
         config = {}
 
     if what == "class":
-        return ClassDoc(obj, func_doc=FunctionDoc, doc=doc, config=config)
+        return class_doc(obj, func_doc=func_doc, doc=doc, config=config)
     elif what in ("function", "method"):
-        return FunctionDoc(obj, doc=doc, config=config)
+        return func_doc(obj, doc=doc, config=config)
     else:
         if doc is None:
             doc = pydoc.getdoc(obj)
-        return ObjDoc(obj, doc, config=config)
+        return obj_doc(obj, doc, config=config)

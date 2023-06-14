@@ -11,8 +11,10 @@ from typing import TYPE_CHECKING, Any, Callable
 
 from . import cached
 from ._doc import doc as _pd_doc
-from ._docscrape import NumpyDocString, Parameter  # type: ignore
 from .attributedict import AttributeDict
+
+# from ._docscrape import NumpyDocString, Parameter  # type: ignore
+from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence

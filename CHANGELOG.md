@@ -11,6 +11,16 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.4.0 — 2023-06-14
+
+### Added
+
+- Package now available on conda-forge
+
+### Changed
+
+- Properly vendor numpydocs and include pointer to license
+
 ## v0.3.0 — 2023-05-03
 
 ### Added

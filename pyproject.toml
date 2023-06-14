@@ -195,6 +195,7 @@ exclude = [
     "venv",
     "tests/",
     "src/module_utilities/tests",
+    "src/module_utilities/vendored",
 ]
 ignore = [
     # # whitespace before ':' - doesn't work well with black
@@ -290,7 +291,7 @@ show_error_codes = true
 warn_unused_ignores = true
 warn_return_any = true
 warn_unused_configs = true
-exclude = [".eggs", ".tox", "doc", "docs"]
+exclude = [".eggs", ".tox", "doc", "docs", ".nox"]
 check_untyped_defs = true
 
 [[tool.mypy.overrides]]
@@ -299,11 +300,16 @@ module = []
 
 [[tool.mypy.overrides]]
 ignore_errors = true
-module = []
+module = ["module_utilities.vendored.docscrape"]
 
 [tool.pyright]
 include = ["src", "tests"]
-exclude = ["**/__pycache__", ".tox/**", "**/.mypy_cache"]
+exclude = [
+    "**/__pycache__",
+    ".tox/**",
+    "**/.mypy_cache",
+    "src/module-utilities/vendored"
+]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"
 # enable subset of "strict"

@@ -319,7 +319,7 @@ def session_install_pip(
     requirement_paths = requirement_paths or ()
     constraint_paths = constraint_paths or ()
     reqs = reqs or ()
-    paths = requirement_paths + constraint_paths
+    paths = tuple(requirement_paths) + tuple(constraint_paths)
 
     unchanged, hashes = env_unchanged(
         session,
@@ -448,12 +448,14 @@ def get_hashes(
 
         other_hashes = {}
         for k, v in other.items():
-            if not isinstance(v, str):
+            if isinstance(v, str):
+                s = v
+            else:
                 try:
-                    v = str(sorted(v))
+                    s = str(sorted(v))
                 except Exception:
-                    v = str(v)
-            other_hashes[k] = hashlib.md5(v.encode("utf-8")).hexdigest()
+                    s = str(v)
+            other_hashes[k] = hashlib.md5(s.encode("utf-8")).hexdigest()
 
         out["other"] = other_hashes
 

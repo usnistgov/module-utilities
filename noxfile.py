@@ -893,14 +893,12 @@ def testdist_pypi_venv(
     if version:
         install_str = f"{install_str}=={version}"
 
-    install_requirements(
+    session_install_pip(
         session=session,
-        name="testdist-pypi-venv",
-        set_kernel=False,
-        install_package=False,
+        requirement_paths=["environment/test-extras.txt"],
+        reqs=[install_str],
         force_reinstall=force_reinstall,
-        style="pip",
-        reqs=["-r", "environment/test-extras.txt", install_str],
+        install_package=False,
     )
 
     if log_session:

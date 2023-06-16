@@ -391,7 +391,7 @@ class DocFiller:
         self,
         name: str,
         ptype: str = "",
-        desc: str | list[str] = [],
+        desc: str | list[str] | None = None,
         key: str | None = None,
     ):
         """
@@ -432,8 +432,10 @@ class DocFiller:
 
         new = self.new_like()
 
-        # cleanup desc
-        if isinstance(desc, str):
+        if desc is None:
+            desc = []
+        elif isinstance(desc, str):
+            # cleanup desc
             desc = dedent(desc).strip().split("\n")
 
         key = name if key is None else key

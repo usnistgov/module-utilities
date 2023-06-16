@@ -154,11 +154,13 @@ select = [
     # # flake8-2020
     "YTT",
     # # flake8-bugbear
-    # "B",
+    "B",
     # flake8-quotes
     "Q",
     # # pylint
     # "PLE", "PLR", "PLW",
+    "PLE",
+    "PLW",
     # # misc lints
     "PIE",
     # # tidy imports

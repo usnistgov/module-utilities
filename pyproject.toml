@@ -40,6 +40,7 @@ test = [
 ]
 dev-extras = [
     "pytest-accept", # p2c: -p
+    "setuptools-scm",
     "ipython",
     "ipykernel",
 ]

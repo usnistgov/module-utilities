@@ -106,15 +106,6 @@ FORCE_REINSTALL_CLI = Annotated[
     ),
 ]
 
-FORCE_REINSTALL_PACKAGE_CLI = Annotated[
-    bool,
-    Option(
-        type=bool,
-        help="If specified, force reinstall of the package even if environment unchanged",
-    ),
-]
-
-
 VERSION_CLI = Annotated[
     str, Option(type=str, help="Version to substitute or check against")
 ]
@@ -270,6 +261,7 @@ def dev_venv(
     session_run_commands(session, dev_run)
 
 
+# ** version report/update
 @DEFAULT_SESSION_VENV
 def version_scm(
     session: Session,
@@ -292,8 +284,6 @@ def version_scm(
         force_reinstall=force_reinstall,
         no_deps=True,
     )
-
-    session.log(f"session.posargs={session.posargs}")
 
     if version:
         session.env["SETUPTOOLS_SCM_PRETEND_VERSION"] = version

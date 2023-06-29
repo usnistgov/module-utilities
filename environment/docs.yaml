@@ -8,7 +8,6 @@ channels:
 dependencies:
   - python>=3.8
   - typing-extensions
-  - setuptools-scm
   - ipython
   - pyenchant
   - ghp-import

@@ -69,7 +69,7 @@ tools = [
 ]
 dev-complete = [
     "module-utilities[dev]", #
-    "module-utilities[tools]",
+    "module-utilities[tools",
     "module-utilities[nox]",
 ]
 docs = [
@@ -308,6 +308,7 @@ include = ["src", "tests"]
 exclude = [
     "**/__pycache__",
     ".tox/**",
+    ".nox/**",
     "**/.mypy_cache",
     "src/module-utilities/vendored"
 ]

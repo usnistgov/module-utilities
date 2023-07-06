@@ -69,7 +69,7 @@ tools = [
 ]
 dev-complete = [
     "module-utilities[dev]", #
-    "module-utilities[tools",
+    "module-utilities[tools]",
     "module-utilities[nox]",
 ]
 docs = [
@@ -310,7 +310,7 @@ exclude = [
     ".tox/**",
     ".nox/**",
     "**/.mypy_cache",
-    "src/module-utilities/vendored"
+    "src/module_utilities/vendored"
 ]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"

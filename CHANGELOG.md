@@ -11,6 +11,13 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.5.0 — 2023-07-10
+
+### Added
+
+- Add `_prepend` option to docfiller. Default behavior is now to append current
+  docstring to templates.
+
 ## v0.4.0 — 2023-06-14
 
 ### Added

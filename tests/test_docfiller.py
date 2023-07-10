@@ -549,3 +549,82 @@ def test_DocFiller_on_class():
         pass
 
     assert hello.__doc__ == expected
+
+
+def test_prepend():
+    expected = """
+    A summary
+
+    A longer summary
+
+    Parameters
+    ----------
+    x : float
+        x param
+        some other stuff
+    y : float
+        y param
+
+    Returns
+    -------
+    out : float
+        output
+    """
+
+    expected = dedent(expected)
+
+    d = DocFiller.from_docstring(expected, combine_keys="parameters")
+
+    def template():
+        """
+        {summary}
+
+        {extended_summary}
+
+        Parameters
+        ----------
+        {x}
+        {y}
+        """
+
+    @d(template)
+    def hello():
+        """
+        Returns
+        -------
+        {returns.out}
+        """
+        pass
+
+    assert hello.__doc__ == expected
+
+    # prepend
+    @d(template, _prepend=True)
+    def there():
+        """
+        Returns
+        -------
+        {returns.out}
+        """
+        pass
+
+    expected = """
+    Returns
+    -------
+    out : float
+        output
+
+    A summary
+
+    A longer summary
+
+    Parameters
+    ----------
+    x : float
+        x param
+        some other stuff
+    y : float
+        y param
+    """
+
+    assert dedent(expected) == there.__doc__

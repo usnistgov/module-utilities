@@ -14,7 +14,9 @@ if TYPE_CHECKING:
     from ._typing import F
 
 
-def doc(*docstrings: None | str | Callable, **params) -> Callable[[F], F]:
+def doc(
+    *docstrings: None | str | Callable, _prepend: bool = False, **params
+) -> Callable[[F], F]:
     """
     A decorator to take docstring templates, concatenate them and perform string
     substitution on them.
@@ -29,15 +31,18 @@ def doc(*docstrings: None | str | Callable, **params) -> Callable[[F], F]:
     *docstrings : None, str, or callable
         The string / docstring / docstring template to be appended in order
         after default docstring under callable.
+    _prepend : bool, default=False
+        If True, prepend decorated function docstring.  Otherwise, append to end.
     **params
         The string which would be used to format docstring template.
+
     """
 
     def decorator(decorated: F) -> F:
         # collecting docstring and docstring templates
         docstring_components: list[str | Callable] = []
-        if decorated.__doc__:
-            docstring_components.append(dedent(decorated.__doc__))
+        # if decorated.__doc__:
+        #     docstring_components.append(dedent(decorated.__doc__))
 
         for docstring in docstrings:
             if docstring is None:
@@ -46,8 +51,18 @@ def doc(*docstrings: None | str | Callable, **params) -> Callable[[F], F]:
                 docstring_components.extend(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues] # noqa: E501
                 )
-            elif isinstance(docstring, str) or docstring.__doc__:
+            elif isinstance(docstring, str):
                 docstring_components.append(docstring)
+            elif docstring.__doc__:
+                # docstring_components.append(docstring)
+                docstring_components.append(dedent(docstring.__doc__ or ""))
+
+        # make default to append
+        if decorated.__doc__:
+            if _prepend:
+                docstring_components.insert(0, dedent(decorated.__doc__))
+            else:
+                docstring_components.append(dedent(decorated.__doc__))
 
         params_applied = [
             # component.format(**params)

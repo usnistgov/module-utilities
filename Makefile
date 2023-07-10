@@ -133,11 +133,12 @@ coverage: ## check code coverage quickly with the default Python
 # versioning
 ################################################################################
 .PHONY: version-scm version-import version
-version-scm: ## check version of package
+
+version-scm: ## check/update version of package with setuptools-scm
 	python -m setuptools_scm
 
 version-import: ## check version from python import
-	python -c 'import module_utilities; print(module_utilities.__version__)'
+	-python -c 'import module_utilities; print(module_utilities.__version__)'
 
 version: version-scm version-import
 
@@ -190,7 +191,7 @@ docs-clean: ## clean docs
 	rm -rf docs/reference/generated/*
 docs-clean-build: docs-clean docs-build ## clean and build
 docs-release: ## release docs.
-	$(NOX) -s docs -- release
+	$(NOX) -s docs -- -d release
 docs-command: ## run arbitrary command with command=...
 	$(NOX) -s docs -- --docs-run $(command)
 
@@ -270,3 +271,10 @@ auto-changelog: ## autogenerate changelog and print to stdout
 
 commitizen-changelog:
 	cz changelog --unreleased-version unreleased --dry-run --incremental
+
+# tuna analyze load time:
+.PHONY: tuna-analyze
+tuna-import: ## Analyze load time for module
+	python -X importtime -c 'import module_utilities' 2> tuna-loadtime.log
+	tuna tuna-loadtime.log
+	rm tuna-loadtime.log

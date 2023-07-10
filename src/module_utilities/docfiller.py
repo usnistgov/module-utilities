@@ -33,7 +33,9 @@ except KeyError:
 
 
 # Factory method to create doc_decorate
-def doc_decorate(*docstrings: str | Callable, **params) -> Callable[[F], F]:
+def doc_decorate(
+    *docstrings: str | Callable, _prepend: bool = False, **params
+) -> Callable[[F], F]:
     """
     A decorator take docstring templates, concatenate them and perform string
     substitution on it.
@@ -49,6 +51,8 @@ def doc_decorate(*docstrings: str | Callable, **params) -> Callable[[F], F]:
     *docstrings : str or callable
         The string / docstring / docstring template to be appended in order
         after default docstring under callable.
+    _prepend : bool, default=False
+        If True, prepend decorated function docstring.  Otherwise, append to end.
     **params
         The string which would be used to format docstring template.
 
@@ -59,7 +63,7 @@ def doc_decorate(*docstrings: str | Callable, **params) -> Callable[[F], F]:
     """
 
     if DOC_SUB:
-        return _pd_doc(*docstrings, **params)
+        return _pd_doc(*docstrings, _prepend=_prepend, **params)
     else:
 
         def decorated(func):
@@ -391,7 +395,7 @@ class DocFiller:
         self,
         name: str,
         ptype: str = "",
-        desc: str | list[str] = [],
+        desc: str | list[str] | None = None,
         key: str | None = None,
     ):
         """
@@ -432,8 +436,10 @@ class DocFiller:
 
         new = self.new_like()
 
-        # cleanup desc
-        if isinstance(desc, str):
+        if desc is None:
+            desc = []
+        elif isinstance(desc, str):
+            # cleanup desc
             desc = dedent(desc).strip().split("\n")
 
         key = name if key is None else key
@@ -566,7 +572,9 @@ class DocFiller:
         """
         return self._default_decorator(func)  # type: ignore
 
-    def __call__(self, *templates: Callable | str, **params) -> Callable[[F], F]:
+    def __call__(
+        self, *templates: Callable | str, _prepend: bool = False, **params
+    ) -> Callable[[F], F]:
         """
         General decorator.
 
@@ -583,12 +591,12 @@ class DocFiller:
         """
         ntemplates, nparams = len(templates), len(params)
 
-        if ntemplates == nparams == 0:
+        if ntemplates == nparams == 0 and not _prepend:
             return self.decorate
         elif nparams == 0:
-            return doc_decorate(*templates, **self.params)
+            return doc_decorate(*templates, _prepend=_prepend, **self.params)
         else:
-            return self.update(params)(*templates)
+            return self.update(params)(*templates, _prepend=_prepend)
 
     # NOTE: This is dangerous.
     # if you pass a function as a template, but forget to explicitly pass it,

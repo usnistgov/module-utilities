@@ -7,9 +7,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Contributing &#8212; module-utilities 0.4.0 documentation</title>
+    <title>Contributing &#8212; module-utilities v0.5.0 documentation</title>
   
   
   
@@ -45,6 +45,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -129,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.4.0 documentation</p>
+    <p class="title logo__title">module-utilities v0.5.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -151,15 +152,25 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.cached.html">Cached class properties/methods (<code class="xref py py-mod docutils literal notranslate"><span class="pre">cached</span></code>)</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
+
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="navigation.html">Indices and tables</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+<li class="toctree-l1 has-children"><a class="reference internal" href="navigation.html">Indices and tables</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
 </ul>
 </li>
 </ul>
@@ -708,6 +719,15 @@ recipe.</p>
 <p>Versioning is handled with <a class="reference external" href="https://github.com/pypa/setuptools_scm">setuptools_scm</a>.The package version is set by the
 git tag. For convenience, you can override the version with nox setting
 <code class="docutils literal notranslate"><span class="pre">--version</span> <span class="pre">...</span></code>. This is useful for updating the docs, etc.</p>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">write_to</span></code> option to <a class="reference external" href="https://github.com/pypa/setuptools_scm">setuptools_scm</a>. This stores the current
+version in <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>. Note that if you build the package (or, build docs
+with the <code class="docutils literal notranslate"><span class="pre">--version</span></code> flag), this will overwrite information in <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">src</span></code> directory. To refresh the version, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>version-scm
+</pre></div>
+</div>
+<p>This scheme avoids having to install <code class="docutils literal notranslate"><span class="pre">setuptools-scm</span></code> (and <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>) in each
+environment.</p>
 </section>
 <section id="notes-on-nox">
 <h2>Notes on <a class="reference external" href="https://github.com/wntrblm/nox">nox</a><a class="headerlink" href="#notes-on-nox" title="Permalink to this heading">#</a></h2>
@@ -715,6 +735,26 @@ git tag. For convenience, you can override the version with nox setting
 multiple scripts/makefiles, while with <a class="reference external" href="https://github.com/wntrblm/nox">nox</a>, most everything is self contained
 in the file <code class="docutils literal notranslate"><span class="pre">noxfile.py</span></code>. <a class="reference external" href="https://github.com/wntrblm/nox">nox</a> also is allows for a mix of conda and virtualenv
 environments.</p>
+<p>We use a mix of conda environments and virtualenv with nox. For example, for
+building the distribution, we use virtualenv, while for development, the default
+is to create a conda environment. To facilitate this, we need to let virtualenv
+know where different python interpreters are. I’ve had trouble mixing pyenv with
+conda. Instead, I use conda to create multiple invironments to hold different
+python version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="k">for</span><span class="w"> </span>version<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">3</span>.8<span class="w"> </span><span class="m">3</span>.9<span class="w"> </span><span class="m">3</span>.10<span class="w"> </span><span class="m">3</span>.11<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>test-3.8<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
+<span class="w">  </span><span class="k">done</span>
+</pre></div>
+</div>
+<p>To tell nox where these environments live, create the file <code class="docutils literal notranslate"><span class="pre">.noxconfig.toml</span></code>
+with the following:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[nox.python]</span>
+<span class="n">paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;~/.conda/envs/test-3.*/bin&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">~/.conda/envs</span></code> should be replaced by whatever prefix you have setup on
+your machine. The noxfile will add this to the search path for python versions
+when creating virtualenvs.</p>
 </section>
 <section id="serving-the-documentation">
 <h2>Serving the documentation<a class="headerlink" href="#serving-the-documentation" title="Permalink to this heading">#</a></h2>
@@ -831,7 +871,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-06-14.
+  Last updated on 2023-07-10.
   <br/>
 </p>
   </div>

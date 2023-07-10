@@ -7,9 +7,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Changelog &#8212; module-utilities 0.4.0 documentation</title>
+    <title>Changelog &#8212; module-utilities v0.5.0 documentation</title>
   
   
   
@@ -45,6 +45,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -129,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.4.0 documentation</p>
+    <p class="title logo__title">module-utilities v0.5.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -151,15 +152,25 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.cached.html">Cached class properties/methods (<code class="xref py py-mod docutils literal notranslate"><span class="pre">cached</span></code>)</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
+
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="navigation.html">Indices and tables</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+<li class="toctree-l1 has-children"><a class="reference internal" href="navigation.html">Indices and tables</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
 </ul>
 </li>
 </ul>
@@ -356,21 +367,25 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-0-2023-06-14">v0.4.0 — 2023-06-14</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-0-2023-07-10">v0.5.0 — 2023-07-10</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-0-2023-06-14">v0.4.0 — 2023-06-14</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Added</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-0-2023-05-03">v0.3.0 — 2023-05-03</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Added</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0-2023-05-02">v0.2.0 — 2023-05-02</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Added</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0-2023-05-01">v0.1.0 — 2023-05-01</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0-2023-05-02">v0.2.0 — 2023-05-02</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0-2023-05-01">v0.1.0 — 2023-05-01</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -395,10 +410,20 @@ document.write(`
 <a class="reference external" href="https://github.com/usnistgov/module-utilities">changelog.d</a></p>
 <!-- scriv-insert-here -->
 </section>
-<section id="v0-4-0-2023-06-14">
-<h2>v0.4.0 — 2023-06-14<a class="headerlink" href="#v0-4-0-2023-06-14" title="Permalink to this heading">#</a></h2>
+<section id="v0-5-0-2023-07-10">
+<h2>v0.5.0 — 2023-07-10<a class="headerlink" href="#v0-5-0-2023-07-10" title="Permalink to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">_prepend</span></code> option to docfiller. Default behavior is now to append current
+docstring to templates.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-0-2023-06-14">
+<h2>v0.4.0 — 2023-06-14<a class="headerlink" href="#v0-4-0-2023-06-14" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Added<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Package now available on conda-forge</p></li>
 </ul>
@@ -412,8 +437,8 @@ document.write(`
 </section>
 <section id="v0-3-0-2023-05-03">
 <h2>v0.3.0 — 2023-05-03<a class="headerlink" href="#v0-3-0-2023-05-03" title="Permalink to this heading">#</a></h2>
-<section id="id1">
-<h3>Added<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<section id="id2">
+<h3>Added<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">DocFiller.assign_param</span></code> to more easily add a new parameter.</p></li>
 </ul>
@@ -421,8 +446,8 @@ document.write(`
 </section>
 <section id="v0-2-0-2023-05-02">
 <h2>v0.2.0 — 2023-05-02<a class="headerlink" href="#v0-2-0-2023-05-02" title="Permalink to this heading">#</a></h2>
-<section id="id2">
-<h3>Added<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<section id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added method <code class="docutils literal notranslate"><span class="pre">assign_keys</span></code> to <code class="docutils literal notranslate"><span class="pre">DocFiller</span></code>.</p></li>
 </ul>
@@ -430,8 +455,8 @@ document.write(`
 </section>
 <section id="v0-1-0-2023-05-01">
 <h2>v0.1.0 — 2023-05-01<a class="headerlink" href="#v0-1-0-2023-05-01" title="Permalink to this heading">#</a></h2>
-<section id="id3">
-<h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<section id="id4">
+<h3>Added<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add typing support. Passing mypy, pyright, pytype.</p></li>
 </ul>
@@ -488,21 +513,25 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-0-2023-06-14">v0.4.0 — 2023-06-14</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-0-2023-07-10">v0.5.0 — 2023-07-10</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-0-2023-06-14">v0.4.0 — 2023-06-14</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Added</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-0-2023-05-03">v0.3.0 — 2023-05-03</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Added</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0-2023-05-02">v0.2.0 — 2023-05-02</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Added</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0-2023-05-01">v0.1.0 — 2023-05-01</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0-2023-05-02">v0.2.0 — 2023-05-02</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0-2023-05-01">v0.1.0 — 2023-05-01</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -537,7 +566,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-06-14.
+  Last updated on 2023-07-10.
   <br/>
 </p>
   </div>

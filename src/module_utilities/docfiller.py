@@ -6,18 +6,17 @@ from __future__ import annotations
 
 import inspect
 import os
+from collections.abc import Mapping
 from textwrap import dedent
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, Iterable, cast
 
 from . import cached
 from ._doc import doc as _pd_doc
 from .attributedict import AttributeDict
-
-# from ._docscrape import NumpyDocString, Parameter  # type: ignore
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Sequence
 
     from ._typing import F
 
@@ -66,7 +65,7 @@ def doc_decorate(
         return _pd_doc(*docstrings, _prepend=_prepend, **params)
     else:
 
-        def decorated(func):
+        def decorated(func: F) -> F:
             return func
 
         return decorated
@@ -318,6 +317,7 @@ class DocFiller:
             self.data = params
         else:
             self.data = dict(params)
+        self._cache: dict[str, Any] = {}
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.data)})"
@@ -550,7 +550,10 @@ class DocFiller:
         """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
-    @cached.prop
+    # HACK: cached.prop and mypy don't play nice with
+    # returning a decorator from
+    @property
+    @cached.meth
     def _default_decorator(self) -> Callable[[F], F]:
         return doc_decorate(**self.params)
 
@@ -570,7 +573,7 @@ class DocFiller:
 
         This uses `self.params` and the decorated funciton docstring as a template.
         """
-        return self._default_decorator(func)  # type: ignore
+        return self._default_decorator(func)
 
     def __call__(
         self, *templates: Callable | str, _prepend: bool = False, **params
@@ -658,7 +661,7 @@ class DocFiller:
         namespace: str | None = None,
         combine_keys: str | Sequence[str] | None = None,
         keep_keys: bool | str | Sequence[str] = True,
-        key_map: Mapping[str, str] | Callable | None = None,
+        key_map: Mapping[str, str] | Callable[[str], str] | None = None,
     ) -> DocFiller:
         """
         Create a Docfiller instance from a dictionary.
@@ -690,6 +693,8 @@ class DocFiller:
         elif isinstance(keep_keys, str):
             keep_keys = [keep_keys]
 
+        assert isinstance(keep_keys, Iterable)
+
         if combine_keys:
             if isinstance(combine_keys, str):
                 combine_keys = [combine_keys]
@@ -713,8 +718,13 @@ class DocFiller:
         if key_map is not None:
             if callable(key_map):
                 mapper = key_map
+            elif isinstance(key_map, Mapping):
+
+                def mapper(x: str) -> str:
+                    return cast(Mapping[str, str], key_map)[x]
+
             else:
-                mapper = lambda x: key_map[x]  # type: ignore
+                raise ValueError("unknown key_map {key_map}")
 
             updated_params = {mapper(k): updated_params[k] for k in updated_params}
 

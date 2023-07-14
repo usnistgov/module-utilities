@@ -6,6 +6,11 @@
 channels:
   - conda-forge
 dependencies:
-  - python>=3.8
-  - twine
-  - build
+  - python=3.9
+  - typing-extensions
+  - pytype
+  - mypy
+  - pytest
+  - pytest-xdist
+  - pytest-cov
+  - pytest-sugar

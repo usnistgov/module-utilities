@@ -63,7 +63,7 @@ class AttributeDict(MutableMapping):
     ):
         if entries is None:
             entries = {}
-        self._entries = entries
+        self._entries: dict[str, Any] = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
 

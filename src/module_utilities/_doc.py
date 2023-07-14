@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 def doc(
     *docstrings: None | str | Callable, _prepend: bool = False, **params
-) -> Callable[[F], F]:
+) -> Callable[[F], F]:  # pyre-ignore
     """
     A decorator to take docstring templates, concatenate them and perform string
     substitution on them.
@@ -49,7 +49,7 @@ def doc(
                 continue
             if hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
-                    docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues] # noqa: E501
+                    docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues] # noqa: E501 # pyre-ignore
                 )
             elif isinstance(docstring, str):
                 docstring_components.append(docstring)
@@ -60,9 +60,9 @@ def doc(
         # make default to append
         if decorated.__doc__:
             if _prepend:
-                docstring_components.insert(0, dedent(decorated.__doc__))
+                docstring_components.insert(0, dedent(decorated.__doc__ or ""))
             else:
-                docstring_components.append(dedent(decorated.__doc__))
+                docstring_components.append(dedent(decorated.__doc__ or ""))
 
         params_applied = [
             # component.format(**params)

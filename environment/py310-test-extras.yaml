@@ -6,9 +6,7 @@
 channels:
   - conda-forge
 dependencies:
-  - python>=3.8
-  - typing-extensions
-  - mypy
+  - python=3.10
   - pytest
   - pytest-xdist
   - pytest-cov

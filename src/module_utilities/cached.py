@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors[34]
 """
 Cached class properties/methods (:mod:`~module_utilities.cached`)
 =================================================================
@@ -58,29 +59,11 @@ def decorate(
 
 @overload
 def decorate(
-    *, key: str, check_use_cache: bool, as_property: Literal[False]
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
-
-
-@overload
-def decorate(
-    *, check_use_cache: bool, as_property: Literal[False]
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
-
-
-@overload
-def decorate(
-    *, key: str, as_property: Literal[False]
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
-
-
-@overload
-def decorate(
-    *, as_property: Literal[False]
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
+    *,
+    key: str | None = ...,
+    check_use_cache: bool = ...,
+    as_property: Literal[False],
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:  # pyre-ignore
     ...
 
 
@@ -102,7 +85,12 @@ def decorate(
 
 
 @overload
-def prop(func: C_prop[S, R]) -> R:
+def prop(
+    func: C_prop[S, R],
+    *,
+    key: str | None = ...,
+    check_use_cache: bool = ...,
+) -> R:
     ...
 
 
@@ -235,14 +223,26 @@ def prop(
         return cached_lookup
 
 
+# @overload
+# def meth(func: C_meth[S, P, R]) -> C_meth[S, P, R]: ...
+
+
 @overload
-def meth(func: C_meth[S, P, R]) -> C_meth[S, P, R]:
+def meth(
+    func: C_meth[S, P, R],
+    *,
+    key: str | None = ...,
+    check_use_cache: bool = ...,
+) -> C_meth[S, P, R]:
     ...
 
 
 @overload
 def meth(
-    *, key: str | None = None, check_use_cache: bool = False
+    func: None = None,
+    *,
+    key: str | None = ...,
+    check_use_cache: bool = ...,
 ) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
     ...
 
@@ -347,7 +347,7 @@ def meth(
 
 
 @overload
-def clear(key_or_func: C_meth[S, P, R]) -> C_meth[S, P, R]:
+def clear(key_or_func: C_meth[S, P, R], *keys: str) -> C_meth[S, P, R]:
     ...
 
 

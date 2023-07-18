@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -398,17 +398,25 @@ def test_use_cache2() -> None:
         def prop1(self):
             return [2, 3]
 
-        @cached.decorate(check_use_cache=True)
+        @cached.decorate(check_use_cache=True, key="prop2")
         def prop2(self) -> list[int]:
             return [1, 2]
 
         @cached.decorate()
-        def prop3(self):
+        def prop3(self) -> list[int]:
             return [1, 2]
 
         @cached.decorate(check_use_cache=True, as_property=False)
         def meth(self) -> list[int]:
             return [1, 2, 3]
+
+        @cached.meth
+        def meth1(self) -> list[int]:
+            return [1, 2, 3]
+
+        @cached.meth(key="a thing")
+        def meth2(self, a: int) -> list[int]:
+            return [a] + self.prop3
 
         @cached.decorate(key="there", as_property=False)
         def there(self) -> list[int]:
@@ -418,12 +426,28 @@ def test_use_cache2() -> None:
         def prop4(self) -> list[int]:
             return [1, 2]
 
+        @property
+        @cached.clear
+        def prop_test(self) -> list[int]:
+            return [1, 2]
+
+        @cached.clear("meth1")
+        def clearer(self) -> list[int]:
+            return [1, 2]
+
+        clearer = cached.clear(clearer, "meth2")
+
     x = tmp()
 
-    reveal_type(x.prop2)
-    reveal_type(x.meth())
-    reveal_type(x.there())
-    reveal_type(x.prop4)
+    if TYPE_CHECKING:
+        reveal_type(x.prop2)
+        reveal_type(x.meth())
+        reveal_type(x.there())
+        reveal_type(x.prop4)
+        reveal_type(x.meth1())
+        reveal_type(x.meth2(2))
+        reveal_type(x.prop_test)
+        reveal_type(x.clearer())
 
     for p in ["prop0", "prop1", "prop2", "prop3"]:
         assert getattr(x, p) is getattr(x, p)

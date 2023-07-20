@@ -1,3 +1,5 @@
+# mypy: disable-error-code="no-untyped-def, no-untyped-call"
+
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
@@ -439,15 +441,15 @@ def test_use_cache2() -> None:
 
     x = tmp()
 
-    if TYPE_CHECKING:
-        reveal_type(x.prop2)
-        reveal_type(x.meth())
-        reveal_type(x.there())
-        reveal_type(x.prop4)
-        reveal_type(x.meth1())
-        reveal_type(x.meth2(2))
-        reveal_type(x.prop_test)
-        reveal_type(x.clearer())
+    # if TYPE_CHECKING:
+    #     reveal_type(x.prop2)
+    #     reveal_type(x.meth())
+    #     reveal_type(x.there())
+    #     reveal_type(x.prop4)
+    #     reveal_type(x.meth1())
+    #     reveal_type(x.meth2(2))
+    #     reveal_type(x.prop_test)
+    #     reveal_type(x.clearer())
 
     for p in ["prop0", "prop1", "prop2", "prop3"]:
         assert getattr(x, p) is getattr(x, p)

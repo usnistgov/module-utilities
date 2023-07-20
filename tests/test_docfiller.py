@@ -1,3 +1,4 @@
+# mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 from textwrap import dedent
 
@@ -223,7 +224,7 @@ def test_DocFiller_docstring():
         {there}
         """
 
-    expected = docfiller.dedent(
+    expected = dedent(
         """
     A summary line
 
@@ -301,7 +302,7 @@ def test_DocFiller_namespace() -> None:
 
     dd1 = docfiller.DocFiller.concat(a=d0, b=d1)
 
-    expected = docfiller.dedent(
+    expected = dedent(
         """
         Parameters
         ----------

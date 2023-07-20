@@ -52,8 +52,8 @@ def decorate(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-    as_property: Literal[True] = ...,
-) -> Callable[[C_prop[S, R]], R]:
+    as_property: Literal[False],
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:  # pyre-ignore
     ...
 
 
@@ -62,8 +62,8 @@ def decorate(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-    as_property: Literal[False],
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:  # pyre-ignore
+    as_property: Literal[True] = ...,
+) -> Callable[[C_prop[S, R]], R]:
     ...
 
 
@@ -81,7 +81,9 @@ def decorate(
     if as_property:
         return prop(key=key, check_use_cache=check_use_cache)
     else:
-        return meth(key=key, check_use_cache=check_use_cache)
+        return meth(
+            key=key, check_use_cache=check_use_cache
+        )  # pyright: ignore[reportGeneralTypeIssues]
 
 
 @overload
@@ -215,7 +217,7 @@ def prop(
             else:
                 return _func(self)
 
-        return property(wrapper)  # type: ignore
+        return cast(R, property(wrapper))
 
     if func:
         return cached_lookup(func)
@@ -304,7 +306,7 @@ def meth(
         bind = signature(_func).bind
 
         @wraps(_func)
-        def wrapper(self: S, *args: P.args, **kwargs: P.kwargs) -> R:
+        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 if not hasattr(self, "_cache"):
                     self._cache = {}
@@ -424,7 +426,7 @@ def clear(
 
     def decorator(func: C_meth[S, P, R]) -> C_meth[S, P, R]:
         @wraps(func)
-        def wrapper(self: S, *args: P.args, **kwargs: P.kwargs) -> R:
+        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             # self._clear_caches(*keys_inner)
             # clear out keys_inner
             if hasattr(self, "_cache"):
@@ -445,3 +447,22 @@ def clear(
         return decorator(function)
     else:
         return decorator
+
+
+# def decorate2(
+#     *,
+#     key: str | None = None,
+#     check_use_cache: bool = False,
+# ) ->  Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
+#     """
+#     General purpose cached decorator.
+
+#     Must always be called.
+#     """
+#     # return cast(Callable[[C_meth[S, P, R]], C_meth[S, P, R]], meth(key=key, check_use_cache=check_use_cache))
+#     return meth(key=key, check_use_cache=check_use_cache)
+
+
+# reveal_type(meth(key='hello', check_use_cache=True))
+# reveal_type(decorate(key='hello', check_use_cache=True, as_property=False))
+# reveal_type(decorate2(key='hello'))

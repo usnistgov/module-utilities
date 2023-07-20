@@ -5,29 +5,45 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping
-from typing import Any
+from typing import Any, Iterator, overload
 
-# from typing import TypeVar, Type
-
-# AttibuteDictT = TypeVar('AttributeDictT', bound="AttributeDict")
+from ._typing import NestedMap, NestedMapVal
 
 
-def _get_nested_values(d, join_string="\n"):
-    out = []
+@overload
+def _get_nested_values(d: NestedMap, join_string: None) -> list[str]:
+    ...
+
+
+@overload
+def _get_nested_values(d: NestedMap, join_string: str = ...) -> str:
+    ...
+
+
+def _get_nested_values(d: NestedMap, join_string: str | None = "\n") -> str | list[str]:
+    out: list[str] = []
     for k in d:
         v = d[k]
         if isinstance(v, str):
             out.append(v)
         else:
-            out.extend(_get_nested_values(v, join_string=None))
+            out.extend(
+                _get_nested_values(v, join_string=None)
+            )  # pytype: disable=wrong-arg-types
 
     if join_string is not None:
-        out = join_string.join(out)
+        return join_string.join(out)
+    else:
+        return out
 
-    return out
+
+# d: dict[str, str | dict[str, str]]= {'a': 'hello', 'b': {'c': 'there'}}
+# reveal_type(_get_nested_values(d))
+# reveal_type(_get_nested_values(d, join_string='\n'))
+# reveal_type(_get_nested_values(d, join_string=None))
 
 
-class AttributeDict(MutableMapping):
+class AttributeDict(MutableMapping[str, NestedMapVal]):
     """
     Dictionary with recursive attribute like access.
 
@@ -57,13 +73,13 @@ class AttributeDict(MutableMapping):
 
     def __init__(
         self,
-        entries: dict[str, Any] | None = None,
+        entries: dict[str, NestedMapVal] | None = None,
         recursive: bool = True,
         allow_missing: bool = True,
     ):
         if entries is None:
             entries = {}
-        self._entries: dict[str, Any] = entries
+        self._entries = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
 
@@ -82,7 +98,7 @@ class AttributeDict(MutableMapping):
         else:
             return self._entries[key]
 
-    def _getslice(self, s) -> AttributeDict:
+    def _getslice(self, s: slice) -> AttributeDict:
         start = s.start
         stop = s.stop
 
@@ -107,28 +123,28 @@ class AttributeDict(MutableMapping):
         subset = {k: self._entries[k] for k in keys[slc]}
         return type(self)(subset)
 
-    def __setitem__(self, key: str, value) -> None:
+    def __setitem__(self, key: str, value: NestedMapVal) -> None:
         self._entries[key] = value
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         return iter(self._entries)
 
     def __len__(self) -> int:
         return len(self._entries)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
         del self._entries[key]
 
-    def _items(self):
+    def _items(self) -> Iterator[tuple[str, NestedMapVal]]:
         yield from self._entries.items()
 
-    def __dir__(self):
+    def __dir__(self) -> list[str]:
         return list(self.keys()) + list(super().__dir__())
 
-    def _update(self, *args, **kwargs):
+    def _update(self, *args: Any, **kwargs: Any) -> None:
         self._entries.update(*args, **kwargs)
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> Any:
         if attr in self._entries:
             out = self._entries[attr]
             if self._recursive and isinstance(out, dict):
@@ -148,12 +164,16 @@ class AttributeDict(MutableMapping):
                 else:
                     pass
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self._entries)})"
 
     @classmethod
     def _from_dict(
-        cls, params: Mapping, max_level: int = 1, level: int = 0, recursive: bool = True
+        cls,
+        params: Mapping[str, NestedMapVal],
+        max_level: int = 1,
+        level: int = 0,
+        recursive: bool = True,
     ) -> AttributeDict:
         # to hide level parameter
         out = cls(recursive=recursive)
@@ -168,7 +188,10 @@ class AttributeDict(MutableMapping):
 
     @classmethod
     def from_dict(
-        cls, params: Mapping, max_level: int = 1, recursive: bool = True
+        cls,
+        params: Mapping[str, NestedMapVal],
+        max_level: int = 1,
+        recursive: bool = True,
     ) -> AttributeDict:
         """
         Create AttributeDict recursively for nested dictionaries.

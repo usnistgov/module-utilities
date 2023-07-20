@@ -18,7 +18,7 @@ from .vendored.docscrape import NumpyDocString, Parameter
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from ._typing import F
+    from ._typing import F, NestedMap, NestedMapVal
 
 try:
     # Default is DOC_SUB is True
@@ -33,7 +33,9 @@ except KeyError:
 
 # Factory method to create doc_decorate
 def doc_decorate(
-    *docstrings: str | Callable, _prepend: bool = False, **params
+    *docstrings: str | Callable[..., Any],
+    _prepend: bool = False,
+    **params: str,
 ) -> Callable[[F], F]:
     """
     A decorator take docstring templates, concatenate them and perform string
@@ -119,7 +121,10 @@ def _build_param_docstring(name: str, ptype: str, desc: str | Sequence[str]) -> 
     return s
 
 
-def _params_to_string(params, key_char: str = "|") -> str | dict[str, Any]:
+def _params_to_string(
+    params: str | list[str] | Parameter | list[Parameter] | tuple[Parameter, ...],
+    key_char: str = "|",
+) -> str | dict[str, str]:
     """
     Parse list of Parameters objects to string
 
@@ -143,10 +148,10 @@ def _params_to_string(params, key_char: str = "|") -> str | dict[str, Any]:
         params = [params]
 
     if isinstance(params[0], str):
-        return "\n".join(params)
+        return "\n".join(cast(list[str], params))
 
     out = {}
-    for p in params:
+    for p in cast(list[Parameter], params):
         name = p.name
         if key_char in name:
             key, name = (x.strip() for x in name.split(key_char))
@@ -159,8 +164,8 @@ def _params_to_string(params, key_char: str = "|") -> str | dict[str, Any]:
 
 
 def _parse_docstring(
-    func_or_doc: Callable | str, key_char: str = "|", expand: bool = True
-):
+    func_or_doc: Callable[..., Any] | str, key_char: str = "|", expand: bool = True
+) -> dict[str, str | dict[str, str]]:
     """
     Parse numpy style docstring from function or string to dictionary.
 
@@ -219,10 +224,10 @@ def _parse_docstring(
     else:
         doc = func_or_doc
 
-    parsed = NumpyDocString(doc)._parsed_data
+    parsed = cast(dict[str, str | list[str] | list[Parameter]], NumpyDocString(doc)._parsed_data)  # type: ignore[no-untyped-call]
 
     if expand:
-        parsed = {
+        parsed_out = {
             k.replace(" ", "_").lower(): _params_to_string(parsed[k], key_char=key_char)
             for k in [
                 "Summary",
@@ -239,10 +244,12 @@ def _parse_docstring(
                 "Examples",
             ]
         }
-    return parsed
+    else:
+        parsed_out = cast(dict[str, str | dict[str, str]], parsed)
+    return parsed_out
 
 
-def dedent_recursive(data: Mapping[str, Any]) -> dict[str, Any]:
+def dedent_recursive(data: NestedMap) -> NestedMap:
     """
     Dedent nested mapping of strings.
 
@@ -283,7 +290,7 @@ def dedent_recursive(data: Mapping[str, Any]) -> dict[str, Any]:
     return out
 
 
-def _recursive_keys(data) -> list[str]:
+def _recursive_keys(data: NestedMap) -> list[str]:
     keys = []
     for k, v in data.items():
         if isinstance(v, dict):
@@ -310,7 +317,9 @@ class DocFiller:
         Optional string to split name into key/name pair.
     """
 
-    def __init__(self, params: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, params: NestedMap | None = None) -> None:
+        self.data: dict[str, NestedMapVal]
+
         if params is None:
             self.data = {}
         elif isinstance(params, dict):
@@ -322,15 +331,15 @@ class DocFiller:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self.data)})"
 
-    def new_like(self, data: dict | None = None) -> DocFiller:
+    def new_like(self, data: NestedMap | None = None) -> DocFiller:
         """Create new object with optional data."""
         if data is None:
             data = self.data.copy()
         return type(self)(data)
 
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> DocFiller | str:
         val = self.data[key]
-        if isinstance(val, dict):
+        if isinstance(val, Mapping):
             return self.new_like(val)
         else:
             return val
@@ -347,10 +356,19 @@ class DocFiller:
     def assign_combined_key(self, new_key: str, keys: Sequence[str]) -> DocFiller:
         """Combine multiple keys into single key"""
         new = self.new_like()
-        new.data[new_key] = "\n".join([self.data[k] for k in keys])
+
+        new_data: list[str] = []
+        for k in keys:
+            d = self.data[k]
+            if isinstance(d, str):
+                new_data.append(d)
+            else:
+                raise ValueError(f"trying to combine key {k} with non-string value {d}")
+
+        new.data[new_key] = "\n".join(new_data)
         return new
 
-    def _gen_get_val(self, key):
+    def _gen_get_val(self, key: str) -> Any:
         from operator import attrgetter
 
         f = attrgetter(key)
@@ -397,7 +415,7 @@ class DocFiller:
         ptype: str = "",
         desc: str | list[str] | None = None,
         key: str | None = None,
-    ):
+    ) -> DocFiller:
         """
         Add in a new parameter
 
@@ -451,8 +469,8 @@ class DocFiller:
     @classmethod
     def concat(
         cls,
-        *args: Mapping[str, Any] | DocFiller,
-        **kwargs: Mapping[str, Any] | DocFiller,
+        *args: NestedMap | DocFiller,
+        **kwargs: NestedMap | DocFiller,
     ) -> DocFiller:
         """
         Create new object from multiple DocFiller or dict objects.
@@ -478,9 +496,9 @@ class DocFiller:
 
         # create
 
-        data: dict[str, Any] = {}
+        data: dict[str, NestedMapVal] = {}
 
-        def _update_data(x):
+        def _update_data(x: DocFiller | NestedMap | dict[str, NestedMap]) -> None:
             if isinstance(x, DocFiller):
                 # x = x.params
                 x = x.data
@@ -489,11 +507,14 @@ class DocFiller:
         for a in args:
             _update_data(a)
 
+        kws: dict[str, NestedMap] = {}
         for k, v in kwargs.items():
-            if isinstance(v, cls):
-                kwargs[k] = v.data
+            if isinstance(v, DocFiller):
+                kws[k] = v.data
+            else:
+                kws[k] = v
 
-        _update_data(kwargs)
+        _update_data(kws)
         return cls(data)
 
     def append(
@@ -517,7 +538,7 @@ class DocFiller:
             if isinstance(d, str):
                 raise ValueError(f"level {name} is not a dict")
             else:
-                for k, v in self.data[name].items():
+                for k, v in d.items():
                     new.data[k] = v
         return new
 
@@ -557,13 +578,13 @@ class DocFiller:
     def _default_decorator(self) -> Callable[[F], F]:
         return doc_decorate(**self.params)
 
-    def update(self, *args, **kwargs) -> DocFiller:
+    def update(self, *args: Any, **kwargs: Any) -> DocFiller:
         """Update parameters"""
         new = self.new_like()
         new.data.update(*args, **kwargs)
         return new
 
-    def assign(self, **kwargs) -> DocFiller:
+    def assign(self, **kwargs: Any) -> DocFiller:
         """Assign new key/value pairs"""
         return self.update(**kwargs)
 
@@ -576,7 +597,10 @@ class DocFiller:
         return self._default_decorator(func)
 
     def __call__(
-        self, *templates: Callable | str, _prepend: bool = False, **params
+        self,
+        *templates: Callable[..., Any] | str,
+        _prepend: bool = False,
+        **params: str,
     ) -> Callable[[F], F]:
         """
         General decorator.
@@ -720,8 +744,8 @@ class DocFiller:
                 mapper = key_map
             elif isinstance(key_map, Mapping):
 
-                def mapper(x: str) -> str:
-                    return cast(Mapping[str, str], key_map)[x]
+                def mapper(x: str, /) -> str:
+                    return key_map[x]
 
             else:
                 raise ValueError("unknown key_map {key_map}")
@@ -736,12 +760,12 @@ class DocFiller:
     @classmethod
     def from_docstring(
         cls,
-        func_or_doc: Callable | str,
+        func_or_doc: Callable[..., Any] | str,
         namespace: str | None = None,
         combine_keys: str | Sequence[str] | None = None,
         key_char: str = "|",
         keep_keys: bool = True,
-        key_map: Mapping | Callable | None = None,
+        key_map: Mapping[str, str] | Callable[[str], str] | None = None,
     ) -> DocFiller:
         """
         Create a Docfiller instance from a function or docstring.

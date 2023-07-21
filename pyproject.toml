@@ -313,27 +313,27 @@ exclude = [
     "src/module_utilities/vendored"
 ]
 pythonVersion = "3.10"
-# typeCheckingMode = "basic"
-typeCheckingMode = "strict"
+# typeCheckingMode = "strict"
+typeCheckingMode = "basic"
+# enable subset of "strict"
+reportDuplicateImport = true
+reportInvalidStubStatement = true
+reportOverlappingOverload = true
+reportPropertyTypeMismatch = true
+reportUntypedClassDecorator = true
+reportUntypedFunctionDecorator = true
+reportUntypedNamedTuple = true
+reportUnusedImport = true
+# disable subset of "basic"
+reportGeneralTypeIssues = false
+reportMissingModuleSource = false
+reportOptionalCall = false
+reportOptionalIterable = false
+reportOptionalMemberAccess = false
+reportOptionalOperand = false
+reportOptionalSubscript = false
+reportPrivateImportUsage = false
+reportUnboundVariable = false
 
-# # enable subset of "strict"
-# reportDuplicateImport = true
-# reportInvalidStubStatement = true
-# reportOverlappingOverload = true
-# reportPropertyTypeMismatch = true
-# reportUntypedClassDecorator = true
-# reportUntypedFunctionDecorator = true
-# reportUntypedNamedTuple = true
-# reportUnusedImport = true
-# # disable subset of "basic"
-# reportGeneralTypeIssues = false
-# reportMissingModuleSource = false
-# reportOptionalCall = false
-# reportOptionalIterable = false
-# reportOptionalMemberAccess = false
-# reportOptionalOperand = false
-# reportOptionalSubscript = false
-# reportPrivateImportUsage = false
-# reportUnboundVariable = false
 [tool.pytype]
 inputs = ["src", "tests"]

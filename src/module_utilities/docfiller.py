@@ -5,30 +5,30 @@ Fill and share documentation (:mod:`module_utilities.docfiller`)
 from __future__ import annotations
 
 import inspect
-import os
 from collections.abc import Mapping
 from textwrap import dedent
-from typing import TYPE_CHECKING, Any, Callable, Iterable, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    NamedTuple,
+    Union,
+    cast,
+)
 
 from . import cached
 from ._doc import doc as _pd_doc
 from .attributedict import AttributeDict
+from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from ._typing import F, NestedMap, NestedMapVal
-
-try:
-    # Default is DOC_SUB is True
-    DOC_SUB = os.getenv("DOCFILLER_SUB", "True").lower() not in (
-        "0",
-        "f",
-        "false",
-    )
-except KeyError:
-    DOC_SUB = True
 
 
 # Factory method to create doc_decorate
@@ -73,7 +73,9 @@ def doc_decorate(
         return decorated
 
 
-def _build_param_docstring(name: str, ptype: str, desc: str | Sequence[str]) -> str:
+def _build_param_docstring(
+    name: str | None, ptype: str | None, desc: str | Sequence[str]
+) -> str:
     """
     Create multiline documentation of single name, type, desc.
 
@@ -121,6 +123,14 @@ def _build_param_docstring(name: str, ptype: str, desc: str | Sequence[str]) -> 
     return s
 
 
+class TParameter(NamedTuple):
+    """Interface to Parameters namedtuple in docscrape"""
+
+    name: str
+    type: str
+    desc: str
+
+
 def _params_to_string(
     params: str | list[str] | Parameter | list[Parameter] | tuple[Parameter, ...],
     key_char: str = "|",
@@ -148,10 +158,10 @@ def _params_to_string(
         params = [params]
 
     if isinstance(params[0], str):
-        return "\n".join(cast(list[str], params))
+        return "\n".join(cast(List[str], params))
 
-    out = {}
-    for p in cast(list[Parameter], params):
+    out: dict[str, str] = {}
+    for p in cast(List[TParameter], params):
         name = p.name
         if key_char in name:
             key, name = (x.strip() for x in name.split(key_char))
@@ -224,7 +234,7 @@ def _parse_docstring(
     else:
         doc = func_or_doc
 
-    parsed = cast(dict[str, str | list[str] | list[Parameter]], NumpyDocString(doc)._parsed_data)  # type: ignore[no-untyped-call]
+    parsed = cast(Dict[str, Union[str, List[str], List[Parameter]]], NumpyDocString(doc)._parsed_data)  # type: ignore[no-untyped-call]
 
     if expand:
         parsed_out = {
@@ -245,7 +255,7 @@ def _parse_docstring(
             ]
         }
     else:
-        parsed_out = cast(dict[str, str | dict[str, str]], parsed)
+        parsed_out = cast(Dict[str, Union[str, Dict[str, str]]], parsed)
     return parsed_out
 
 
@@ -279,7 +289,7 @@ def dedent_recursive(data: NestedMap) -> NestedMap:
     a : int
         A thing
     """
-    out = {}
+    out: dict[str, NestedMapVal] = {}
     for k in data:
         v = data[k]
         if isinstance(v, str):
@@ -291,7 +301,7 @@ def dedent_recursive(data: NestedMap) -> NestedMap:
 
 
 def _recursive_keys(data: NestedMap) -> list[str]:
-    keys = []
+    keys: list[str] = []
     for k, v in data.items():
         if isinstance(v, dict):
             key_list = [f"{k}.{x}" for x in _recursive_keys(v)]
@@ -625,6 +635,48 @@ class DocFiller:
         else:
             return self.update(params)(*templates, _prepend=_prepend)
 
+    def inherit(
+        self,
+        template: Callable[..., Any],
+        _style: str = "numpy_with_merge",
+        _prepend: bool = False,
+        **params: str,
+    ) -> Callable[[F], F]:
+        """
+        Use combination of custom_inherit.doc_inherit and DocFiller.
+
+        Parameters
+        ----------
+        template : callable
+            Template method to inherit from.
+        _style : str, default="numpy_with_merge"
+            `style` parameter for custom_inherit.
+        _prepend : bool, default = False
+            Prepend parameter.
+        **params :
+            Extra parameter specificiations.
+
+        Returns
+        -------
+        callable
+        """
+        from . import docinherit
+
+        if not docinherit.HAS_CUSTOM_INHERIT:
+            raise ModuleNotFoundError("Install custom_inherit to use this decorator")
+        docfiller = self.update(params)
+
+        def decorator(func: F) -> F:
+            @docfiller(template)
+            def dummy() -> None:
+                pass
+
+            func = docfiller.decorate(func)
+
+            return docinherit.doc_inherit_interface(parent=dummy, style=_style)(func)
+
+        return decorator
+
     # NOTE: This is dangerous.
     # if you pass a function as a template, but forget to explicitly pass it,
     # you overwrite the docstring for that function.  Just really confusing
@@ -739,18 +791,13 @@ class DocFiller:
         else:
             updated_params = {k: params[k] for k in keep_keys}
 
-        if key_map is not None:
-            if callable(key_map):
-                mapper = key_map
-            elif isinstance(key_map, Mapping):
-
-                def mapper(x: str, /) -> str:
-                    return key_map[x]
-
-            else:
-                raise ValueError("unknown key_map {key_map}")
-
-            updated_params = {mapper(k): updated_params[k] for k in updated_params}
+        if key_map is None:
+            pass
+        elif callable(key_map):
+            updated_params = {key_map(k): v for k, v in updated_params.items()}
+        else:
+            assert isinstance(key_map, Mapping)
+            updated_params = {key_map[k]: v for k, v in updated_params.items()}
 
         if namespace:
             updated_params = {namespace: updated_params}

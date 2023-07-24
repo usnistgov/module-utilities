@@ -4,8 +4,7 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 """
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping
-from typing import Any, Iterator, overload
+from typing import Any, Iterator, Mapping, MutableMapping, overload
 
 from ._typing import NestedMap, NestedMapVal
 
@@ -27,20 +26,14 @@ def _get_nested_values(d: NestedMap, join_string: str | None = "\n") -> str | li
         if isinstance(v, str):
             out.append(v)
         else:
-            out.extend(
-                _get_nested_values(v, join_string=None)
-            )  # pytype: disable=wrong-arg-types
+            # fmt: off
+            out.extend(_get_nested_values(v, join_string=None))  # pytype: disable=wrong-arg-types
+            # fmt: on
 
     if join_string is not None:
         return join_string.join(out)
     else:
         return out
-
-
-# d: dict[str, str | dict[str, str]]= {'a': 'hello', 'b': {'c': 'there'}}
-# reveal_type(_get_nested_values(d))
-# reveal_type(_get_nested_values(d, join_string='\n'))
-# reveal_type(_get_nested_values(d, join_string=None))
 
 
 class AttributeDict(MutableMapping[str, NestedMapVal]):

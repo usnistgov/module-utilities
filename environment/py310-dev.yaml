@@ -17,6 +17,7 @@ dependencies:
   - setuptools-scm
   - ipython
   - ipykernel
+  - custom-inherit
   - nox
   - ruamel.yaml
   - pip

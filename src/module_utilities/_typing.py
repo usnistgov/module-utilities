@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Mapping, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, Mapping, TypeVar, Union
 
 # to maintain type information across generic functions and parametrization
 # T = TypeVar("T")
@@ -18,3 +18,9 @@ NestedMap = Mapping[str, NestedMapVal]
 
 NestedDictVal = Union[str, "NestedDict"]
 NestedDict = Dict[str, NestedDictVal]
+
+
+if TYPE_CHECKING:
+    from .docfiller import DocFiller
+
+T_DocFiller = TypeVar("T_DocFiller", bound="DocFiller")

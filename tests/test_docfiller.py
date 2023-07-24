@@ -576,7 +576,7 @@ def test_prepend():
 
     d = DocFiller.from_docstring(expected, combine_keys="parameters")
 
-    def template():
+    def template(x: float, y: float) -> float:
         """
         {summary}
 
@@ -587,17 +587,24 @@ def test_prepend():
         {x}
         {y}
         """
+        return x + y
+
+    # reveal_type(template)
+    # reveal_type(template(1.0, 2.0))
 
     @d(template)
-    def hello():
+    def hello(x: float, y: float) -> float:
         """
         Returns
         -------
         {returns.out}
         """
-        pass
+        return x + y
 
     assert hello.__doc__ == expected
+
+    # reveal_type(hello)
+    # reveal_type(hello(1., 2.))
 
     # prepend
     @d(template, _prepend=True)

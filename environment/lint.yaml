@@ -1,9 +1,0 @@
-channels:
-  - conda-forge
-dependencies:
-  - mypy
-  - pytest
-  - python>=3.8
-  - pytype
-  - typing-extensions
-name: module-utilities-env

@@ -9,6 +9,8 @@
 
    cached
    docfiller
+   docinherit
    attributedict
+   _typing
 
 ```

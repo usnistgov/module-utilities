@@ -6,9 +6,11 @@
 channels:
   - conda-forge
 dependencies:
-  - python>=3.8
+  - python=3.11
   - typing-extensions
+  - mypy
   - pytest
   - pytest-xdist
   - pytest-cov
   - pytest-sugar
+  - docstring-inheritance

@@ -6,7 +6,7 @@
 channels:
   - conda-forge
 dependencies:
-  - python>=3.8
+  - python=3.10
   - typing-extensions
   - ipython
   - pyenchant
@@ -18,3 +18,4 @@ dependencies:
   - myst-nb
   - sphinx-book-theme
   - autodocsumm
+  - docstring-inheritance

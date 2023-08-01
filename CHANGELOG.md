@@ -11,6 +11,14 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.6.0 — 2023-08-01
+
+### Added
+
+- Now include module `docinhert` to interface with
+  [docstring-inheritance](https://github.com/AntoineD/docstring-inheritance)
+- Fully support mypy and pyright type checking.
+
 ## v0.5.0 — 2023-07-10
 
 ### Added

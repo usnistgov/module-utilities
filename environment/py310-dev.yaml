@@ -12,12 +12,12 @@ dependencies:
   - pytest-xdist
   - pytest-cov
   - pytest-sugar
+  - docstring-inheritance
   - pytype
   - mypy
   - setuptools-scm
   - ipython
   - ipykernel
-  - custom-inherit
   - nox
   - ruamel.yaml
   - pip

@@ -1,6 +1,7 @@
 # mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 from textwrap import dedent
+from typing import cast
 
 # from typing import TYPE_CHECKING
 # from typing_extensions import reveal_type
@@ -11,6 +12,189 @@ from module_utilities import docfiller
 from module_utilities.docfiller import DocFiller, dedent_recursive
 
 # just testing on doc routine:
+
+
+# --- simple (coverage filler) tests ---------------------------------------------------
+
+
+def test_append():
+    def func():
+        """Hello"""
+
+    @docfiller.doc_decorate(func, x="there")
+    def func1():
+        """{x}"""
+
+    assert func1.__doc__.strip() == "Hellothere"  # type: ignore
+
+    @docfiller.doc_decorate(func, x="some", _prepend=True)
+    def func2():
+        """Yell"""
+
+    assert func2.__doc__ == "YellHello"
+
+    def func_none():
+        pass
+
+    func_none.__doc__ = None
+
+    @docfiller.doc_decorate(None, x="there")
+    def func3():
+        """Hello {x}"""
+        pass
+
+    assert func3.__doc__ == "Hello there"
+
+    docfiller.DOC_SUB = False  # type: ignore
+
+    @docfiller.doc_decorate(func1, x="hello")
+    def func4a():
+        """{x}"""
+
+    docfiller.DOC_SUB = True  # type: ignore
+
+    assert func4a.__doc__ == "{x}"
+
+
+def test_indent_docstring():
+    assert docfiller.indent_docstring("hello", prefix=" ") == " hello"
+    assert docfiller.indent_docstring("hello", prefix=None) == "hello"
+
+
+def test_build_params_docstring():
+    with pytest.raises(ValueError):
+        s = docfiller._build_param_docstring(name="", ptype="", desc=["hello"])
+
+    s = docfiller._build_param_docstring(name="hello", ptype=None, desc="stuff")
+
+    assert (
+        s
+        == dedent(
+            """
+    hello
+        stuff
+    """
+        ).strip()
+    )
+
+    s = docfiller._build_param_docstring(name="hello", ptype=None, desc="")
+
+    assert s == "hello"
+
+    s = docfiller._build_param_docstring(name="hello", ptype=None, desc=[""])
+
+    assert s == "hello"
+
+
+def test_params_to_string():
+    s = docfiller._params_to_string("hello")
+    assert s == "hello"
+
+
+def test_func_or_doc():
+    def template():
+        """
+        Parameters
+        ----------
+        x : int
+        """
+
+    d = DocFiller.from_docstring(template, combine_keys="parameters")
+
+    @d.decorate
+    def func():
+        """{x}"""
+
+    assert func.__doc__ == "x : int"
+
+
+def test_docfiller_creation():
+    d = DocFiller([("x", "hello")])  # type: ignore
+
+    @d.decorate
+    def func():
+        "{x}"
+
+    assert func.__doc__ == "hello"
+
+    assert repr(d) == "DocFiller({'x': 'hello'})"
+
+
+def test_DocFiller_getitem():
+    d = DocFiller.from_docstring(
+        """
+    Parameters
+    ----------
+    x : int
+    y : float
+    """,
+        keep_keys="parameters",
+    )
+
+    dd = cast(DocFiller, d["parameters"])
+
+    @dd.decorate
+    def func():
+        """{x}"""
+
+    assert func.__doc__ == "x : int"
+
+    @dd.decorate
+    def func1():
+        """
+        {x}
+        {y}
+        """
+
+    ddd = dd.assign_combined_key("z", ["x", "y"])
+
+    @ddd.decorate
+    def func2():
+        """
+        {z}
+        """
+
+    assert func1.__doc__ == func2.__doc__
+
+    with pytest.raises(ValueError):
+        ddd = d.assign_combined_key("zz", ["parameters"])
+
+    d = DocFiller.from_docstring(
+        """
+    Parameters
+    ----------
+    x : int
+    y : float
+    """,
+        keep_keys=False,
+        combine_keys="parameters",
+        key_map=lambda x: "hello_" + x,
+    )
+
+    @d.decorate
+    def func3():
+        """{hello_x}"""
+
+    assert func3.__doc__ == "x : int"
+
+    d = DocFiller.from_docstring(
+        """
+    Parameters
+    ----------
+    x : int
+    y : float
+    """,
+        keep_keys=False,
+        combine_keys="parameters",
+        key_map={"x": "hello_x", "y": "hello_y"},
+        namespace="top",
+    )
+
+    @d.decorate
+    def func4():
+        """{top.hello_x}"""
+
+    assert func4.__doc__ == "x : int"
 
 
 @pytest.fixture
@@ -300,7 +484,9 @@ def test_DocFiller_namespace() -> None:
 
     dd0 = d0.insert_level("a").append(d1.insert_level("b"))
 
-    dd1 = docfiller.DocFiller.concat(a=d0, b=d1)
+    dd1 = docfiller.DocFiller.concat(a=d0, b=d1, c={"type_": "int"})
+
+    assert dd1["c"]["type_"] == "int"  # type: ignore
 
     expected = dedent(
         """
@@ -337,11 +523,15 @@ def test_DocFiller_namespace() -> None:
 
         assert func.__doc__ == expected
 
+    with pytest.raises(ValueError):
+        d0.assign(x="hello").levels_to_top("x")
+
     dd0 = (
         d0.rename_levels(parameters="p", returns="r")
         .levels_to_top("p", "r")
         .insert_level("a")
     )
+
     dd1 = (
         d1.rename_levels(parameters="p", returns="r")
         .levels_to_top("p", "r")

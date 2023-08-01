@@ -8,6 +8,61 @@ import pytest
 from module_utilities import cached
 
 
+# checking typeproperty
+
+
+def test_typeproperty():
+    class tmp:
+        _cache: dict[str, Any] = {}
+
+        @cached.TypedProperty
+        def thing(self):
+            return 1
+
+    x = tmp()
+    with pytest.raises(AttributeError):
+        x.thing = 2
+
+
+def test_meth_bad_hash():
+    # test that passing unhashable just returns the func
+    class tmp:
+        _cache: dict[str, Any] = {}
+
+        @cached.meth
+        def thing(self, x):
+            return x
+
+    x = tmp()
+
+    assert x.thing(1) == 1
+
+    assert "thing" in x._cache
+
+    x._cache = {}
+    v = {"a": 1}
+    assert x.thing(v) == v
+    assert len(x._cache["thing"]) == 0
+
+    # class tmp2:
+    #     def __init__(self):
+    #         self._cache: dict[str, Any] = {}
+
+    #     @cached.prop
+    #     def prop(self) -> int:
+    #         return 1
+
+    #     @cached.meth
+    #     def meth(self) -> int:
+    #         return 2
+
+    # y = tmp2()
+
+    # reveal_type(y.prop)
+    # reveal_type(y.meth)
+    # reveal_type(y.meth())
+
+
 class Baseclass:
     def __init__(self, a, b) -> None:
         self.a = a
@@ -286,6 +341,11 @@ def test_clear() -> None:
             "a doc string"
             return self.get_xy(x, y)
 
+        # check that clearing unknown key is fine
+        @cached.clear("a_meth_that_isnt_there")
+        def clear_missing(self) -> None:
+            pass
+
     x = test(1, 2)
     key_prop = "prop"
     key_meth = ("meth", ((3, 4), frozenset()))  # type: ignore
@@ -299,6 +359,12 @@ def test_clear() -> None:
         key=key_meth,
         docstring=docstring,
     )
+
+    keys0 = list(x._cache.keys())
+
+    x.clear_missing()
+
+    assert list(x._cache.keys()) == keys0
 
     # this clears the cache
     x.a, x.b = 2, 4
@@ -374,6 +440,14 @@ def test_use_cache() -> None:
         def prop3(self):
             return [1, 2]
 
+        @cached.meth
+        def meth0(self):
+            return [1, 2]
+
+        @cached.meth(check_use_cache=True)
+        def meth1(self):
+            return [1, 2]
+
     x = tmp()
 
     for p in ["prop0", "prop2"]:
@@ -383,6 +457,12 @@ def test_use_cache() -> None:
     for p in ["prop1", "prop3"]:
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
+
+    assert x.meth0() is x.meth0()
+    assert x.meth1() is not x.meth1()
+
+    assert "meth0" in x._cache
+    assert "meth1" not in x._cache
 
 
 def test_use_cache2() -> None:

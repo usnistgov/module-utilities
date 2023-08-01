@@ -32,13 +32,18 @@ homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
-inherit = ["custom-inherit"]
-test = [
+inherit = ["docstring-inheritance"]
+opt-all = [
+    "module-utilities[inherit]", #
+
+]
+test-extras = [
     "pytest", #
     "pytest-xdist",
     "pytest-cov",
     "pytest-sugar",
 ]
+test = ["module-utilities[test-extras]", "module-utilities[opt-all]"]
 dev-extras = [
     "setuptools-scm", #
     "pytest-accept", # p2c: -p
@@ -62,7 +67,6 @@ dev = [
     "module-utilities[test]", #
     "module-utilities[typing-extras]",
     "module-utilities[dev-extras]",
-    "module-utilities[inherit]",
 ]
 tools = [
     "pre-commit", #
@@ -85,6 +89,8 @@ docs = [
     "myst-nb",
     "sphinx-book-theme",
     "autodocsumm",
+    # "sphinx-autodoc-typehints",
+    "module-utilities[opt-all]",
 ]
 # to be parsed with pyproject2conda with --no-base option
 dist-pypi = ["twine", "build"]
@@ -95,7 +101,13 @@ dist-conda = [
     "conda-verify",
     "boa",
 ]
+# testing with out optional deps
+test-noopt = ["module-utilities[test-extras]"]
 
+# typing-noopt = [
+#     "module-utilities[typing-extras]",
+#     "module-utilities[test-extras]",
+# ]
 [tool.pyproject2conda]
 channels = ["conda-forge"]
 
@@ -129,6 +141,12 @@ test = "pytest"
 addopts = "-n 4 --doctest-modules --doctest-glob='*.md'"
 # testpaths = ["src/module_utilities", "tests", "./README.md"]
 testpaths = ["src", "tests", "README.md"]
+markers = ["inherit: docstring_inheritance dependent code"]
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "@overload"]
+omit = ["*/vendored/*"]
+include = ["src/*"]
 
 [tool.isort]
 profile = "black"

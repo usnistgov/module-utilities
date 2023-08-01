@@ -18,3 +18,4 @@ dependencies:
   - myst-nb
   - sphinx-book-theme
   - autodocsumm
+  - docstring-inheritance

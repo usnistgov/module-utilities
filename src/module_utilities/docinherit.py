@@ -4,62 +4,157 @@ Routies to interface docfiller with custom_inherit (mod:`~module_utilites.docinh
 ======================================================================================
 """
 
-
 from __future__ import annotations
 
-try:
-    from custom_inherit import doc_inherit  # pyright: ignore
+from typing import TYPE_CHECKING
 
-    HAS_CUSTOM_INHERIT = True
-except ImportError:
-    HAS_CUSTOM_INHERIT = False  # pyright: ignore
-
-
-if HAS_CUSTOM_INHERIT:
-    from typing import Any, Callable, cast
-
+if TYPE_CHECKING:
     from ._typing import F, T_DocFiller
+
+try:
+    from docstring_inheritance import inherit_numpy_docstring  # pyright: ignore
+
+    HAS_INHERIT = True
+except ImportError:  # pragma: no cover
+    HAS_INHERIT = False  # pyright: ignore
+
+
+if HAS_INHERIT:
+    from typing import Any, Callable
+
     from .options import DOC_SUB
 
-    def doc_inherit_interface(
+    def doc_inherit(
         parent: Callable[..., Any] | str,
-        style: str = "numpy_with_merge",
     ) -> Callable[[F], F]:
-        """Interface to custom_inherit.doc_inherit."""
-        if DOC_SUB:
-            return cast(
-                Callable[[F], F],  # pyright: ignore
-                doc_inherit(parent=parent, style=style),
-            )
-        else:
+        """
+        Decorator interface to docstring_inheritance.inherit_numpy_docstring
 
-            def wrapper(func: F) -> F:
+        Parameters
+        ----------
+        parent : callable or str
+            Parent function to inherit from.
+
+        Returns
+        -------
+        decorator : callable
+
+        See Also
+        --------
+        module_utilities.docfiller.DocFiller.inherit
+
+        Examples
+        --------
+        >>> from module_utilities.docfiller import DocFiller, indent_docstring
+        >>> template = '''
+        ... Parameters
+        ... ----------
+        ... x : {type_}
+        ...     x parameter
+        ... y : {type_}
+        ...     y parameter
+        ... '''
+
+        >>> d_int = DocFiller.from_docstring(template.format(type_="int"), combine_keys='parameters')
+        >>> d_float = DocFiller.from_docstring(template.format(type_="float"), combine_keys='parameters')
+        >>> @d_int.decorate
+        ... def func(x, y):
+        ...     '''
+        ...     A function
+        ...
+        ...     Parameters
+        ...     ----------
+        ...     {x}
+        ...     {y}
+        ...     '''
+        ...     pass
+
+        >>> @d_float.inherit(func)
+        ... def func1(x, y, z):
+        ...     '''
+        ...     A new function
+        ...
+        ...     Parameters
+        ...     ----------
+        ...     z : str
+        ...         z parameter
+        ...     '''
+        ...     pass
+
+        >>> print(indent_docstring(func))
+        +  A function
+        <BLANKLINE>
+        +  Parameters
+        +  ----------
+        +  x : int
+        +      x parameter
+        +  y : int
+        +      y parameter
+
+        >>> print(indent_docstring(func1))
+        +  A new function
+        <BLANKLINE>
+        +  Parameters
+        +  ----------
+        +  x : float
+        +      x parameter
+        +  y : float
+        +      y parameter
+        +  z : str
+        +      z parameter
+
+        """
+
+        if callable(parent):
+            docstring = parent.__doc__ or ""
+        else:
+            docstring = parent
+
+        if DOC_SUB:
+
+            def wrapper_inherit(func: F) -> F:
+                inherit_numpy_docstring(docstring, func)
                 return func
 
-            return wrapper
+            return wrapper_inherit
+        else:
+
+            def wrapper_dummy(func: F) -> F:
+                return func
+
+            return wrapper_dummy
 
     def factory_docfiller_from_parent(
         cls: Any, docfiller: T_DocFiller  # pyright: ignore
     ) -> Callable[..., Callable[[F], F]]:
-        """Decorator with docfiller inheriting from cls"""
+        """
+        Decorator with docfiller inheriting from cls
+
+        Note this returns a factory itself.
+
+        See Also
+        --------
+        module_utilities.docfiller.DocFiller.factory_from_parent
+        """
 
         def decorator(
-            name_or_method: str | Callable[..., Any] | None = None, /, **params: str
+            name_or_method: str | Callable[..., Any] | None = None,
+            /,
+            _prepend: bool = False,
+            **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
                 if callable(name_or_method):
                     template = name_or_method
                 else:
                     template = getattr(cls, name_or_method or method.__name__)
-                return docfiller(template, _prepend=False, **params)(method)
+                return docfiller(template, _prepend=_prepend, **params)(method)
 
             return decorated
 
         return decorator
 
-    def factory_docinherit_from_parent(
-        cls: Any, style: str = "numpy_with_merge"
-    ) -> Callable[..., Callable[[F], F]]:
+    def factory_docinherit_from_parent(cls: Any) -> Callable[..., Callable[[F], F]]:
         """Create decorator inheriting from cls"""
 
         def decorator(
@@ -70,7 +165,7 @@ if HAS_CUSTOM_INHERIT:
                     template = name_or_method
                 else:
                     template = getattr(cls, name_or_method or method.__name__)
-                return doc_inherit_interface(parent=template, style=style)(method)
+                return doc_inherit(parent=template)(method)
 
             return decorated
 
@@ -79,17 +174,23 @@ if HAS_CUSTOM_INHERIT:
     def factory_docfiller_inherit_from_parent(
         cls: Any,
         docfiller: T_DocFiller,  # pyright: ignore
-        style: str = "numpy_with_merge",
     ) -> Callable[..., Callable[[F], F]]:
         """
         Do combination of doc_inherit and docfiller
 
         1. Fill parent and child with docfiller (from this module).
         2. Merge using doc_inherit
+
+        See Also
+        --------
+        module_utilities.docfiller.DocFiller.factory_inherit_from_parent
         """
 
         def decorator(
-            name_or_method: str | Callable[..., Any] | None = None, /, **params: str
+            name_or_method: str | Callable[..., Any] | None = None,
+            /,
+            _prepend: bool = False,
+            **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
                 if callable(name_or_method):
@@ -97,9 +198,7 @@ if HAS_CUSTOM_INHERIT:
                 else:
                     template = getattr(cls, name_or_method or method.__name__)
 
-                return docfiller.inherit(
-                    template, _style=style, _prepend=False, **params
-                )(method)
+                return docfiller.inherit(template, _prepend=_prepend, **params)(method)
 
             return decorated
 

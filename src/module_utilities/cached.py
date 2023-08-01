@@ -10,52 +10,44 @@ from __future__ import annotations
 from functools import wraps
 from inspect import signature
 from typing import (
-    Any,
+    TYPE_CHECKING,
     Callable,
     Generic,
-    Protocol,
-    TypeVar,
     cast,
     overload,
 )
 
-from typing_extensions import (
-    Concatenate,
-    Literal,
-    ParamSpec,
-    Self,
-    TypeAlias,
-)
+from ._typing import C_meth, C_prop, P, R, S
 
-__all__ = ["decorate", "prop", "meth", "clear"]
+if TYPE_CHECKING:
+    from typing_extensions import (
+        Literal,
+        Self,
+    )
 
-# from ._typing import F
-
-
-class HasCache(Protocol):
-    """Class protocol to mark that classes should have property _cache."""
-
-    _cache: dict[str, Any]
-
-
-P = ParamSpec("P")
-R = TypeVar("R")
-S = TypeVar("S", bound=HasCache)
-
-
-# Note: possibly replace
-# _MethDecorator -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
-# _PropDecorator -> Callable[[C_prop[S, R]], TypedProperty[S, R]]
-# Callable[[S], R] -> C_prop[S, R]
-# Callable[Concatenate[S, P, R], R] -> C_meth[S, P, R]
-
-## If using type aliases
-C_prop: TypeAlias = Callable[[S], R]
-C_meth: TypeAlias = Callable[Concatenate[S, P], R]  # pyre-ignore
+__all__ = ["decorate", "prop", "meth", "clear", "TypedProperty"]  # , "HasCache", "S"]
 
 
 class TypedProperty(Generic[S, R]):
-    """Simplified version of property with typing."""
+    """
+    Simplified version of property with typing.
+
+
+    Examples
+    --------
+    >>> class Example:
+    ...     def __init__(self):
+    ...         self._cache: dict[str, Any] = {}
+    ...
+    ...     @TypedProperty
+    ...     def prop(self) -> int:
+    ...         return 1
+    ...
+    >>> x = Example()
+    >>> print(x.prop)
+    1
+
+    """
 
     def __init__(self, getter: C_prop[S, R]) -> None:
         self.__name__: str | None = None
@@ -65,7 +57,7 @@ class TypedProperty(Generic[S, R]):
     def __set_name__(self, owner: type[S], name: str) -> None:
         if self.__name__ is None:
             self.__name__ = name
-        elif name != self.__name__:
+        elif name != self.__name__:  # pragma: no cover
             raise TypeError(
                 "Cannot assign the same TypedProperty to two different names "
                 f"({self.__name__!r} and {name!r})."
@@ -86,20 +78,6 @@ class TypedProperty(Generic[S, R]):
 
     def __set__(self, instance: S | None, value: R) -> None:
         raise AttributeError(f"can't set attribute {self.__name__}")
-
-
-# class _MethDecorator(Protocol[S, P, R]):
-#     def __call__(
-#         self, __f: Callable[Concatenate[S, P], R]
-#     ) -> Callable[Concatenate[S, P], R]:
-#         ...
-# class _PropDecorator(Protocol[S, R]):
-#     def __call__(self, __f: C_prop[S, R]) -> TypedProperty[S, R]:
-#         ...
-
-
-# _MethDecorator: TypeAlias = Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
-# _PropDecorator: TypeAlias = Callable[[C_prop[S, R]], TypedProperty[S, R]]
 
 
 @overload
@@ -174,7 +152,7 @@ def prop(
 
     Parameters
     ----------
-    _func: callable
+    func: callable
         This parameter is used in the case that you decorate without ().
         That is, you can decorate with ``@prop`` or ``@prop()``.
         Positional only.
@@ -407,7 +385,7 @@ def meth(
                 #     self._cache = {}  # type: ignore
                 except KeyError:
                     pass
-                except Exception as e:
+                except Exception as e:  # pragma: no cover
                     print(f"unknown exception {e} in meth call")
                     raise
 

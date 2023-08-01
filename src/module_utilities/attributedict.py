@@ -66,12 +66,14 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
 
     def __init__(
         self,
-        entries: dict[str, NestedMapVal] | None = None,
+        entries: Mapping[str, NestedMapVal] | None = None,
         recursive: bool = True,
         allow_missing: bool = True,
     ):
         if entries is None:
             entries = {}
+        if not isinstance(entries, dict):
+            entries = dict(entries)
         self._entries = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
@@ -131,7 +133,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     def _items(self) -> Iterator[tuple[str, NestedMapVal]]:
         yield from self._entries.items()
 
-    def __dir__(self) -> list[str]:
+    def __dir__(self) -> list[str]:  # pragma: no cover
         return list(self.keys()) + list(super().__dir__())
 
     def _update(self, *args: Any, **kwargs: Any) -> None:

@@ -13,3 +13,4 @@ dependencies:
   - pytest-xdist
   - pytest-cov
   - pytest-sugar
+  - docstring-inheritance

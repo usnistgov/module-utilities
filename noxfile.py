@@ -372,7 +372,9 @@ def pyproject2conda(
     extras = CONFIG["environment-extras"]
 
     # All versions:
-    for env, python_version in product(["test", "typing"], PYTHON_ALL_VERSIONS):
+    for env, python_version in product(
+        ["test", "typing", "test-noopt"], PYTHON_ALL_VERSIONS
+    ):
         create_env(
             name=env,
             extras=extras.get(env, env),
@@ -553,6 +555,37 @@ def test(
     )
 
 
+@ALL_SESSION
+def test_noopt(
+    session: Session,
+    test_no_pytest: bool = False,
+    test_opts: TEST_OPTS_CLI = (),  # type: ignore
+    test_run: RUN_CLI = [],  # noqa
+    lock: LOCK_CLI = False,
+    force_reinstall: FORCE_REINSTALL_CLI = False,
+    log_session: bool = False,
+    no_cov: bool = False,
+):
+    """Test environments with conda installs."""
+
+    pkg_install_condaenv(
+        session=session,
+        name="test-noopt",
+        lock=lock,
+        install_package=True,
+        force_reinstall=force_reinstall,
+        log_session=log_session,
+    )
+
+    _test(
+        session=session,
+        run=test_run,
+        test_no_pytest=test_no_pytest,
+        test_opts=test_opts,
+        no_cov=no_cov,
+    )
+
+
 @ALL_SESSION_VENV
 def test_venv(
     session: Session,
@@ -595,7 +628,7 @@ def _coverage(session, run, cmd, run_internal):
 
     for c in cmd:
         if c == "combine":
-            paths = list(Path(".nox").glob("test*/tmp/.coverage"))
+            paths = list(Path(".nox").glob("test-3*/tmp/.coverage"))
             if update_target(".coverage", *paths):
                 session.run("coverage", "combine", "--keep", "-a", *map(str, paths))
         elif c == "open":
@@ -977,24 +1010,6 @@ def typing(
     log_session: bool = False,
 ):
     """Run type checkers (mypy, pyright, pytype)."""
-
-    # create temporary environment file:
-    # from tempfile import TemporaryDirectory
-
-    # with TemporaryDirectory() as d:
-    #     path = Path(d) / "tmp-yaml.yaml"
-
-    #     session.run(
-    #         "pyproject2conda",
-    #         "yaml",
-    #         "-e",
-    #         "typing",
-    #         "--python-version",
-    #         session.python,
-    #         "-o",
-    #         str(path),
-    #         external=True,
-    #     )
 
     pkg_install_condaenv(
         session=session,

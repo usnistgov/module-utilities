@@ -68,6 +68,15 @@ or
 conda install -c conda-forge module-utilities
 ```
 
+Optionally, you can install
+[docstring-inheritance](https://github.com/AntoineD/docstring-inheritance) with
+
+```base
+pip install docstring-inheritance
+# or
+conda install -c conda-forge docstring-inheritance
+```
+
 ## Example usage
 
 Simple example of using `cached` module.
@@ -115,7 +124,7 @@ setting ameth
 Simple example of using `DocFiller`.
 
 ```pycon
->>> from module_utilities.docfiller import DocFiller
+>>> from module_utilities.docfiller import DocFiller, indent_docstring
 >>> d = DocFiller.from_docstring(
 ...     """
 ...     Parameters
@@ -153,19 +162,19 @@ Simple example of using `DocFiller`.
 ...     """
 ...     return x + y + z
 ...
->>> print(func.__doc__.strip())
-Parameters
-----------
-x : int
-    x param
-y : int
-    y param
-z : int
-    z int param
-Returns
---------
-output : int
-    Integer output.
+>>> print(indent_docstring(func))
++  Parameters
++  ----------
++  x : int
++      x param
++  y : int
++      y param
++  z : int
++      z int param
++  Returns
++  --------
++  output : int
++      Integer output.
 
 # Note that for python version <= 3.8 that method chaining
 # in decorators doesn't work, so have to do the following.
@@ -185,38 +194,38 @@ output : int
 ...     """
 ...     pass
 ...
->>> print(func1.__doc__.strip())
-Parameters
-----------
-x : int
-    x param
-y : int
-    y param
-z : int
-    z int param
-Returns
--------
-output : int
-    Integer output.
+>>> print(indent_docstring(func1))
++  Parameters
++  ----------
++  x : int
++      x param
++  y : int
++      y param
++  z : int
++      z int param
++  Returns
++  -------
++  output : int
++      Integer output.
 
 >>> dd = d.assign_keys(z='z1', out='returns.output1')
 >>> @dd(func1)
 ... def func2(x, y, z):
 ...     pass
 
->>> print(func2.__doc__.strip())
-Parameters
-----------
-x : int
-    x param
-y : int
-    y param
-z : float
-    z float param
-Returns
--------
-output : float
-    Float output
+>>> print(indent_docstring(func2))
++  Parameters
++  ----------
++  x : int
++      x param
++  y : int
++      y param
++  z : float
++      z float param
++  Returns
++  -------
++  output : float
++      Float output
 
 
 ```

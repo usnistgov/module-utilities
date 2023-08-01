@@ -17,6 +17,15 @@ conda install -c conda-forge module-utilities
 This is the preferred method to install module-utilities, as it will always
 install the most recent stable release.
 
+Optionally, you can install
+[docstring-inheritance](https://github.com/AntoineD/docstring-inheritance) with
+
+```base
+pip install docstring-inheritance
+# or
+conda install -c conda-forge docstring-inheritance
+```
+
 ## From sources
 
 The sources for module-utilities can be downloaded from the [Github repo].

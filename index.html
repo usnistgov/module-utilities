@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>module-utilities &#8212; module-utilities v0.5.0 documentation</title>
+    <title>module-utilities &#8212; module-utilities v0.6.0 documentation</title>
   
   
   
@@ -129,7 +129,7 @@
   
   
   
-    <p class="title logo__title">module-utilities v0.5.0 documentation</p>
+    <p class="title logo__title">module-utilities v0.6.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -155,11 +155,30 @@
 
 
 
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
 
 
 
+
+
+<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docinherit.html">Routies to interface docfiller with custom_inherit (mod:<cite>~module_utilites.docinherit</cite>)</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities._typing.html">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code>)</a></li>
+
+
+
+
+
+
+
+
+
 
 </ul>
 </li>
@@ -429,6 +448,13 @@ request for wanted features and suggestions!</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>module-utilities
 </pre></div>
 </div>
+<p>Optionally, you can install
+<a class="reference external" href="https://github.com/AntoineD/docstring-inheritance">docstring-inheritance</a> with</p>
+<div class="highlight-base notranslate"><div class="highlight"><pre><span></span>pip install docstring-inheritance
+# or
+conda install -c conda-forge docstring-inheritance
+</pre></div>
+</div>
 </section>
 <section id="example-usage">
 <h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h2>
@@ -473,7 +499,7 @@ request for wanted features and suggestions!</p>
 </pre></div>
 </div>
 <p>Simple example of using <code class="docutils literal notranslate"><span class="pre">DocFiller</span></code>.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">module_utilities.docfiller</span> <span class="kn">import</span> <span class="n">DocFiller</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">module_utilities.docfiller</span> <span class="kn">import</span> <span class="n">DocFiller</span><span class="p">,</span> <span class="n">indent_docstring</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="o">.</span><span class="n">from_docstring</span><span class="p">(</span>
 <span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    Parameters</span>
@@ -511,19 +537,19 @@ request for wanted features and suggestions!</p>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-<span class="go">Parameters</span>
-<span class="go">----------</span>
-<span class="go">x : int</span>
-<span class="go">    x param</span>
-<span class="go">y : int</span>
-<span class="go">    y param</span>
-<span class="go">z : int</span>
-<span class="go">    z int param</span>
-<span class="go">Returns</span>
-<span class="go">--------</span>
-<span class="go">output : int</span>
-<span class="go">    Integer output.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : int</span>
+<span class="go">+      x param</span>
+<span class="go">+  y : int</span>
+<span class="go">+      y param</span>
+<span class="go">+  z : int</span>
+<span class="go">+      z int param</span>
+<span class="go">+  Returns</span>
+<span class="go">+  --------</span>
+<span class="go">+  output : int</span>
+<span class="go">+      Integer output.</span>
 
 <span class="go"># Note that for python version &lt;= 3.8 that method chaining</span>
 <span class="go"># in decorators doesn&#39;t work, so have to do the following.</span>
@@ -543,38 +569,38 @@ request for wanted features and suggestions!</p>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func1</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-<span class="go">Parameters</span>
-<span class="go">----------</span>
-<span class="go">x : int</span>
-<span class="go">    x param</span>
-<span class="go">y : int</span>
-<span class="go">    y param</span>
-<span class="go">z : int</span>
-<span class="go">    z int param</span>
-<span class="go">Returns</span>
-<span class="go">-------</span>
-<span class="go">output : int</span>
-<span class="go">    Integer output.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func1</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : int</span>
+<span class="go">+      x param</span>
+<span class="go">+  y : int</span>
+<span class="go">+      y param</span>
+<span class="go">+  z : int</span>
+<span class="go">+      z int param</span>
+<span class="go">+  Returns</span>
+<span class="go">+  -------</span>
+<span class="go">+  output : int</span>
+<span class="go">+      Integer output.</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="s1">&#39;returns.output1&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@dd</span><span class="p">(</span><span class="n">func1</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">func2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">func2</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-<span class="go">Parameters</span>
-<span class="go">----------</span>
-<span class="go">x : int</span>
-<span class="go">    x param</span>
-<span class="go">y : int</span>
-<span class="go">    y param</span>
-<span class="go">z : float</span>
-<span class="go">    z float param</span>
-<span class="go">Returns</span>
-<span class="go">-------</span>
-<span class="go">output : float</span>
-<span class="go">    Float output</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func2</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : int</span>
+<span class="go">+      x param</span>
+<span class="go">+  y : int</span>
+<span class="go">+      y param</span>
+<span class="go">+  z : float</span>
+<span class="go">+      z float param</span>
+<span class="go">+  Returns</span>
+<span class="go">+  -------</span>
+<span class="go">+  output : float</span>
+<span class="go">+      Float output</span>
 
 
 </pre></div>
@@ -670,7 +696,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-07-10.
+  Last updated on 2023-08-01.
   <br/>
 </p>
   </div>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>docfiller &#8212; module-utilities v0.5.0 documentation</title>
+    <title>docfiller &#8212; module-utilities v0.6.0 documentation</title>
   
   
   
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities v0.5.0 documentation</p>
+    <p class="title logo__title">module-utilities v0.6.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -156,11 +156,30 @@
 
 
 
+
 <li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
 
 
 
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.docinherit.html">Routies to interface docfiller with custom_inherit (mod:<cite>~module_utilites.docinherit</cite>)</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../reference/generated/module_utilities._typing.html">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code>)</a></li>
+
+
+
+
+
+
+
+
+
 
 </ul>
 </li>
@@ -1011,6 +1030,228 @@ class hello(builtins.object)
 </div>
 </div>
 </div>
+<p>There are cases where you’d like to update the documentation from one implementation to another.  For example, say you have the following functions:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@d</span><span class="o">.</span><span class="n">decorate</span>
+<span class="k">def</span> <span class="nf">func_xy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add numbers</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    {x}</span>
+<span class="sd">    {y}</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : float</span>
+<span class="sd">        Sum of input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">func_xy</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add numbers
+
+
+Parameters
+----------
+x : float
+    x param
+    some other stuff
+y : float
+    y param
+
+
+Returns
+-------
+output : float
+    Sum of input
+</pre></div>
+</div>
+</div>
+</div>
+<p>But what if you want a new version that adds three numbers <code class="docutils literal notranslate"><span class="pre">func_xyz(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code>?  Most everything is the same as for <code class="docutils literal notranslate"><span class="pre">func_xy</span></code> above, but we need to add <code class="docutils literal notranslate"><span class="pre">z</span></code>.  For this, we have an interface to <a class="reference external" href="https://github.com/AntoineD/docstring-inheritance">docstring-inheritance</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@d</span><span class="o">.</span><span class="n">inherit</span><span class="p">(</span><span class="n">func_xy</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">func_xyz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    z : float</span>
+<span class="sd">        Another parameter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">func_xyz</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add numbers
+
+Parameters
+----------
+x : float
+    x param
+    some other stuff
+y : float
+    y param
+z : float
+    Another parameter
+
+Returns
+-------
+output : float
+    Sum of input
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the special case that you want to inherit from methods of a baseclass, you can use the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">prop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nd">@d</span><span class="o">.</span><span class="n">decorate</span>
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        {x}</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Double x</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+
+<span class="n">d_from_base</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">factory_inherit_from_parent</span><span class="p">(</span><span class="n">Base</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Derived</span><span class="p">:</span>
+    <span class="nd">@d_from_base</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">prop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@d_from_base</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        {y}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Base</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on class Base in module __main__:
+
+class Base(builtins.object)
+ |  Methods defined here:
+ |  
+ |  meth(self, x)
+ |      A method
+ |      
+ |      
+ |      Parameters
+ |      ----------
+ |      x : float
+ |          x param
+ |          some other stuff
+ |      
+ |      
+ |      Returns
+ |      -------
+ |      float
+ |          Double x
+ |  
+ |  prop(self)
+ |      A property
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Derived</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on class Derived in module __main__:
+
+class Derived(builtins.object)
+ |  Methods defined here:
+ |  
+ |  meth(self, x, y)
+ |      A method
+ |      
+ |      Parameters
+ |      ----------
+ |      x : float
+ |          x param
+ |          some other stuff
+ |      y : float
+ |          y param
+ |      
+ |      Returns
+ |      -------
+ |      float
+ |          Double x
+ |  
+ |  prop(self)
+ |      A property
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -1098,7 +1339,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-07-10.
+  Last updated on 2023-08-01.
   <br/>
 </p>
   </div>

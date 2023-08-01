@@ -156,13 +156,13 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">module_utilities.docfiller</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docfiller.html">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code>)</a></li>
 
 
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docinherit.html">Routies to interface docfiller with custom_inherit (mod:<cite>~module_utilites.docinherit</cite>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/generated/module_utilities.docinherit.html">Routines to interface docfiller with custom_inherit (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docinherit</span></code>)</a></li>
 
 
 
@@ -431,6 +431,9 @@ integrate with something like <a class="reference external" href="https://github
 <li><p><code class="docutils literal notranslate"><span class="pre">docfiller</span></code>: A module to share documentation. This is addapted from the
 <a class="reference external" href="https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py">pandas <code class="docutils literal notranslate"><span class="pre">doc</span></code> decorator</a>.
 There are some convenience functions and classes for sharing documentation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docinhert</span></code>: An interface to <a class="reference external" href="https://github.com/AntoineD/docstring-inheritance">docstring-inheritance</a> module. This can be
+combined with <code class="docutils literal notranslate"><span class="pre">docfiller</span></code> to make creating related function/class
+documentation easy.</p></li>
 </ul>
 </section>
 <section id="status">
@@ -448,8 +451,8 @@ request for wanted features and suggestions!</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>module-utilities
 </pre></div>
 </div>
-<p>Optionally, you can install
-<a class="reference external" href="https://github.com/AntoineD/docstring-inheritance">docstring-inheritance</a> with</p>
+<p>Optionally, you can install <a class="reference external" href="https://github.com/AntoineD/docstring-inheritance">docstring-inheritance</a> to use the <code class="docutils literal notranslate"><span class="pre">docinherit</span></code>
+module:</p>
 <div class="highlight-base notranslate"><div class="highlight"><pre><span></span>pip install docstring-inheritance
 # or
 conda install -c conda-forge docstring-inheritance

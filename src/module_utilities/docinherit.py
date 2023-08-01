@@ -1,7 +1,11 @@
 # pyright: reportMissingTypeStubs=false
 """
-Routies to interface docfiller with custom_inherit (mod:`~module_utilites.docinherit`)
-======================================================================================
+Routines to interface docfiller with custom_inherit (:mod:`~module_utilities.docinherit`)
+=========================================================================================
+
+Note that to use this module, you must install
+`docstring-inheritanc <https://github.com/AntoineD/docstring-inheritance>`_
+
 """
 
 from __future__ import annotations

@@ -49,6 +49,12 @@ place.
   [pandas `doc` decorator](https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py).
   There are some convenience functions and classes for sharing documentation.
 
+- `docinhert`: An interface to [docstring-inheritance] module. This can be
+  combined with `docfiller` to make creating related function/class
+  documentation easy.
+
+[docstring-inheritance]: https://github.com/AntoineD/docstring-inheritance
+
 ## Status
 
 This package is actively used by the author. Please feel free to create a pull
@@ -68,8 +74,8 @@ or
 conda install -c conda-forge module-utilities
 ```
 
-Optionally, you can install
-[docstring-inheritance](https://github.com/AntoineD/docstring-inheritance) with
+Optionally, you can install [docstring-inheritance] to use the `docinherit`
+module:
 
 ```base
 pip install docstring-inheritance

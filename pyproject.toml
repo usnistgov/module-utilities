@@ -32,12 +32,18 @@ homepage = "https://github.com/usnistgov/module-utilities"
 documentation = "https://pages.nist.gov/module-utilities/"
 
 [project.optional-dependencies]
-test = [
+inherit = ["docstring-inheritance"]
+opt-all = [
+    "module-utilities[inherit]", #
+
+]
+test-extras = [
     "pytest", #
     "pytest-xdist",
     "pytest-cov",
     "pytest-sugar",
 ]
+test = ["module-utilities[test-extras]", "module-utilities[opt-all]"]
 dev-extras = [
     "setuptools-scm", #
     "pytest-accept", # p2c: -p
@@ -45,7 +51,7 @@ dev-extras = [
     "ipykernel",
 ]
 typing-extras = [
-    # "pytype; python_version < '3.11'",
+    "pytype; python_version < '3.11'", #
     "mypy",
 ]
 typing = [
@@ -83,6 +89,8 @@ docs = [
     "myst-nb",
     "sphinx-book-theme",
     "autodocsumm",
+    # "sphinx-autodoc-typehints",
+    "module-utilities[opt-all]",
 ]
 # to be parsed with pyproject2conda with --no-base option
 dist-pypi = ["twine", "build"]
@@ -93,7 +101,13 @@ dist-conda = [
     "conda-verify",
     "boa",
 ]
+# testing with out optional deps
+test-noopt = ["module-utilities[test-extras]"]
 
+# typing-noopt = [
+#     "module-utilities[typing-extras]",
+#     "module-utilities[test-extras]",
+# ]
 [tool.pyproject2conda]
 channels = ["conda-forge"]
 
@@ -127,6 +141,12 @@ test = "pytest"
 addopts = "-n 4 --doctest-modules --doctest-glob='*.md'"
 # testpaths = ["src/module_utilities", "tests", "./README.md"]
 testpaths = ["src", "tests", "README.md"]
+markers = ["inherit: docstring_inheritance dependent code"]
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "@overload"]
+omit = ["*/vendored/*"]
+include = ["src/*"]
 
 [tool.isort]
 profile = "black"
@@ -293,10 +313,11 @@ warn_return_any = true
 warn_unused_configs = true
 exclude = [".eggs", ".tox", "doc", "docs", ".nox"]
 check_untyped_defs = true
+strict = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = []
+module = ["custom_inherit.*"]
 
 [[tool.mypy.overrides]]
 ignore_errors = true
@@ -312,8 +333,11 @@ exclude = [
     "src/module_utilities/vendored"
 ]
 pythonVersion = "3.10"
+strict = ["src"]
+# Would like to use strict throughtout, but need to update tests first.
+# typeCheckingMode = "strict"
 typeCheckingMode = "basic"
-# enable subset of "strict"
+## enable subset of "strict"
 reportDuplicateImport = true
 reportInvalidStubStatement = true
 reportOverlappingOverload = true
@@ -322,7 +346,7 @@ reportUntypedClassDecorator = true
 reportUntypedFunctionDecorator = true
 reportUntypedNamedTuple = true
 reportUnusedImport = true
-# disable subset of "basic"
+## disable subset of "basic"
 reportGeneralTypeIssues = false
 reportMissingModuleSource = false
 reportOptionalCall = false

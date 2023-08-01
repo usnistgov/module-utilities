@@ -6,19 +6,9 @@
 channels:
   - conda-forge
 dependencies:
-  - python>=3.8
+  - python=3.11
   - typing-extensions
   - pytest
   - pytest-xdist
   - pytest-cov
   - pytest-sugar
-  - mypy
-  - setuptools-scm
-  - ipython
-  - ipykernel
-  - nox
-  - ruamel.yaml
-  - pip
-  - pip:
-      - pytest-accept
-      - noxopt

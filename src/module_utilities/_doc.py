@@ -8,15 +8,17 @@ module, feel it's better to have static version here.
 from __future__ import annotations
 
 from textwrap import dedent
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any, Callable
+
     from ._typing import F
 
 
 def doc(
-    *docstrings: None | str | Callable, _prepend: bool = False, **params
-) -> Callable[[F], F]:
+    *docstrings: None | str | Callable[..., Any], _prepend: bool = False, **params: str
+) -> Callable[[F], F]:  # pyre-ignore
     """
     A decorator to take docstring templates, concatenate them and perform string
     substitution on them.
@@ -40,7 +42,7 @@ def doc(
 
     def decorator(decorated: F) -> F:
         # collecting docstring and docstring templates
-        docstring_components: list[str | Callable] = []
+        docstring_components: list[str | Callable[..., Any]] = []
         # if decorated.__doc__:
         #     docstring_components.append(dedent(decorated.__doc__))
 
@@ -49,7 +51,7 @@ def doc(
                 continue
             if hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
-                    docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues] # noqa: E501
+                    docstring._docstring_components  # pyright: ignore # noqa: E501 # pyre-ignore
                 )
             elif isinstance(docstring, str):
                 docstring_components.append(docstring)
@@ -60,9 +62,9 @@ def doc(
         # make default to append
         if decorated.__doc__:
             if _prepend:
-                docstring_components.insert(0, dedent(decorated.__doc__))
+                docstring_components.insert(0, dedent(decorated.__doc__ or ""))
             else:
-                docstring_components.append(dedent(decorated.__doc__))
+                docstring_components.append(dedent(decorated.__doc__ or ""))
 
         params_applied = [
             # component.format(**params)

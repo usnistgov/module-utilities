@@ -8,8 +8,8 @@ from . import cached, docfiller
 
 try:
     from ._version import __version__
-except Exception:
-    __version__ = "999"
+except Exception:  # pragma: no cover
+    __version__ = "999"  # pragma: no cover
 
 
 __author__ = """William P. Krekelberg"""

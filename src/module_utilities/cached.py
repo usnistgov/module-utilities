@@ -9,23 +9,23 @@ from __future__ import annotations
 
 from functools import wraps
 from inspect import signature
-from typing import (
-    TYPE_CHECKING,
-    Callable,
-    Generic,
-    cast,
-    overload,
-)
-
-from ._typing import C_meth, C_prop, P, R, S
+from typing import TYPE_CHECKING, Generic, cast, overload
 
 if TYPE_CHECKING:
+    from typing import (
+        Callable,
+    )
+
     from typing_extensions import (
         Literal,
         Self,
     )
 
-__all__ = ["decorate", "prop", "meth", "clear", "TypedProperty"]  # , "HasCache", "S"]
+    from ._typing import C_meth, C_prop, P
+
+from ._typing import R, S
+
+__all__ = ["decorate", "prop", "meth", "clear", "TypedProperty"]
 
 
 class TypedProperty(Generic[S, R]):

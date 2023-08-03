@@ -4,7 +4,10 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 """
 from __future__ import annotations
 
-from typing import Any, Iterator, Mapping, MutableMapping, overload
+from typing import TYPE_CHECKING, MutableMapping, overload
+
+if TYPE_CHECKING:
+    from typing import Any, Iterator, Mapping
 
 from ._typing import NestedMap, NestedMapVal
 
@@ -154,10 +157,10 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
                 # set to False by -O (it is True for normal execution).
                 # But we only want to see an error when building the docs;
                 # not something users should see, so this slight inconsistency is fine.
-                if __debug__:
+                if __debug__:  # pragma: no cover
                     raise err
                 else:
-                    pass
+                    pass  # pragma: no cover
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({repr(self._entries)})"

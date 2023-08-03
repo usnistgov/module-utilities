@@ -1071,6 +1071,7 @@ def testdist_conda(
     test_opts: TEST_OPTS_CLI = (),  # type: ignore
     testdist_conda_run: RUN_CLI = [],  # noqa
     force_reinstall: FORCE_REINSTALL_CLI = False,
+    testdist_conda_channel: cmd_annotated(help="conda channels to use") = (),  # type: ignore
     version: VERSION_CLI = "",
     log_session: bool = False,
 ):
@@ -1080,13 +1081,16 @@ def testdist_conda(
     if version:
         install_str = f"{install_str}=={version}"
 
+    if not testdist_conda_channel:
+        testdist_conda_channel = ["conda-forge"]
+
     session_install_envs(
         session,
         session_environment_filename(
             python_version=session.python, name="test-extras.yaml"
         ),
         deps=[install_str],
-        channels=["conda-forge"],
+        channels=testdist_conda_channel,
         force_reinstall=force_reinstall,
         install_package=False,
     )

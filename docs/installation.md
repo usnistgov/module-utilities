@@ -51,6 +51,6 @@ pip install [-e] --no-deps .
 ```
 
 where options in brackets are options (for environment name, and editable
-install, repectively).
+install, respectively).
 
 [github repo]: https://github.com/usnistgov/module-utilities

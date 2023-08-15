@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Cached class properties/methods (cached) &#8212; module-utilities v0.6.0 documentation</title>
+    <title>Cached class properties/methods (cached) &#8212; module-utilities 0.7.0 documentation</title>
   
   
   
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities v0.6.0 documentation</p>
+    <p class="title logo__title">module-utilities 0.7.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -390,7 +390,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.prop"><code class="docutils literal notranslate"><span class="pre">prop()</span></code></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.meth"><code class="docutils literal notranslate"><span class="pre">meth()</span></code></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.TypedProperty"><code class="docutils literal notranslate"><span class="pre">TypedProperty</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.CachedProperty"><code class="docutils literal notranslate"><span class="pre">CachedProperty</span></code></a></li>
 </ul>
 
             </nav>
@@ -427,21 +427,21 @@ document.write(`
 <p><strong>Classes:</strong></p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.cached.TypedProperty" title="module_utilities.cached.TypedProperty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TypedProperty</span></code></a>(getter)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.cached.CachedProperty" title="module_utilities.cached.CachedProperty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CachedProperty</span></code></a>(prop[, key, check_use_cache])</p></td>
 <td><p>Simplified version of property with typing.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.decorate">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">decorate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_property</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L103-L122"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.decorate" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">decorate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_property</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L137-L156"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.decorate" title="Permalink to this definition">#</a></dt>
 <dd><p>General purpose cached decorator.</p>
 <p>Must always be called.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.prop">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L143-L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.prop" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L177-L282"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.prop" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorator to cache a property within a class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -536,7 +536,7 @@ That property, then caching will NOT be done.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.meth">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">meth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L302-L405"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.meth" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">meth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L307-L410"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.meth" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorator to cache a function within a class</p>
 <p>Requires the Class to have a cache dict called <code class="docutils literal notranslate"><span class="pre">_cache</span></code>.</p>
 <p class="rubric">Examples</p>
@@ -582,7 +582,7 @@ That property, then caching will NOT be done.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.clear">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_or_func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L418-L508"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.clear" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_or_func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L423-L513"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.clear" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorator to clear self._cache of specified properties</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -642,8 +642,8 @@ That property, then caching will NOT be done.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="module_utilities.cached.TypedProperty">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">TypedProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L31-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.TypedProperty" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.cached.CachedProperty">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">CachedProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L30-L101"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.CachedProperty" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<a class="reference internal" href="module_utilities._typing.html#module_utilities._typing.S" title="module_utilities._typing.S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code></a>, <a class="reference internal" href="module_utilities._typing.html#module_utilities._typing.R" title="module_utilities._typing.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a>]</p>
 <p>Simplified version of property with typing.</p>
 <p class="rubric">Examples</p>
@@ -651,11 +651,16 @@ That property, then caching will NOT be done.</p>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="nd">@TypedProperty</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">prop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calling prop&quot;</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
 <span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">prop</span> <span class="o">=</span> <span class="n">CachedProperty</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Example</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">prop</span><span class="p">)</span>
+<span class="go">calling prop</span>
+<span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">prop</span><span class="p">)</span>
 <span class="go">1</span>
 </pre></div>
@@ -716,7 +721,7 @@ That property, then caching will NOT be done.</p>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.prop"><code class="docutils literal notranslate"><span class="pre">prop()</span></code></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.meth"><code class="docutils literal notranslate"><span class="pre">meth()</span></code></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.TypedProperty"><code class="docutils literal notranslate"><span class="pre">TypedProperty</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.cached.CachedProperty"><code class="docutils literal notranslate"><span class="pre">CachedProperty</span></code></a></li>
 </ul>
 
   </nav></div>
@@ -750,7 +755,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-08-01.
+  Last updated on 2023-08-15.
   <br/>
 </p>
   </div>

@@ -9,18 +9,28 @@ import pytest
 from module_utilities import cached
 
 
-# checking typeproperty
-
-
-def test_typeproperty():
+def test_CachedProperty():
     class tmp:
         _cache: dict[str, Any] = {}
 
-        @cached.TypedProperty
-        def thing(self):
+        def _thing(self) -> int:
+            "A test"
             return 1
 
+        thing = cached.CachedProperty(_thing, key="thing")
+
+        @cached.prop
+        def there(self) -> int:
+            "B test"
+            return 2
+
     x = tmp()
+    assert x.thing == 1
+
+    assert x._cache == {"thing": 1}
+    assert tmp.there.__name__ == "there"
+    assert tmp.there.__doc__ == "B test"
+
     with pytest.raises(AttributeError):
         x.thing = 2
 

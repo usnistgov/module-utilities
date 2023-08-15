@@ -697,6 +697,28 @@ class DocFiller:
         """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
+    # @cached.prop
+    # def atest(self) -> int:
+    #     """
+    #     A thing that does stuff
+
+    #     Returns
+    #     -------
+    #     int
+    #     """
+    #     return 1
+
+    # @property
+    # def btest(self) -> int:
+    #     """
+    #     B thing that does stuff
+
+    #     Returns
+    #     -------
+    #     int
+    #     """
+    #     return 2
+
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
         return doc_decorate(**self.params)

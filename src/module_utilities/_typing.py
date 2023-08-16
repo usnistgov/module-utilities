@@ -5,7 +5,7 @@ Typing definitions (:mod:`~module_utilities._typing`)
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, Dict, Mapping, Protocol, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, Mapping, Protocol, TypeVar
 
 from typing_extensions import Concatenate, ParamSpec, TypeAlias
 
@@ -57,15 +57,15 @@ C_meth: TypeAlias = Callable[Concatenate[S, P], R]  # pyre-ignore
 
 # docfiller stuff
 
-NestedMapVal = Union[str, "NestedMap"]
+NestedMapVal: TypeAlias = "str | NestedMap"
 """Nested map value type"""
-NestedMap = Mapping[str, NestedMapVal]
+NestedMap: TypeAlias = Mapping[str, NestedMapVal]
 """Nested map type"""
 
 
-NestedDictVal = Union[str, "NestedDict"]
+NestedDictVal: TypeAlias = "str | NestedDict"
 """Nested dict value type"""
-NestedDict = Dict[str, NestedDictVal]
+NestedDict: TypeAlias = "dict[str, NestedDictVal]"
 """Nested dict type"""
 
 

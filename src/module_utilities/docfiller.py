@@ -9,13 +9,8 @@ from collections.abc import Mapping
 from textwrap import dedent, indent
 from typing import (
     TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
     Iterable,
-    List,
     NamedTuple,
-    Union,
     cast,
 )
 
@@ -26,7 +21,11 @@ from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from typing import (
+        Any,
+        Callable,
+        Sequence,
+    )
 
     from ._typing import F, NestedMap, NestedMapVal
 
@@ -216,10 +215,10 @@ def _params_to_string(
         params = [params]
 
     if isinstance(params[0], str):
-        return "\n".join(cast(List[str], params))
+        return "\n".join(cast("list[str]", params))
 
     out: dict[str, str] = {}
-    for p in cast(List[TParameter], params):
+    for p in cast("list[TParameter]", params):
         name = p.name
         if key_char in name:
             key, name = (x.strip() for x in name.split(key_char))
@@ -296,7 +295,7 @@ def _parse_docstring(
     else:
         doc = func_or_doc
 
-    parsed = cast(Dict[str, Union[str, List[str], List[Parameter]]], NumpyDocString(doc)._parsed_data)  # type: ignore[no-untyped-call]
+    parsed = cast("dict[str, str | list[str] | list[Parameter]]", NumpyDocString(doc)._parsed_data)  # type: ignore[no-untyped-call]
 
     if expand:
         parsed_out = {
@@ -317,7 +316,7 @@ def _parse_docstring(
             ]
         }
     else:
-        parsed_out = cast(Dict[str, Union[str, Dict[str, str]]], parsed)
+        parsed_out = cast("dict[str, str | dict[str, str]]", parsed)
     return parsed_out
 
 
@@ -698,6 +697,28 @@ class DocFiller:
         """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
+    # @cached.prop
+    # def atest(self) -> int:
+    #     """
+    #     A thing that does stuff
+
+    #     Returns
+    #     -------
+    #     int
+    #     """
+    #     return 1
+
+    # @property
+    # def btest(self) -> int:
+    #     """
+    #     B thing that does stuff
+
+    #     Returns
+    #     -------
+    #     int
+    #     """
+    #     return 2
+
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
         return doc_decorate(**self.params)
@@ -834,7 +855,7 @@ class DocFiller:
 
         def decorator(func: F) -> F:
             @docfiller(template)
-            def dummy() -> None:
+            def dummy() -> None:  # pragma: no cover
                 pass
 
             func = docfiller(_prepend=_prepend)(func)

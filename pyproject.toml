@@ -52,7 +52,7 @@ dev-extras = [
 ]
 typing-extras = [
     "pytype; python_version < '3.11'", #
-    "mypy",
+    "mypy >= 1.4.1",
 ]
 typing = [
     "module-utilities[typing-extras]", #
@@ -333,7 +333,7 @@ exclude = [
     "src/module_utilities/vendored"
 ]
 pythonVersion = "3.10"
-strict = ["src"]
+strict = ["src", "tools/noxtools.py"]
 # Would like to use strict throughtout, but need to update tests first.
 # typeCheckingMode = "strict"
 typeCheckingMode = "basic"

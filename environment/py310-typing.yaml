@@ -9,7 +9,7 @@ dependencies:
   - python=3.10
   - typing-extensions
   - pytype
-  - mypy
+  - mypy >= 1.4.1
   - pytest
   - pytest-xdist
   - pytest-cov

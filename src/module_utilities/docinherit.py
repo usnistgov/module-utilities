@@ -20,10 +20,12 @@ try:
 
     HAS_INHERIT = True
 except ImportError:  # pragma: no cover
+    inherit_numpy_docstring = None  # type: ignore
     HAS_INHERIT = False  # pyright: ignore
 
 
 if HAS_INHERIT:
+    assert inherit_numpy_docstring is not None
     from typing import Any, Callable
 
     from .options import DOC_SUB

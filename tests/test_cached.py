@@ -3,23 +3,34 @@
 from __future__ import annotations
 from typing import Any
 
+# from typing_extensions import reveal_type
 import pytest
 
 from module_utilities import cached
 
 
-# checking typeproperty
-
-
-def test_typeproperty():
+def test_CachedProperty():
     class tmp:
         _cache: dict[str, Any] = {}
 
-        @cached.TypedProperty
-        def thing(self):
+        def _thing(self) -> int:
+            "A test"
             return 1
 
+        thing = cached.CachedProperty(_thing, key="thing")
+
+        @cached.prop
+        def there(self) -> int:
+            "B test"
+            return 2
+
     x = tmp()
+    assert x.thing == 1
+
+    assert x._cache == {"thing": 1}
+    assert tmp.there.__name__ == "there"
+    assert tmp.there.__doc__ == "B test"
+
     with pytest.raises(AttributeError):
         x.thing = 2
 
@@ -623,3 +634,71 @@ def test_error_with_slots2():
 
     x = test(1, 2)
     do_prop_test(x)
+
+
+def test_with_kwargs():
+    class test:
+        def __init__(self):
+            self._cache: dict[str, Any] = {}
+
+        @cached.prop
+        def prop(self) -> float:
+            return 1.0
+
+        @cached.meth
+        def meth0(self, beta: float) -> float:
+            return beta
+
+        @cached.meth
+        def meth1(self, *args: int) -> tuple[int, ...]:
+            return args
+
+        @cached.meth
+        def meth2(self, /, **kws: int) -> dict[str, int]:
+            return kws
+
+        # need to have / above
+        # the following will give an error with mypy
+        # @cached.meth
+        # def meth2b(self, **kws: int) -> dict[str, int]:
+        #     return kws
+
+        @cached.meth
+        def meth3(
+            self, /, *args: int, **kwargs: int
+        ) -> tuple[tuple[int, ...], dict[str, int]]:
+            return args, kwargs
+
+        # need to have slash above
+        # the following will give an error with mypy
+        # @cached.meth
+        # def meth3b(self, *args: int, **kwargs: int) -> tuple[tuple[int, ...], dict[str, int]]:
+        #     return args, kwargs
+
+        @cached.meth
+        def meth4(self, beta: float, *args: int) -> tuple[float, tuple[int, ...]]:
+            return beta, args
+
+        # either of these will work.
+        @cached.meth
+        def meth5(
+            self, beta: float, /, *args: int, **kwargs: int
+        ) -> tuple[float, tuple[int, ...], dict[str, int]]:
+            return beta, args, kwargs
+
+        @cached.meth
+        def meth5b(
+            self, /, beta: float, *args: int, **kwargs: int
+        ) -> tuple[float, tuple[int, ...], dict[str, int]]:
+            return beta, args, kwargs
+
+    x = test()
+    # reveal_type(x.meth0)
+    # reveal_type(x.meth1)
+    # reveal_type(x.meth2)
+    # reveal_type(x.meth2b)
+    # reveal_type(x.meth3)
+    # reveal_type(x.meth3b)
+    # reveal_type(x.meth4)
+    # reveal_type(x.meth5)
+    # reveal_type(x.meth5b)

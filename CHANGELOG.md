@@ -11,6 +11,12 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.7.0 — 2023-08-15
+
+### Changed
+
+- Simplified cached.prop by using (new) CachedProperty class.
+
 ## v0.6.0 — 2023-08-01
 
 ### Added

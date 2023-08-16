@@ -7,31 +7,29 @@ Routines to define cached properties/methods in a class.
 """
 from __future__ import annotations
 
-from functools import wraps
+from functools import update_wrapper, wraps
 from inspect import signature
-from typing import (
-    TYPE_CHECKING,
-    Callable,
-    Generic,
-    cast,
-    overload,
-)
-
-from ._typing import C_meth, C_prop, P, R, S
+from typing import TYPE_CHECKING, Generic, cast, overload
 
 if TYPE_CHECKING:
-    from typing_extensions import (
-        Literal,
-        Self,
+    from typing import (
+        Callable,
     )
 
-__all__ = ["decorate", "prop", "meth", "clear", "TypedProperty"]  # , "HasCache", "S"]
+    from typing_extensions import (
+        Literal,
+    )
+
+    from ._typing import C_meth, C_prop, P
+
+from ._typing import R, S
+
+__all__ = ["decorate", "prop", "meth", "clear", "CachedProperty"]
 
 
-class TypedProperty(Generic[S, R]):
+class CachedProperty(Generic[S, R]):
     """
     Simplified version of property with typing.
-
 
     Examples
     --------
@@ -39,45 +37,68 @@ class TypedProperty(Generic[S, R]):
     ...     def __init__(self):
     ...         self._cache: dict[str, Any] = {}
     ...
-    ...     @TypedProperty
     ...     def prop(self) -> int:
+    ...         print("calling prop")
     ...         return 1
+    ...
+    ...     prop = CachedProperty(prop, key="hello")
     ...
     >>> x = Example()
     >>> print(x.prop)
+    calling prop
     1
-
+    >>> print(x.prop)
+    1
     """
 
-    def __init__(self, getter: C_prop[S, R]) -> None:
-        self.__name__: str | None = None
-        self.getter = getter
-        self.__doc__: str | None = getter.__doc__
+    def __init__(
+        self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
+    ) -> None:
+        update_wrapper(self, prop)  # pyright: ignore
 
-    def __set_name__(self, owner: type[S], name: str) -> None:
-        if self.__name__ is None:
-            self.__name__ = name
-        elif name != self.__name__:  # pragma: no cover
-            raise TypeError(
-                "Cannot assign the same TypedProperty to two different names "
-                f"({self.__name__!r} and {name!r})."
-            )
+        self._prop = prop
+
+        if key is None:
+            key = prop.__name__
+        assert isinstance(key, str)
+        self._key = key
+        self._check_use_cache = check_use_cache
 
     @overload
-    def __get__(self, instance: None, owner: type[S] | None = None) -> Self:
+    def __get__(self, instance: None, owner: type[S] | None = None) -> C_prop[S, R]:
         ...
 
     @overload
     def __get__(self, instance: S, owner: type[S] | None = None) -> R:
         ...
 
-    def __get__(self, instance: S | None, owner: type[S] | None = None) -> Self | R:
+    def __get__(
+        self, instance: S | None, owner: type[S] | None = None
+    ) -> C_prop[S, R] | R:
         if instance is None:
-            return self
-        return self.getter(instance)
+            return self._prop
+
+        if (not self._check_use_cache) or (getattr(instance, "_use_cache", False)):
+            try:
+                return cast(
+                    R,
+                    instance._cache[self._key],  # pyright: ignore [reportPrivateUsage]
+                )
+            except AttributeError:
+                instance._cache = {}  # pyright: ignore [reportPrivateUsage]
+            except KeyError:
+                pass
+
+            # fmt: off
+            instance._cache[self._key] = ret = self._prop(instance)  # pyright: ignore [reportPrivateUsage]
+            # fmt: on
+
+            return ret
+        else:
+            return self._prop(instance)
 
     def __set__(self, instance: S | None, value: R) -> None:
-        raise AttributeError(f"can't set attribute {self.__name__}")
+        raise AttributeError(f"can't set attribute {self._prop.__name__}")
 
 
 @overload
@@ -96,7 +117,20 @@ def decorate(
     key: str | None = ...,
     check_use_cache: bool = ...,
     as_property: Literal[True] = ...,
-) -> Callable[[C_prop[S, R]], TypedProperty[S, R]]:
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
+    ...
+
+
+@overload
+def decorate(
+    *,
+    key: str | None = ...,
+    check_use_cache: bool = ...,
+    as_property: bool,
+) -> (
+    Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
+    | Callable[[C_prop[S, R]], CachedProperty[S, R]]
+):
     ...
 
 
@@ -106,7 +140,7 @@ def decorate(
     check_use_cache: bool = False,
     as_property: bool = True,
 ) -> (
-    Callable[[C_prop[S, R]], TypedProperty[S, R]]
+    Callable[[C_prop[S, R]], CachedProperty[S, R]]
     | Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
 ):
     """
@@ -129,14 +163,14 @@ def prop(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> TypedProperty[S, R]:
+) -> CachedProperty[S, R]:
     ...
 
 
 @overload
 def prop(
     func: None = None, /, *, key: str | None = ..., check_use_cache: bool = ...
-) -> Callable[[C_prop[S, R]], TypedProperty[S, R]]:
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
     ...
 
 
@@ -146,7 +180,7 @@ def prop(
     *,
     key: str | None = None,
     check_use_cache: bool = False,
-) -> TypedProperty[S, R] | Callable[[C_prop[S, R]], TypedProperty[S, R]]:
+) -> CachedProperty[S, R] | Callable[[C_prop[S, R]], CachedProperty[S, R]]:
     """
     Decorator to cache a property within a class.
 
@@ -237,44 +271,15 @@ def prop(
     meth : decorator for cache creation of function
     """
 
-    def cached_lookup(_func: C_prop[S, R]) -> TypedProperty[S, R]:
-        if key is None:
-            key_lookup = _func.__name__
-        else:
-            key_lookup = key
-
-        @TypedProperty
-        @wraps(_func)
-        def wrapper(self: S) -> R:
-            if (not check_use_cache) or (getattr(self, "_use_cache", False)):
-                try:
-                    return cast(
-                        R,
-                        self._cache[key_lookup],  # pyright: ignore [reportPrivateUsage]
-                    )
-                except AttributeError:
-                    self._cache = {}  # pyright: ignore [reportPrivateUsage]
-                except KeyError:
-                    pass
-
-                # fmt: off
-                self._cache[key_lookup] = ret = _func(self)  # pyright: ignore [reportPrivateUsage]
-                # fmt: on
-
-                return ret
-            else:
-                return _func(self)
-
-        return wrapper
+    def cached_lookup(_func: C_prop[S, R]) -> CachedProperty[S, R]:
+        return CachedProperty[S, R](
+            prop=_func, key=key, check_use_cache=check_use_cache
+        )
 
     if func:
         return cached_lookup(func)
     else:
         return cached_lookup
-
-
-# @overload
-# def meth(func: C_meth[S, P, R]) -> C_meth[S, P, R]: ...
 
 
 @overload

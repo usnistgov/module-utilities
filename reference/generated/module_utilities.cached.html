@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Cached class properties/methods (cached) &#8212; module-utilities 0.7.0 documentation</title>
+    <title>Cached class properties/methods (cached) &#8212; module-utilities 0.6.1.dev11+ge27786a documentation</title>
   
   
   
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.7.0 documentation</p>
+    <p class="title logo__title">module-utilities 0.6.1.dev11+ge27786a documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -536,7 +536,7 @@ That property, then caching will NOT be done.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.meth">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">meth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L307-L410"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.meth" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">meth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_use_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L307-L411"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.meth" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorator to cache a function within a class</p>
 <p>Requires the Class to have a cache dict called <code class="docutils literal notranslate"><span class="pre">_cache</span></code>.</p>
 <p class="rubric">Examples</p>
@@ -559,13 +559,15 @@ That property, then caching will NOT be done.</p>
 <span class="go">[1, 2]</span>
 </pre></div>
 </div>
-<p>This will respect default params
-&gt;&gt;&gt; x.method(1)
-[1, 2]</p>
-<p>And keyword arguments
-&gt;&gt;&gt; x.method(y=2, x=1)
-[1, 2]</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span>
+<p>This will respect default params</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[1, 2]</span>
+</pre></div>
+</div>
+<p>And keyword arguments</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span>
 <span class="go">{&#39;key&#39;: {((1, 2), frozenset()): [1, 2]}}</span>
 </pre></div>
 </div>
@@ -582,7 +584,7 @@ That property, then caching will NOT be done.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="module_utilities.cached.clear">
-<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_or_func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L423-L513"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.clear" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">module_utilities.cached.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_or_func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/cached.py#L424-L514"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.cached.clear" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorator to clear self._cache of specified properties</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -755,7 +757,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-08-15.
+  Last updated on 2023-08-16.
   <br/>
 </p>
   </div>

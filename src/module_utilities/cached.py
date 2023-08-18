@@ -336,13 +336,14 @@ def meth(
     [1, 2]
 
     This will respect default params
+
     >>> x.method(1)
     [1, 2]
 
     And keyword arguments
+
     >>> x.method(y=2, x=1)
     [1, 2]
-
     >>> print(x._cache)
     {'key': {((1, 2), frozenset()): [1, 2]}}
 

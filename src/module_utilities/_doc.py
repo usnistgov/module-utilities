@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-    from ._typing import F
+    from .typing import F
 
 
 def doc(

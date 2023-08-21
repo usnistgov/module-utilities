@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from module_utilities import attributedict
-from module_utilities._typing import NestedMap
+from module_utilities.typing import NestedMap
 import pytest
 
 

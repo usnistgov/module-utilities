@@ -27,7 +27,7 @@ if TYPE_CHECKING:
         Sequence,
     )
 
-    from ._typing import F, NestedMap, NestedMapVal
+    from .typing import F, NestedMap, NestedMapVal
 
 
 def indent_docstring(

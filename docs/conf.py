@@ -145,7 +145,7 @@ autodoc_default_flags = [
 ]
 autodoc_typehints = "none"
 
-autodoc_type_aliases = {"NestedMap": "module_utilities._typing.NestedMap"}
+autodoc_type_aliases = {"NestedMap": "module_utilities.typing.NestedMap"}
 
 # -- napoleon ------------------------------------------------------------------
 napoleon_google_docstring = False
@@ -210,7 +210,7 @@ napoleon_type_aliases = {
     "pd.Index": "~pandas.Index",
     "pd.NaT": "~pandas.NaT",
     "DocFiller": "~module_utilities.docfiller.DocFiller",
-    "NestedMap": "~module_utilities._typing.NestedMap",
+    "NestedMap": "~module_utilities.typing.NestedMap",
 }
 
 

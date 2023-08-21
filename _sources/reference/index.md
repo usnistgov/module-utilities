@@ -11,6 +11,6 @@
    docfiller
    docinherit
    attributedict
-   _typing
+   typing
 
 ```

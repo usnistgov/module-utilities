@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Typing definitions (_typing) &#8212; module-utilities 0.6.1.dev11+ge27786a documentation</title>
+    <title>Typing definitions (typing) &#8212; module-utilities v0.8.0 documentation</title>
   
   
   
@@ -54,7 +54,7 @@
     <script src="https://pages.nist.gov/leaveNotice/js/jquery.leaveNotice-nist.min.js"></script>
     <script src="../../_static/js/leave_notice.js"></script>
     <script async="async" id="_fed_au_ua_tag" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NIST&subagency=github&pua=UA-66610693-1&yt=true&exts=ppsx,pps,f90,sch,rtf,wrl,txz,m1v,xlsm,msi,xsd,f,tif,eps,mpg,xml,pl,xlt,c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/module_utilities._typing';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/module_utilities.typing';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="License" href="../../license.html" />
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities 0.6.1.dev11+ge27786a documentation</p>
+    <p class="title logo__title">module-utilities v0.8.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -170,7 +170,7 @@
 
 <li class="toctree-l2"><a class="reference internal" href="module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code>)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code>)</a></li>
 
 
 
@@ -263,7 +263,7 @@
       
       
       
-      <li><a href="https://github.com/usnistgov/module-utilities/issues/new?title=Issue%20on%20page%20%2Freference/generated/module_utilities._typing.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/usnistgov/module-utilities/issues/new?title=Issue%20on%20page%20%2Freference/generated/module_utilities.typing.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +293,7 @@
       
       
       
-      <li><a href="../../_sources/reference/generated/module_utilities._typing.rst" target="_blank"
+      <li><a href="../../_sources/reference/generated/module_utilities.typing.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -375,7 +375,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Typing definitions (_typing)</h1>
+    <h1>Typing definitions (typing)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -385,17 +385,17 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code>)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedMapVal"><code class="docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedMap"><code class="docutils literal notranslate"><span class="pre">NestedMap</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedDictVal"><code class="docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedDict"><code class="docutils literal notranslate"><span class="pre">NestedDict</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.F"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.P"><code class="docutils literal notranslate"><span class="pre">P</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.HasCache"><code class="docutils literal notranslate"><span class="pre">HasCache</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.T_DocFiller"><code class="docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedMapVal"><code class="docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedMap"><code class="docutils literal notranslate"><span class="pre">NestedMap</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedDictVal"><code class="docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedDict"><code class="docutils literal notranslate"><span class="pre">NestedDict</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.F"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.P"><code class="docutils literal notranslate"><span class="pre">P</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.HasCache"><code class="docutils literal notranslate"><span class="pre">HasCache</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.T_DocFiller"><code class="docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></li>
 </ul>
 
             </nav>
@@ -408,37 +408,37 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <span class="target" id="module-module_utilities._typing"></span><section id="typing-definitions-typing">
-<h1>Typing definitions (<a class="reference internal" href="#module-module_utilities._typing" title="module_utilities._typing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code></a>)<a class="headerlink" href="#typing-definitions-typing" title="Permalink to this heading">#</a></h1>
+  <span class="target" id="module-module_utilities.typing"></span><section id="typing-definitions-typing">
+<h1>Typing definitions (<a class="reference internal" href="#module-module_utilities.typing" title="module_utilities.typing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a>)<a class="headerlink" href="#typing-definitions-typing" title="Permalink to this heading">#</a></h1>
 </section>
 <p><strong>Data:</strong></p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.NestedMapVal" title="module_utilities._typing.NestedMapVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.NestedMapVal" title="module_utilities.typing.NestedMapVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></p></td>
 <td><p>Nested map value type</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities._typing.NestedMap" title="module_utilities._typing.NestedMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedMap</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.typing.NestedMap" title="module_utilities.typing.NestedMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedMap</span></code></a></p></td>
 <td><p>Nested map type</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.NestedDictVal" title="module_utilities._typing.NestedDictVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.NestedDictVal" title="module_utilities.typing.NestedDictVal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></p></td>
 <td><p>Nested dict value type</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities._typing.NestedDict" title="module_utilities._typing.NestedDict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedDict</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.typing.NestedDict" title="module_utilities.typing.NestedDict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NestedDict</span></code></a></p></td>
 <td><p>Nested dict type</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.F" title="module_utilities._typing.F"><code class="xref py py-obj docutils literal notranslate"><span class="pre">F</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.F" title="module_utilities.typing.F"><code class="xref py py-obj docutils literal notranslate"><span class="pre">F</span></code></a></p></td>
 <td><p>Function type</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities._typing.P" title="module_utilities._typing.P"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.typing.P" title="module_utilities.typing.P"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P</span></code></a></p></td>
 <td><p>Parameter specification</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.R" title="module_utilities._typing.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.R" title="module_utilities.typing.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a></p></td>
 <td><p>Return Type</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities._typing.S" title="module_utilities._typing.S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.typing.S" title="module_utilities.typing.S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code></a></p></td>
 <td><p>Self Type bound to HasCache</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.T_DocFiller" title="module_utilities._typing.T_DocFiller"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.T_DocFiller" title="module_utilities.typing.T_DocFiller"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></p></td>
 <td><p>Docfiller type</p></td>
 </tr>
 </tbody>
@@ -446,73 +446,73 @@ document.write(`
 <p><strong>Classes:</strong></p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities._typing.HasCache" title="module_utilities._typing.HasCache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HasCache</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.typing.HasCache" title="module_utilities.typing.HasCache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HasCache</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Class protocol to mark that classes should have property _cache.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.NestedMapVal">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">NestedMapVal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'str</span> <span class="pre">|</span> <span class="pre">NestedMap'</span></em><a class="headerlink" href="#module_utilities._typing.NestedMapVal" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.NestedMapVal">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">NestedMapVal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'str</span> <span class="pre">|</span> <span class="pre">NestedMap'</span></em><a class="headerlink" href="#module_utilities.typing.NestedMapVal" title="Permalink to this definition">#</a></dt>
 <dd><p>Nested map value type</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.NestedMap">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">NestedMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#module_utilities._typing.NestedMap" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.NestedMap">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">NestedMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#module_utilities.typing.NestedMap" title="Permalink to this definition">#</a></dt>
 <dd><p>Nested map type</p>
 <p>alias of <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">NestedMap</span></code>]</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.NestedDictVal">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">NestedDictVal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'str</span> <span class="pre">|</span> <span class="pre">NestedDict'</span></em><a class="headerlink" href="#module_utilities._typing.NestedDictVal" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.NestedDictVal">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">NestedDictVal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'str</span> <span class="pre">|</span> <span class="pre">NestedDict'</span></em><a class="headerlink" href="#module_utilities.typing.NestedDictVal" title="Permalink to this definition">#</a></dt>
 <dd><p>Nested dict value type</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.NestedDict">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">NestedDict</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dict[str,</span> <span class="pre">NestedDictVal]'</span></em><a class="headerlink" href="#module_utilities._typing.NestedDict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.NestedDict">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">NestedDict</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dict[str,</span> <span class="pre">NestedDictVal]'</span></em><a class="headerlink" href="#module_utilities.typing.NestedDict" title="Permalink to this definition">#</a></dt>
 <dd><p>Nested dict type</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.F">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">F</span></span><a class="headerlink" href="#module_utilities._typing.F" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.F">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">F</span></span><a class="headerlink" href="#module_utilities.typing.F" title="Permalink to this definition">#</a></dt>
 <dd><p>Function type</p>
 <p>alias of TypeVar(‘F’, bound=<code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[…], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code></a>])</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.P">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">P</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">~P</span></em><a class="headerlink" href="#module_utilities._typing.P" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.P">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">P</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">~P</span></em><a class="headerlink" href="#module_utilities.typing.P" title="Permalink to this definition">#</a></dt>
 <dd><p>Parameter specification</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.R">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">R</span></span><a class="headerlink" href="#module_utilities._typing.R" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.R">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">R</span></span><a class="headerlink" href="#module_utilities.typing.R" title="Permalink to this definition">#</a></dt>
 <dd><p>Return Type</p>
 <p>alias of TypeVar(‘R’)</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.S">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#module_utilities._typing.S" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.S">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#module_utilities.typing.S" title="Permalink to this definition">#</a></dt>
 <dd><p>Self Type bound to HasCache</p>
-<p>alias of TypeVar(‘S’, bound=<a class="reference internal" href="#module_utilities._typing.HasCache" title="module_utilities._typing.HasCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasCache</span></code></a>)</p>
+<p>alias of TypeVar(‘S’, bound=<a class="reference internal" href="#module_utilities.typing.HasCache" title="module_utilities.typing.HasCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasCache</span></code></a>, covariant=True)</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="module_utilities._typing.HasCache">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">HasCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/_typing.py#L46-L49"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities._typing.HasCache" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.HasCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">HasCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/typing.py#L46-L49"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.typing.HasCache" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Protocol" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></a></p>
 <p>Class protocol to mark that classes should have property _cache.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="module_utilities._typing.T_DocFiller">
-<span class="sig-prename descclassname"><span class="pre">module_utilities._typing.</span></span><span class="sig-name descname"><span class="pre">T_DocFiller</span></span><a class="headerlink" href="#module_utilities._typing.T_DocFiller" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="module_utilities.typing.T_DocFiller">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.typing.</span></span><span class="sig-name descname"><span class="pre">T_DocFiller</span></span><a class="headerlink" href="#module_utilities.typing.T_DocFiller" title="Permalink to this definition">#</a></dt>
 <dd><p>Docfiller type</p>
 <p>alias of TypeVar(‘T_DocFiller’, bound=<code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code>)</p>
 </dd></dl>
@@ -566,17 +566,17 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">_typing</span></code>)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedMapVal"><code class="docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedMap"><code class="docutils literal notranslate"><span class="pre">NestedMap</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedDictVal"><code class="docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.NestedDict"><code class="docutils literal notranslate"><span class="pre">NestedDict</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.F"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.P"><code class="docutils literal notranslate"><span class="pre">P</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.HasCache"><code class="docutils literal notranslate"><span class="pre">HasCache</span></code></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities._typing.T_DocFiller"><code class="docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedMapVal"><code class="docutils literal notranslate"><span class="pre">NestedMapVal</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedMap"><code class="docutils literal notranslate"><span class="pre">NestedMap</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedDictVal"><code class="docutils literal notranslate"><span class="pre">NestedDictVal</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.NestedDict"><code class="docutils literal notranslate"><span class="pre">NestedDict</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.F"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.P"><code class="docutils literal notranslate"><span class="pre">P</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.HasCache"><code class="docutils literal notranslate"><span class="pre">HasCache</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.typing.T_DocFiller"><code class="docutils literal notranslate"><span class="pre">T_DocFiller</span></code></a></li>
 </ul>
 
   </nav></div>
@@ -610,7 +610,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-08-16.
+  Last updated on 2023-08-21.
   <br/>
 </p>
   </div>

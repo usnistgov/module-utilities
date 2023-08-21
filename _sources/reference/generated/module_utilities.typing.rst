@@ -1,6 +1,6 @@
 ﻿
 
-.. automodule:: module_utilities._typing
+.. automodule:: module_utilities.typing
    :autosummary:
    :show-inheritance:
    :members:

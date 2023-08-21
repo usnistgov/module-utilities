@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, MutableMapping, overload
 if TYPE_CHECKING:
     from typing import Any, Iterator, Mapping
 
-from ._typing import NestedMap, NestedMapVal
+from .typing import NestedMap, NestedMapVal
 
 
 @overload

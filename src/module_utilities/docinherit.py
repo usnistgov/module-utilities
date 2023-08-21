@@ -13,7 +13,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ._typing import F, T_DocFiller
+    from .typing import F, T_DocFiller
 
 try:
     from docstring_inheritance import inherit_numpy_docstring  # pyright: ignore

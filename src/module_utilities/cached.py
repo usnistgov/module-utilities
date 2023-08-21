@@ -20,9 +20,9 @@ if TYPE_CHECKING:
         Literal,
     )
 
-    from ._typing import C_meth, C_prop, P
+    from .typing import C_meth, C_prop, P
 
-from ._typing import R, S
+from .typing import R, S
 
 __all__ = ["decorate", "prop", "meth", "clear", "CachedProperty"]
 
@@ -69,7 +69,7 @@ class CachedProperty(Generic[S, R]):
         ...
 
     @overload
-    def __get__(self, instance: S, owner: type[S] | None = None) -> R:
+    def __get__(self, instance: S, owner: type[S] | None = None) -> R:  # type: ignore[misc]
         ...
 
     def __get__(
@@ -336,13 +336,14 @@ def meth(
     [1, 2]
 
     This will respect default params
+
     >>> x.method(1)
     [1, 2]
 
     And keyword arguments
+
     >>> x.method(y=2, x=1)
     [1, 2]
-
     >>> print(x._cache)
     {'key': {((1, 2), frozenset()): [1, 2]}}
 
@@ -362,7 +363,7 @@ def meth(
         bind = signature(_func).bind
 
         @wraps(_func)
-        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:  # type: ignore[misc]
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 if not hasattr(self, "_cache"):
                     self._cache = {}  # pyright: ignore [reportPrivateUsage] # fmt: skip
@@ -488,7 +489,7 @@ def clear(
 
     def decorator(func: C_meth[S, P, R]) -> C_meth[S, P, R]:
         @wraps(func)
-        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:  # type: ignore[misc]
             # self._clear_caches(*keys_inner)
             # clear out keys_inner
             if hasattr(self, "_cache"):

@@ -11,6 +11,13 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.8.0 — 2023-08-21
+
+### Changed
+
+- Moved submodule `_typing` to `typing` (i.e., publicly accessible).
+- Made TypeVar `S` covariant. This fixes issues with subclassing overrides.
+
 ## v0.7.0 — 2023-08-15
 
 ### Changed

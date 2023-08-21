@@ -1,5 +1,5 @@
 """
-Typing definitions (:mod:`~module_utilities._typing`)
+Typing definitions (:mod:`~module_utilities.typing`)
 =====================================================
 """
 
@@ -49,7 +49,7 @@ class HasCache(Protocol):
     _cache: dict[str, Any]
 
 
-S = TypeVar("S", bound="HasCache")
+S = TypeVar("S", bound="HasCache", covariant=True)
 """Self Type bound to HasCache"""
 
 C_prop: TypeAlias = Callable[[S], R]

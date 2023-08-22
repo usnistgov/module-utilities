@@ -13,11 +13,13 @@ from typing import TYPE_CHECKING, Generic, cast, overload
 
 if TYPE_CHECKING:
     from typing import (
+        Any,
         Callable,
     )
 
     from typing_extensions import (
         Literal,
+        Self,
     )
 
     from .typing import C_meth, C_prop, P
@@ -54,6 +56,7 @@ class CachedProperty(Generic[S, R]):
     def __init__(
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
+        self.__name__: str | None = None
         update_wrapper(self, prop)  # pyright: ignore
 
         self._prop = prop
@@ -64,19 +67,26 @@ class CachedProperty(Generic[S, R]):
         self._key = key
         self._check_use_cache = check_use_cache
 
+    def __set_name__(self, owner: type[Any], name: str) -> None:
+        if self.__name__ is None:
+            self.__name__ = name
+        elif name != self.__name__:  # pragma: no cover
+            raise TypeError(
+                "Cannot assign the same TypedProperty to two different names "
+                f"({self.__name__!r} and {name!r})."
+            )
+
     @overload
-    def __get__(self, instance: None, owner: type[S] | None = None) -> C_prop[S, R]:
+    def __get__(self, instance: None, owner: type[Any] | None = None) -> Self:
         ...
 
     @overload
-    def __get__(self, instance: S, owner: type[S] | None = None) -> R:  # type: ignore[misc]
+    def __get__(self, instance: S, owner: type[Any] | None = None) -> R:  # type: ignore[misc]
         ...
 
-    def __get__(
-        self, instance: S | None, owner: type[S] | None = None
-    ) -> C_prop[S, R] | R:
+    def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:
         if instance is None:
-            return self._prop
+            return self
 
         if (not self._check_use_cache) or (getattr(instance, "_use_cache", False)):
             try:

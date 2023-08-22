@@ -6,7 +6,7 @@ from typing import Any, TypeVar, Generic, cast, overload
 from typing_extensions import Self
 
 
-R = TypeVar("R", int, str)
+R = TypeVar("R")
 T = TypeVar("T", bound="Base[R]")  # type: ignore
 
 
@@ -61,6 +61,10 @@ class Base(Generic[R]):
     def prop_cached(self) -> R:
         return self.val
 
+    @property
+    def prop_cached2(self) -> R:
+        return self.val
+
     def meth(self, x: R) -> R:
         return x
 
@@ -74,19 +78,24 @@ class Derived(Base[int]):
     def prop_property(self) -> int:
         return 1
 
-    # @cached.prop
-    # def prop_cached(self) -> int: # type: ignore[override]
-    #     return self.val
+    @cached.prop
+    def prop_cached(self) -> int:  # type: ignore[override]
+        return self.val
+
+    @property
+    @cached.meth  # this lie works
+    def prop_cached2(self) -> int:
+        return self.val
 
     @cached.prop
-    def prop_derived(self: Self) -> int:
+    def prop_derived(self) -> int:
         return self.prop_cached
 
     @cached.meth
     def meth_cached(self, x: int) -> int:
         return x
 
-    def derived(self: Self) -> None:
+    def derived(self) -> None:
         # reveal_type(self.there.output)
         # reveal_type(self.there.other)
         # reveal_type(self.there.__getitem__(0))

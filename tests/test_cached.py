@@ -13,11 +13,10 @@ def test_CachedProperty():
     class tmp:
         _cache: dict[str, Any] = {}
 
-        def _thing(self) -> int:
+        @cached.CachedProperty
+        def thing(self) -> int:
             "A test"
             return 1
-
-        thing = cached.CachedProperty(_thing, key="thing")
 
         @cached.prop
         def there(self) -> int:

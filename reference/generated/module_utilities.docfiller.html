@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Fill and share documentation (docfiller) &#8212; module-utilities v0.8.0 documentation</title>
+    <title>Fill and share documentation (docfiller) &#8212; module-utilities v0.9.0 documentation</title>
   
   
   
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">module-utilities v0.8.0 documentation</p>
+    <p class="title logo__title">module-utilities v0.9.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -407,7 +407,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.insert_level"><code class="docutils literal notranslate"><span class="pre">DocFiller.insert_level()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.levels_to_top"><code class="docutils literal notranslate"><span class="pre">DocFiller.levels_to_top()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.rename_levels"><code class="docutils literal notranslate"><span class="pre">DocFiller.rename_levels()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.update"><code class="docutils literal notranslate"><span class="pre">DocFiller.update()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.decorate"><code class="docutils literal notranslate"><span class="pre">DocFiller.decorate()</span></code></a></li>
@@ -707,35 +707,40 @@ after default docstring under callable.</p></li>
 <tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.rename_levels" title="module_utilities.docfiller.DocFiller.rename_levels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rename_levels</span></code></a>(**kws)</p></td>
 <td><p>Rename a keys at top level.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.params" title="module_utilities.docfiller.DocFiller.params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">params</span></code></a>()</p></td>
-<td><p>An AttributeDict view of parameters.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.update" title="module_utilities.docfiller.DocFiller.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.update" title="module_utilities.docfiller.DocFiller.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Update parameters</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign" title="module_utilities.docfiller.DocFiller.assign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign" title="module_utilities.docfiller.DocFiller.assign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign</span></code></a>(**kwargs)</p></td>
 <td><p>Assign new key/value pairs</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.decorate" title="module_utilities.docfiller.DocFiller.decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate</span></code></a>(func)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.decorate" title="module_utilities.docfiller.DocFiller.decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate</span></code></a>(func)</p></td>
 <td><p>Default decorator.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.__call__" title="module_utilities.docfiller.DocFiller.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(*templates[, _prepend])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.__call__" title="module_utilities.docfiller.DocFiller.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(*templates[, _prepend])</p></td>
 <td><p>Factory function to create docfiller decorator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.inherit" title="module_utilities.docfiller.DocFiller.inherit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inherit</span></code></a>(template[, _prepend])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.inherit" title="module_utilities.docfiller.DocFiller.inherit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inherit</span></code></a>(template[, _prepend])</p></td>
 <td><p>Factor function to create decorator.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_from_parent" title="module_utilities.docfiller.DocFiller.factory_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_from_parent</span></code></a>(cls)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_from_parent" title="module_utilities.docfiller.DocFiller.factory_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_from_parent</span></code></a>(cls)</p></td>
 <td><p>Interface to docinherit.factory_docfiller_from_parent.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent" title="module_utilities.docfiller.DocFiller.factory_inherit_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_inherit_from_parent</span></code></a>(cls)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent" title="module_utilities.docfiller.DocFiller.factory_inherit_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_inherit_from_parent</span></code></a>(cls)</p></td>
 <td><p>Interface to docinherit.factory_docfiller_inherit_from_parent.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_dict" title="module_utilities.docfiller.DocFiller.from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dict</span></code></a>(params[, namespace, combine_keys, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_dict" title="module_utilities.docfiller.DocFiller.from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dict</span></code></a>(params[, namespace, combine_keys, ...])</p></td>
 <td><p>Create a Docfiller instance from a dictionary.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_docstring" title="module_utilities.docfiller.DocFiller.from_docstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_docstring</span></code></a>(func_or_doc[, namespace, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_docstring" title="module_utilities.docfiller.DocFiller.from_docstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_docstring</span></code></a>(func_or_doc[, namespace, ...])</p></td>
 <td><p>Create a Docfiller instance from a function or docstring.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes:</strong></p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.params" title="module_utilities.docfiller.DocFiller.params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">params</span></code></a></p></td>
+<td><p>An AttributeDict view of parameters.</p></td>
 </tr>
 </tbody>
 </table>
@@ -867,9 +872,9 @@ Use names <code class="docutils literal notranslate"><span class="pre">kwargs</s
 <dd><p>Rename a keys at top level.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.params">
-<span class="sig-name descname"><span class="pre">params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L695-L698"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.params" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">params</span></span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L695-L698"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.params" title="Permalink to this definition">#</a></dt>
 <dd><p>An AttributeDict view of parameters.</p>
 </dd></dl>
 
@@ -1124,7 +1129,7 @@ If str or sequence of str, keep these keys in output.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.insert_level"><code class="docutils literal notranslate"><span class="pre">DocFiller.insert_level()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.levels_to_top"><code class="docutils literal notranslate"><span class="pre">DocFiller.levels_to_top()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.rename_levels"><code class="docutils literal notranslate"><span class="pre">DocFiller.rename_levels()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.update"><code class="docutils literal notranslate"><span class="pre">DocFiller.update()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.decorate"><code class="docutils literal notranslate"><span class="pre">DocFiller.decorate()</span></code></a></li>
@@ -1169,7 +1174,7 @@ By William P. Krekelberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on 2023-08-21.
+  Last updated on 2023-08-22.
   <br/>
 </p>
   </div>

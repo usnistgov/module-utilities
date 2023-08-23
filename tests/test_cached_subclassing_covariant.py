@@ -17,7 +17,8 @@ class Base:
     def f_functools(self) -> float:
         return 1.0
 
-    @cached.prop
+    @property
+    @cached.meth
     def f_prop(self) -> float:
         return 1.0
 
@@ -42,8 +43,9 @@ class Derived1(Base):
     def f_functools(self) -> int:
         return 1
 
-    @cached.prop
-    def f_prop(self) -> float:
+    @property
+    @cached.meth
+    def f_prop(self) -> int:
         return 1
 
     def f_method(self, x: int) -> float:

@@ -701,3 +701,42 @@ def test_with_kwargs():
     # reveal_type(x.meth4)
     # reveal_type(x.meth5)
     # reveal_type(x.meth5b)
+
+
+def test_meth_single_arg():
+    class Tmp:
+        _use_cache = False
+
+        def __init__(self):
+            self._cache: dict[str, Any] = {}
+
+        @cached.meth
+        def meth(self) -> float:
+            return 1.0
+
+        @property
+        @cached.meth
+        def prop(self) -> int:
+            return 1
+
+        @property
+        @cached.meth(check_use_cache=True)
+        def prop_check(self) -> int:
+            return 2
+
+        @cached.meth(check_use_cache=True)
+        def meth_check(self, x: float) -> float:
+            return x
+
+    x = Tmp()
+
+    assert x.meth() == 1.0
+    assert x.prop == 1
+    assert x.prop_check == 2
+    assert x.meth_check(2.0) == 2.0
+
+    assert x._cache["meth"] is x.meth()
+    assert x._cache["prop"] is x.prop
+
+    assert "prop_check" not in x._cache
+    assert "meth_check" not in x._cache

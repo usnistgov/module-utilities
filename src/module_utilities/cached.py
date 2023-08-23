@@ -68,7 +68,7 @@ class CachedProperty(Generic[S, R]):
         self._check_use_cache = check_use_cache
 
     def __set_name__(self, owner: type[Any], name: str) -> None:
-        if self.__name__ is None:
+        if self.__name__ is None:  # pragma: no cover
             self.__name__ = name
         elif name != self.__name__:  # pragma: no cover
             raise TypeError(
@@ -81,7 +81,7 @@ class CachedProperty(Generic[S, R]):
         ...
 
     @overload
-    def __get__(self, instance: S, owner: type[Any] | None = None) -> R:  # type: ignore[misc]
+    def __get__(self, instance: S, owner: type[Any] | None = None) -> R:
         ...
 
     def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:
@@ -370,48 +370,79 @@ def meth(
             key_func = key
 
         # use signature
-        bind = signature(_func).bind
+        sig = signature(_func)
 
-        @wraps(_func)
-        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:  # type: ignore[misc]
-            if (not check_use_cache) or (getattr(self, "_use_cache", False)):
-                if not hasattr(self, "_cache"):
-                    self._cache = {}  # pyright: ignore [reportPrivateUsage] # fmt: skip
+        if len(sig.parameters) == 1:
+            # special case of single (self) parameter.
+            @wraps(_func)
+            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+                if (not check_use_cache) or (getattr(self, "_use_cache", False)):
+                    try:
+                        return cast(
+                            R,
+                            self._cache[
+                                key_func
+                            ],  # pyright: ignore [reportPrivateUsage]
+                        )
+                    except AttributeError:
+                        self._cache = {}  # pyright: ignore [reportPrivateUsage]
+                    except KeyError:
+                        pass
 
-                # fmt: off
-                if (key_func not in self._cache):  # pyright: ignore [reportPrivateUsage]
-                    self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
-                # fmt: on
-
-                params = bind(self, *args, **kwargs)
-                params.apply_defaults()
-                key_params = (
-                    params.args[1:],
-                    frozenset(params.kwargs.items()),
-                )
-
-                try:
                     # fmt: off
-                    return cast(R, self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
+                    self._cache[key_func] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
                     # fmt: on
-                except TypeError:
-                    # this means that key_lookup is bad hash
+
+                    return ret
+                else:
                     return _func(self, *args, **kwargs)
-                # except AttributeError:
-                #     self._cache = {}  # type: ignore
-                except KeyError:
-                    pass
-                except Exception as e:  # pragma: no cover
-                    print(f"unknown exception {e} in meth call")
-                    raise
 
-                # fmt: off
-                self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs) # pyright: ignore [reportPrivateUsage]
-                # fmt: on
-                return ret
+        else:
+            # Full method
+            bind = sig.bind
 
-            else:
-                return _func(self, *args, **kwargs)
+            @wraps(_func)
+            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+                if (not check_use_cache) or (getattr(self, "_use_cache", False)):
+                    if not hasattr(self, "_cache"):
+                        self._cache = (
+                            {}
+                        )  # pyright: ignore [reportPrivateUsage] # fmt: skip
+
+                    # fmt: off
+                    if (key_func not in self._cache):  # pyright: ignore [reportPrivateUsage]
+                        self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
+                    # fmt: on
+
+                    params = bind(self, *args, **kwargs)
+                    params.apply_defaults()
+                    key_params = (
+                        params.args[1:],
+                        frozenset(params.kwargs.items()),
+                    )
+
+                    try:
+                        # fmt: off
+                        return cast(R, self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
+                        # fmt: on
+                    except TypeError:
+                        # this means that key_lookup is bad hash
+                        return _func(self, *args, **kwargs)
+                    # except AttributeError:
+                    #     self._cache = {}  # type: ignore
+                    except KeyError:
+                        pass
+                    except Exception as e:  # pragma: no cover
+                        print(f"unknown exception {e} in meth call")
+                        raise
+
+                    # fmt: off
+                    self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs) # pyright: ignore [reportPrivateUsage]
+                    # fmt: on
+                    return ret
+
+                else:
+                    return _func(self, *args, **kwargs)
 
         return wrapper
 
@@ -499,7 +530,7 @@ def clear(
 
     def decorator(func: C_meth[S, P, R]) -> C_meth[S, P, R]:
         @wraps(func)
-        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:  # type: ignore[misc]
+        def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             # self._clear_caches(*keys_inner)
             # clear out keys_inner
             if hasattr(self, "_cache"):

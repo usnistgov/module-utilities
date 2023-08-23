@@ -13,7 +13,8 @@ class Base:
     def prop_property(self) -> int:
         return 1
 
-    @cached.prop
+    @property
+    @cached.meth
     def prop_cached(self) -> int:
         return 1
 
@@ -30,7 +31,8 @@ class Derived(Base):
     def prop_property(self) -> int:
         return 1
 
-    @cached.prop
+    @property
+    @cached.meth
     def prop_cached(self) -> int:
         return 1
 

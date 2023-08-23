@@ -49,7 +49,7 @@ class HasCache(Protocol):
     _cache: dict[str, Any]
 
 
-S = TypeVar("S", bound="HasCache", covariant=True)
+S = TypeVar("S", bound="HasCache")
 """Self Type bound to HasCache"""
 
 C_prop: TypeAlias = Callable[[S], R]

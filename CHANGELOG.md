@@ -11,6 +11,17 @@ See the fragment files in
 
 <!-- scriv-insert-here -->
 
+## v0.9.0 — 2023-08-22
+
+### Changed
+
+- Revert to TypeVar `S` being invariant. This leads to some issues with
+  `cached.prop` decorator. However, the use of covariant `TypeVar` was a hack.
+  Instead, it is better in these cases to decorate with `@property` on top of
+  `@cached.meth`. mypy/pyright deal with `property` in a special way.
+- To better work with the above, single parameter methods are caached using only
+  the method name, and no parameters.
+
 ## v0.8.0 — 2023-08-21
 
 ### Changed

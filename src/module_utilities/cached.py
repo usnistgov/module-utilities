@@ -377,19 +377,17 @@ def meth(
             @wraps(_func)
             def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
+                    # fmt: off
                     try:
                         return cast(
                             R,
-                            self._cache[
-                                key_func
-                            ],  # pyright: ignore [reportPrivateUsage]
+                            self._cache[key_func],  # pyright: ignore [reportPrivateUsage]
                         )
                     except AttributeError:
                         self._cache = {}  # pyright: ignore [reportPrivateUsage]
                     except KeyError:
                         pass
 
-                    # fmt: off
                     self._cache[key_func] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
                     # fmt: on
 
@@ -404,12 +402,10 @@ def meth(
             @wraps(_func)
             def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
-                    if not hasattr(self, "_cache"):
-                        self._cache = (
-                            {}
-                        )  # pyright: ignore [reportPrivateUsage] # fmt: skip
-
                     # fmt: off
+                    if not hasattr(self, "_cache"):
+                        self._cache = {} # pyright: ignore [reportPrivateUsage]
+
                     if (key_func not in self._cache):  # pyright: ignore [reportPrivateUsage]
                         self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
                     # fmt: on

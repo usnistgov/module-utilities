@@ -49,6 +49,8 @@ dev-extras = [
     "pytest-accept", # p2c: -p
     "ipython",
     "ipykernel",
+    # "nbval",
+
 ]
 typing-extras = [
     "pytype; python_version < '3.11'", #
@@ -72,6 +74,7 @@ tools = [
     "pre-commit", #
     "cruft",
     "scriv",
+    "nbqa",
 ]
 dev-complete = [
     "module-utilities[dev]", #

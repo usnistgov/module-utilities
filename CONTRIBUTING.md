@@ -66,6 +66,7 @@ If you are proposing a feature:
 [commitizen]: https://github.com/commitizen-tools/commitizen
 [nb_conda_kernels]: https://github.com/Anaconda-Platform/nb_conda_kernels
 [pyproject2conda]: https://github.com/wpk-nist-gov/pyproject2conda
+[nbqa]: https://github.com/nbQA-dev/nbQA
 
 This project uses a host of tools to (hopefully) make development easier. We
 recommend installing some of these tools system wide. For this, we recommend
@@ -83,6 +84,7 @@ Additional tools are:
 - [commitizen] (optional)
 - [pyproject2conda] (optional)
 - [cog] (optional)
+- [nbqa] (optional)
 
 These are setup using the following:
 
@@ -93,6 +95,7 @@ condax/pipx install commitizen # optional
 pipx install scriv
 pipx install pyproject2conda # optional
 condax/pipx install cogapp # optional
+condax/pipx install nbqa # optional
 ```
 
 if using pipx, nox can be installed with:
@@ -155,13 +158,19 @@ development.
     nox -e dev
     ```
 
-    This create a development environment located at `.nox/dev`.
+    This create a development environment located at `envs/dev`.
+
+    Note that we create nox environments in `envs` instead of `.nox`. This fixes
+    some issues with things like [nb_conda_kernels], as well as other third
+    party tools that expect conda environment to be located in a directory like
+    `.../miniforge/envs/env-name`.
 
   - Alternatively, you can create centrally located conda environmentment using
     the command:
 
     ```bash
     conda/mamba env create -n {env-name} -f environment/dev.yaml
+    conda activate {environment-name or -p path/to/environment}
     ```
 
     ```bash

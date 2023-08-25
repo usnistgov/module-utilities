@@ -1001,7 +1001,7 @@ def _append_recipe(recipe_path: str, append_path: str) -> None:
         f.writelines(recipe + ["\n"] + append)
 
 
-# type checking
+# ** type checking
 def _typing(
     session: nox.Session,
     run: list[list[str]],
@@ -1023,13 +1023,16 @@ def _typing(
         session.run(cmd, "--version", external=True)
 
     for c in cmd:
-        _run_info(c)
+        if not c.startswith("nbqa"):
+            _run_info(c)
         if c == "mypy":
             session.run("mypy", "--color-output")
         elif c == "pyright":
             session.run("pyright", external=True)
         elif c == "pytype":
             session.run("pytype", "-o", str(Path(session.create_tmp()) / ".pytype"))
+        elif c.startswith("nbqa"):
+            session.run("make", c, external=True)
         else:
             session.log(f"skipping unknown command {c}")
     session_run_commands(session, run_internal, external=False)
@@ -1039,7 +1042,15 @@ def _typing(
 def typing(
     session: nox.Session,
     typing_cmd: cmd_annotated(  # type: ignore
-        choices=["mypy", "pyright", "pytype", "all"],
+        choices=[
+            "mypy",
+            "pyright",
+            "pytype",
+            "all",
+            "nbqa-mypy",
+            "nbqa-pyright",
+            "nbqa-typing",
+        ],
         flags=("--typing-cmd", "-m"),
     ) = (),
     typing_run: RUN_CLI = [],  # noqa
@@ -1073,7 +1084,15 @@ def typing(
 def typing_venv(
     session: nox.Session,
     typing_cmd: cmd_annotated(  # type: ignore
-        choices=["mypy", "pyright", "pytype", "all"],
+        choices=[
+            "mypy",
+            "pyright",
+            "pytype",
+            "all",
+            "nbqa-mypy",
+            "nbqa-pyright",
+            "nbqa-typing",
+        ],
         flags=("--typing-cmd", "-m"),
     ) = (),
     typing_run: RUN_CLI = [],  # noqa

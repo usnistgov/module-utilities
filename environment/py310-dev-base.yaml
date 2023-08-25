@@ -18,9 +18,6 @@ dependencies:
   - setuptools-scm
   - ipython
   - ipykernel
-  - nox
-  - ruamel.yaml
   - pip
   - pip:
       - pytest-accept
-      - noxopt

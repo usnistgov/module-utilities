@@ -3,8 +3,8 @@
 # You should not manually edit this file.
 # Instead edit the corresponding pyproject.toml file.
 #
+docstring-inheritance
 pytest
-pytest-xdist
 pytest-cov
 pytest-sugar
-docstring-inheritance
+pytest-xdist

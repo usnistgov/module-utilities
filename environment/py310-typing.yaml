@@ -7,11 +7,11 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - typing-extensions
-  - pytype
+  - docstring-inheritance
   - mypy >= 1.4.1
   - pytest
-  - pytest-xdist
   - pytest-cov
   - pytest-sugar
-  - docstring-inheritance
+  - pytest-xdist
+  - pytype
+  - typing-extensions

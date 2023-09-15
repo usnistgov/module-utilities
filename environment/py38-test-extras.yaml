@@ -7,8 +7,8 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8
+  - docstring-inheritance
   - pytest
-  - pytest-xdist
   - pytest-cov
   - pytest-sugar
-  - docstring-inheritance
+  - pytest-xdist

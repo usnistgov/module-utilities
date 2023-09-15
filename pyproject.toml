@@ -72,8 +72,8 @@ dev = [
 ]
 tools = [
     "pre-commit", #
-    "cruft",
-    "scriv",
+    # "cruft",
+    "scriv", # p2c: -p
     "nbqa",
 ]
 dev-complete = [

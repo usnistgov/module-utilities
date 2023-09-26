@@ -243,7 +243,7 @@ def requirements(
     """
     pkg_install_venv(
         session=session,
-        reqs=["pyproject2conda>=0.6.1"],
+        reqs=["pyproject2conda>=0.7.0"],
         name="reqs",
         update=update,
         log_session=log_session,
@@ -984,9 +984,13 @@ def testdist_conda(
         log_session=log_session,
     )
 
-    if not test_no_pytest:
-        opts = combine_list_str(test_opts)
-        session.run("pytest", *opts)
+    _test(
+        session=session,
+        run=testdist_conda_run,
+        test_no_pytest=test_no_pytest,
+        test_opts=test_opts,
+        no_cov=True,
+    )
 
 
 # ** testdist (pypi)

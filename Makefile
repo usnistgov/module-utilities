@@ -280,3 +280,7 @@ nbqa-typing: nbqa-mypy nbqa-pyright ## run nbqa mypy/pyright
 .PHONY: pytest-nbval
 pytest-nbval:  ## run pytest --nbval
 	pytest --nbval --current-env --sanitize-with=config/nbval.ini $(NOTEBOOKS) -x
+
+.PHONY: README.pdf
+README.pdf: ## create README.pdf
+	pandoc -V colorlinks -V geometry:margin=0.8in README.md -o README.pdf

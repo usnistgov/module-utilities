@@ -72,9 +72,10 @@ dev = [
 ]
 tools = [
     "pre-commit", #
-    "cruft",
-    "scriv",
+    # "cruft",
+    "scriv", # p2c: -p
     "nbqa",
+    "pyright",
 ]
 dev-complete = [
     "module-utilities[dev]", #
@@ -85,14 +86,13 @@ docs = [
     "ipython", #
     "pyenchant",
     "ghp-import",
-    "sphinx>=5.3.0",
+    "sphinx >= 5.3.0",
     "sphinx-copybutton",
     "sphinxcontrib-spelling",
     "sphinx-autobuild",
     "myst-nb",
     "sphinx-book-theme",
     "autodocsumm",
-    # "sphinx-autodoc-typehints",
     "module-utilities[opt-all]",
 ]
 # to be parsed with pyproject2conda with --no-base option
@@ -112,7 +112,41 @@ test-noopt = ["module-utilities[test-extras]"]
 #     "module-utilities[test-extras]",
 # ]
 [tool.pyproject2conda]
+user_config = "config/userconfig.toml"
+template_python = "requirements/py{py}-{env}"
+template = "requirements/{env}"
+# defaults
+python = ["3.10"]
 channels = ["conda-forge"]
+style = ["yaml", "requirements"]
+default_envs = [
+    "test",
+    "typing",
+    "docs",
+    "dev",
+    "dev-complete",
+    "dist-conda",
+    "dist-pypi",
+    "test-noopt",
+]
+
+[tool.pyproject2conda.envs.test-extras]
+extras = ["test"]
+
+[tool.pyproject2conda.envs.dev-base]
+extras = ["dev"]
+
+[[tool.pyproject2conda.overrides]]
+envs = ["test-extras", "dist-conda", "dist-pypi"]
+base = false
+
+[[tool.pyproject2conda.overrides]]
+envs = ["test", "typing", "test-extras", "test-noopt"]
+python = ["3.8", "3.9", "3.10", "3.11"]
+
+[[tool.pyproject2conda.overrides]]
+envs = ["dist-conda"]
+style = ["yaml"]
 
 ## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]
@@ -203,7 +237,6 @@ exclude = [
     ".hg",
     ".mypy_cache",
     ".nox",
-    "envs",
     ".pants.d",
     ".pytype",
     ".ruff_cache",
@@ -351,7 +384,7 @@ reportUntypedClassDecorator = true
 reportUntypedFunctionDecorator = true
 reportUntypedNamedTuple = true
 reportUnusedImport = true
-## disable subset of "basic"
+# disable subset of "basic"
 reportGeneralTypeIssues = false
 reportMissingModuleSource = false
 reportOptionalCall = false

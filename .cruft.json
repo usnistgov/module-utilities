@@ -1,7 +1,7 @@
 {
-  "template": "https://github.com/wpk-nist-gov/cookiecutter-pypackage.git",
-  "commit": "ee05016ea78335c70ce4762f08867ec95887b95a",
-  "checkout": "feature/nox",
+  "template": "https://github.com/usnistgov/cookiecutter-nist-python.git",
+  "commit": "7ba78569cba4c2b39c2706d1f95b74c919b310cf",
+  "checkout": "develop",
   "context": {
     "cookiecutter": {
       "full_name": "William P. Krekelberg",
@@ -22,16 +22,10 @@
         "changelog.d/templates/auto-changelog/*.jinja2"
       ],
       "project_short_description": "Collection of utilities to aid working with python modules.",
-      "version": "0.0.1",
-      "use_pytest": "y",
-      "use_pypi_deployment_with_travis": "n",
       "command_line_interface": "No command-line interface",
-      "create_author_file": "y",
-      "open_source_license": "NIST license",
-      "sphinx_auto": "automodule",
       "sphinx_use_autodocsumm": "y",
       "sphinx_theme": "sphinx_book_theme",
-      "_template": "https://github.com/wpk-nist-gov/cookiecutter-pypackage.git"
+      "_template": "https://github.com/usnistgov/cookiecutter-nist-python.git"
     }
   },
   "directory": null

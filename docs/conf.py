@@ -58,8 +58,6 @@ extensions = [
     # "sphinx_design"
     ## myst stuff
     "myst_nb",
-    ## type hings
-    # "sphinx_autodoc_typehints",
 ]
 
 nitpicky = True
@@ -114,7 +112,10 @@ nb_execution_mode = "cache"
 # nb_execution_mode = "auto"
 
 # set the kernel name
-nb_kernel_rgx_aliases = {"module_utilities.*": "python3", "conda.*": "python3"}
+nb_kernel_rgx_aliases = {
+    "module-utilities.*": "python3",
+    "conda.*": "python3",
+}
 
 nb_execution_allow_errors = True
 
@@ -482,7 +483,9 @@ def linkcode_resolve(domain, info):
     else:
         linespec = ""
 
+    # fmt: off
     fn = os.path.relpath(fn, start=os.path.dirname(module_utilities.__file__))
+    # fmt: on
 
     return f"https://github.com/{github_username}/module-utilities/blob/{html_context['github_version']}/src/module_utilities/{fn}{linespec}"
 

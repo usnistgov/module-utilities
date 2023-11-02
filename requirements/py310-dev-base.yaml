@@ -20,7 +20,7 @@ dependencies:
   - pytest-sugar
   - pytest-xdist
   - pytype
-  - setuptools-scm
+  - setuptools-scm>=8.0
   - typing-extensions
   - pip
   - pip:

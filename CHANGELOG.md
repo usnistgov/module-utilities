@@ -7,7 +7,7 @@ Changelog for `module-utilities`
 
 ## Unreleased
 
-[changelog.d]: https://github.com/usnistgov/module-utilities
+[changelog.d]: https://github.com/usnistgov/module-utilities/tree/main/changelog.d
 
 See the fragment files in [changelog.d]
 

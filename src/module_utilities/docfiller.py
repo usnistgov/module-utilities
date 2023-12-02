@@ -686,7 +686,7 @@ class DocFiller:
 
     def rename_levels(self, **kws: str) -> DocFiller:
         """Rename a keys at top level."""
-        params = {}
+        params: dict[str, Any] = {}
         for k, v in self.data.items():
             key = kws.get(k, k)
             params[key] = v

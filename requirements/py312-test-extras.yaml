@@ -7,5 +7,12 @@
 # You should not manually edit this file.
 # Instead edit the corresponding pyproject.toml file.
 #
-build
-twine
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - docstring-inheritance
+  - pytest
+  - pytest-cov
+  - pytest-sugar
+  - pytest-xdist

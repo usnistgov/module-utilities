@@ -375,7 +375,7 @@ def meth(
         if len(sig.parameters) == 1:
             # special case of single (self) parameter.
             @wraps(_func)
-            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+            def wrapper_no_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                     # fmt: off
                     try:
@@ -395,12 +395,14 @@ def meth(
                 else:
                     return _func(self, *args, **kwargs)
 
+            return wrapper_no_args
+
         else:
             # Full method
             bind = sig.bind
 
             @wraps(_func)
-            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+            def wrapper_with_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                     # fmt: off
                     if not hasattr(self, "_cache"):
@@ -440,7 +442,7 @@ def meth(
                 else:
                     return _func(self, *args, **kwargs)
 
-        return wrapper
+            return wrapper_with_args
 
     if func:
         return cached_lookup(func)

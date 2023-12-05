@@ -197,9 +197,9 @@ class SessionParams(DataclassParser):
             "pyright",
             "pytype",
             "all",
-            "nbqa-mypy",
-            "nbqa-pyright",
-            "nbqa-typing",
+            "mypy-notebook",
+            "pyright-notebook",
+            "typing-notebook",
         ]
     ] = add_option("--typing", "-m")
     typing_run: RUN_ANNO = None
@@ -759,7 +759,7 @@ def typing(
         session.run(cmd, "--version", external=True)
 
     if "clean" in cmd:
-        cmd = [x for x in cmd if x != "clean"]
+        cmd.remove("clean")
 
         for name in [".mypy_cache", ".pytype"]:
             p = Path(session.create_tmp()) / name
@@ -768,16 +768,18 @@ def typing(
                 shutil.rmtree(str(p))
 
     for c in cmd:
-        if not c.startswith("nbqa"):
+        if c.endswith("-notebook"):
+            session.run("make", c, external=True)
+            continue
+        else:
             _run_info(c)
+
         if c == "mypy":
             session.run("mypy", "--color-output")
         elif c == "pyright":
             session.run("pyright", external=True)
         elif c == "pytype":
             session.run("pytype", "-o", str(Path(session.create_tmp()) / ".pytype"))
-        elif c.startswith("nbqa"):
-            session.run("make", c, external=True)
         else:
             session.log(f"skipping unknown command {c}")
 

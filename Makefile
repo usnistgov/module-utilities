@@ -260,15 +260,15 @@ tuna-import: ## Analyze load time for module
 
 # nbqa-mypy
 NOTEBOOKS ?= examples/usage
-.PHONY: nbqa-mypy nbqa-pyright nbqa-typing
-nbqa-mypy: ## run nbqa mypy
+.PHONY: mypy-notebook pyright-notebook typing-notebook
+mypy-notebook: ## run nbqa mypy
 	nbqa --nbqa-shell mypy $(NOTEBOOKS)
-nbqa-pyright: ## run nbqa pyright
+pyright-notebook: ## run nbqa pyright
 	nbqa --nbqa-shell pyright $(NOTEBOOKS)
-nbqa-typing: nbqa-mypy nbqa-pyright ## run nbqa mypy/pyright
+typing-notebook: mypy-notebook pyright-notebook ## run nbqa mypy/pyright
 
-.PHONY: pytest-nbval
-pytest-nbval:  ## run pytest --nbval
+.PHONY: pytest-notebook
+pytest-notebook:  ## run pytest --nbval
 	pytest --nbval --current-env --sanitize-with=config/nbval.ini -x --dist loadscope $(NOTEBOOKS)
 
 .PHONY: typing-tools

@@ -441,8 +441,8 @@ def pip_compile(
         "dev-complete",
         "dev-base",
         "docs",
-        "test-noopt",
         "test-notebook",
+        "test-noopt",
     ]
 
     if session.python == PYTHON_DEFAULT_VERSION:

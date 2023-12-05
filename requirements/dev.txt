@@ -11,6 +11,7 @@ docstring-inheritance
 ipykernel
 ipython
 mypy>=1.4.1
+nbval
 nox
 pytest
 pytest-accept

@@ -38,6 +38,7 @@ from tools.noxtools import (
     open_webpage,
     prepend_flag,
     session_run_commands,
+    shlex,
     update_target,
     write_hashes,
 )
@@ -435,7 +436,15 @@ def pip_compile(
     )
 
     envs_all = ["test", "typing"]
-    envs_dev = ["dev", "dev-complete", "dev-base", "docs", "test-noopt"]
+    envs_dev = [
+        "dev",
+        "dev-complete",
+        "dev-base",
+        "docs",
+        "test-noopt",
+        "test-notebook",
+        "typing-notebook",
+    ]
 
     if session.python == PYTHON_DEFAULT_VERSION:
         envs = envs_all + envs_dev
@@ -482,7 +491,7 @@ def _test(
             session.env["COVERAGE_FILE"] = str(Path(session.create_tmp()) / ".coverage")
 
             if "--cov" not in opts:
-                opts.append("--cov")
+                opts.append(f"--cov={IMPORT_NAME}")
 
         # Because we are testing if temporary folders
         # have git or not, we have to make sure we're above the
@@ -727,6 +736,8 @@ def typing(
         Installer.from_envname(
             session=session,
             envname="typing",
+            # Note: need package if using nbqa type checking.
+            package=".",
             lock=opts.lock,
             update=opts.update,
         )
@@ -947,6 +958,86 @@ def cog(session: nox.Session, opts: SessionParams) -> None:
         session=session, update=opts.update, pip_deps="cogapp"
     ).install_all(log_session=opts.log_session)
     session.run("cog", "-rP", "README.md", env={"COLUMNS": "90"})
+
+
+@nox.session(name="test-notebook", **DEFAULT_KWS)
+@add_opts
+def test_notebook(session: nox.Session, opts: SessionParams) -> None:
+    (
+        Installer.from_envname(
+            session=session,
+            envname="test-notebook",
+            lock=opts.lock,
+            package=".",
+            update=opts.update,
+        ).install_all(log_session=opts.log_session, update_package=opts.update_package)
+    )
+
+    test_nbval_opts = shlex.split(
+        """
+    --nbval
+    --nbval-current-env
+    --nbval-sanitize-with=config/nbval.ini
+    --dist loadscope
+     examples/usage
+   """
+    )
+
+    test_opts = (opts.test_opts or []) + test_nbval_opts
+
+    session.log(f"{test_opts = }")
+
+    _test(
+        session=session,
+        run=opts.test_run,
+        test_no_pytest=opts.test_no_pytest,
+        test_opts=test_opts,
+        no_cov=opts.no_cov,
+    )
+
+
+# Just use typing with nbqa options.
+# # Notebook typing
+# typing_notebook: list[Literal["clean", "mypy", "pyright", "all"]] | None = None
+# typing_notebook_run: RUN_ANNO = None
+# typing_notebook_run_internal: RUN_ANNO = None
+# @nox.session(name="typing-notebook", **DEFAULT_KWS)
+# @add_opts
+# def typing_notebook(session: nox.Session, opts: SessionParams) -> None:
+#     (
+#         Installer.from_envname(
+#             session=session,
+#             envname="typing-notebook",            lock=opts.lock,
+#             update=opts.update,
+#             # package=".",
+#         ).install_all(log_session=opts.log_session, update_package=opts.update_package)
+#         .run_commands(opts.typing_notebook_run)
+#         .run_commands(opts.typing_notebook_run_internal)
+#     )
+
+#     cmds = opts.typing_notebook or []
+
+#     if not any((cmds, opts.typing_notebook_run, opts.typing_notebook_run_internal)):
+#         cmds = ["mypy", "pyright"]
+
+
+#     if "clean" in cmds:
+#         cmds.remove("clean")
+#         for name in [".mypy_cache"]:
+#             p = Path(session.create_tmp()) / name
+#             if p.exists():
+#                 session.log(f"removing cache {p}")
+#                 shutil.rmtree(str(p))
+
+#     # set the cache directory for mypy
+#     session.env["MYPY_CACHE_DIR"] = str(Path(session.create_tmp()) / ".mypy_cache")
+
+
+#     for cmd in cmds:
+#         if cmd == "mypy":
+#             session.run("nbqa", "mypy", "examples/usage")
+#         elif cmd == "pyright":
+#             session.run("nbqa", "--nbqa-shell", "pyright", "examples/usage")
 
 
 # * Utilities -------------------------------------------------------------------------

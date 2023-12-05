@@ -11,7 +11,10 @@ argcomplete==3.1.6
 asttokens==2.4.1
     # via stack-data
 attrs==23.1.0
-    # via scriv
+    # via
+    #   jsonschema
+    #   referencing
+    #   scriv
 autopep8==2.0.4
     # via nbqa
 certifi==2023.11.17
@@ -32,7 +35,7 @@ comm==0.2.0
     # via ipykernel
 coverage[toml]==7.3.2
     # via
-    #   coverage
+    #   nbval
     #   pytest-cov
 debugpy==1.8.0
     # via ipykernel
@@ -46,6 +49,8 @@ execnet==2.0.2
     # via pytest-xdist
 executing==2.0.1
     # via stack-data
+fastjsonschema==2.19.0
+    # via nbformat
 filelock==3.13.1
     # via virtualenv
 identify==2.5.32
@@ -55,7 +60,9 @@ idna==3.6
 iniconfig==2.0.0
     # via pytest
 ipykernel==6.27.1
-    # via -r ./requirements/dev-complete.txt
+    # via
+    #   -r ./requirements/dev-complete.txt
+    #   nbval
 ipython==8.18.1
     # via
     #   -r ./requirements/dev-complete.txt
@@ -65,12 +72,19 @@ jedi==0.19.1
     # via ipython
 jinja2==3.1.2
     # via scriv
+jsonschema==4.20.0
+    # via nbformat
+jsonschema-specifications==2023.11.2
+    # via jsonschema
 jupyter-client==8.6.0
-    # via ipykernel
+    # via
+    #   ipykernel
+    #   nbval
 jupyter-core==5.5.0
     # via
     #   ipykernel
     #   jupyter-client
+    #   nbformat
 markdown-it-py==3.0.0
     # via scriv
 markupsafe==2.1.3
@@ -85,7 +99,11 @@ mypy==1.7.1
     # via -r ./requirements/dev-complete.txt
 mypy-extensions==1.0.0
     # via mypy
+nbformat==5.9.2
+    # via nbval
 nbqa==1.7.1
+    # via -r ./requirements/dev-complete.txt
+nbval==0.10.0
     # via -r ./requirements/dev-complete.txt
 nest-asyncio==1.5.8
     # via ipykernel
@@ -130,6 +148,7 @@ pyright==1.1.338
 pytest==7.4.3
     # via
     #   -r ./requirements/dev-complete.txt
+    #   nbval
     #   pytest-accept
     #   pytest-cov
     #   pytest-sugar
@@ -150,8 +169,16 @@ pyzmq==25.1.1
     # via
     #   ipykernel
     #   jupyter-client
+referencing==0.31.1
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.31.0
     # via scriv
+rpds-py==0.13.2
+    # via
+    #   jsonschema
+    #   referencing
 ruamel-yaml==0.18.5
     # via -r ./requirements/dev-complete.txt
 ruamel-yaml-clib==0.2.8
@@ -182,6 +209,7 @@ traitlets==5.14.0
     #   jupyter-client
     #   jupyter-core
     #   matplotlib-inline
+    #   nbformat
 typing-extensions==4.8.0
     # via
     #   -r ./requirements/dev-complete.txt

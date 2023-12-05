@@ -15,6 +15,7 @@ dependencies:
   - ipykernel
   - ipython
   - mypy>=1.4.1
+  - nbval
   - pytest
   - pytest-cov
   - pytest-sugar

@@ -42,11 +42,11 @@ test-extras = [
     "pytest-sugar",
 ]
 test = ["module-utilities[test-extras]", "module-utilities[opt-all]"]
+nbval = ["nbval"]
 dev-extras = [
     "pytest-accept", # p2c: -p
     "ipython",
     "ipykernel",
-    "nbval",
 ]
 typing-extras = [
     "pytype; python_version < '3.11'", #
@@ -59,7 +59,8 @@ typing = [
 ]
 nox = ["nox", "ruamel.yaml"]
 dev = [
-    "module-utilities[test]", #
+    "module-utilities[nbval]", #
+    "module-utilities[test]",
     "module-utilities[typing-extras]",
     "module-utilities[dev-extras]",
 ]
@@ -87,13 +88,6 @@ docs = [
     "autodocsumm",
     "module-utilities[opt-all]",
 ]
-# Project specific
-# Testing without optional dependenciies
-test-noopt = ["module-utilities[test-extras]"]
-# testing with nbval
-test-notebook = ["module-utilities[test]", "nbval"]
-# typing with nbqa
-typing-notebook = ["module-utilities[typing]", "nbqa"]
 
 [tool.pyproject2conda]
 user_config = "config/userconfig.toml"
@@ -129,11 +123,11 @@ envs = ["test", "typing", "test-extras"]
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 # Project specific environments
-[tool.pyproject2conda.envs.test-noopt]
-
 [tool.pyproject2conda.envs.test-notebook]
+extras = ["test", "nbval"]
 
-[tool.pyproject2conda.envs.typing-notebook]
+[tool.pyproject2conda.envs.test-noopt]
+extras = ["test-extras"]
 
 ## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]

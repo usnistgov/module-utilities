@@ -443,7 +443,6 @@ def pip_compile(
         "docs",
         "test-noopt",
         "test-notebook",
-        "typing-notebook",
     ]
 
     if session.python == PYTHON_DEFAULT_VERSION:

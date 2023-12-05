@@ -996,50 +996,6 @@ def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     )
 
 
-# Just use typing with nbqa options.
-# # Notebook typing
-# typing_notebook: list[Literal["clean", "mypy", "pyright", "all"]] | None = None
-# typing_notebook_run: RUN_ANNO = None
-# typing_notebook_run_internal: RUN_ANNO = None
-# @nox.session(name="typing-notebook", **DEFAULT_KWS)
-# @add_opts
-# def typing_notebook(session: nox.Session, opts: SessionParams) -> None:
-#     (
-#         Installer.from_envname(
-#             session=session,
-#             envname="typing-notebook",            lock=opts.lock,
-#             update=opts.update,
-#             # package=".",
-#         ).install_all(log_session=opts.log_session, update_package=opts.update_package)
-#         .run_commands(opts.typing_notebook_run)
-#         .run_commands(opts.typing_notebook_run_internal)
-#     )
-
-#     cmds = opts.typing_notebook or []
-
-#     if not any((cmds, opts.typing_notebook_run, opts.typing_notebook_run_internal)):
-#         cmds = ["mypy", "pyright"]
-
-
-#     if "clean" in cmds:
-#         cmds.remove("clean")
-#         for name in [".mypy_cache"]:
-#             p = Path(session.create_tmp()) / name
-#             if p.exists():
-#                 session.log(f"removing cache {p}")
-#                 shutil.rmtree(str(p))
-
-#     # set the cache directory for mypy
-#     session.env["MYPY_CACHE_DIR"] = str(Path(session.create_tmp()) / ".mypy_cache")
-
-
-#     for cmd in cmds:
-#         if cmd == "mypy":
-#             session.run("nbqa", "mypy", "examples/usage")
-#         elif cmd == "pyright":
-#             session.run("nbqa", "--nbqa-shell", "pyright", "examples/usage")
-
-
 # * Utilities -------------------------------------------------------------------------
 def _create_doc_examples_symlinks(session: nox.Session, clean: bool = True) -> None:
     """Create symlinks from docs/examples/*.md files to /examples/usage/..."""

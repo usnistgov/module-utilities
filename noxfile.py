@@ -2,6 +2,7 @@
 # * Imports ----------------------------------------------------------------------------
 from __future__ import annotations
 
+import shlex
 import shutil
 import sys
 from functools import lru_cache, wraps
@@ -38,7 +39,6 @@ from tools.noxtools import (
     open_webpage,
     prepend_flag,
     session_run_commands,
-    shlex,
     update_target,
     write_hashes,
 )

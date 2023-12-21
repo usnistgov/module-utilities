@@ -1,22 +1,21 @@
 [build-system]
-requires = ["setuptools>=61.2", "setuptools_scm[toml]>=8.0"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=8"]
 
 [project]
 name = "module-utilities"
-authors = [{ name = "William P. Krekelberg", email = "wpk@nist.gov" }]
-license = { text = "NIST-PD" }
 description = "Collection of utilities to aid working with python modules."
-# if using markdown
-# long_description_content_type = text/markdown
 keywords = ["module-utilities"]
+license = { text = "NIST-PD" }
+authors = [{ name = "William P. Krekelberg", email = "wpk@nist.gov" }]
+requires-python = ">=3.8"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
     "License :: Public Domain",
     "Operating System :: OS Independent",
-    "Intended Audience :: Science/Research",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -25,111 +24,72 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dynamic = ["readme", "version"]
-requires-python = ">=3.8"
 dependencies = ["typing-extensions"]
 
-[project.urls]
-homepage = "https://github.com/usnistgov/module-utilities"
-documentation = "https://pages.nist.gov/module-utilities/"
-
 [project.optional-dependencies]
-inherit = ["docstring-inheritance"]
-opt-all = ["module-utilities[inherit]"]
-test-extras = [
-    "pytest", #
-    "pytest-xdist",
-    "pytest-cov",
-    "pytest-sugar",
-]
-test = ["module-utilities[test-extras]", "module-utilities[opt-all]"]
-nbval = ["nbval"]
-dev-extras = [
-    "pytest-accept", # p2c: -p
-    "ipython",
-    "ipykernel",
-]
-typing-extras = [
-    "pytype; python_version < '3.11'", #
-    "mypy >= 1.4.1",
-]
-typing = [
-    "module-utilities[typing-extras]", #
-    "module-utilities[opt-all]",
-    "pytest",
-]
-nox = ["nox", "ruamel.yaml"]
 dev = [
     "module-utilities[nbval]", #
     "module-utilities[test]",
     "module-utilities[typing-extras]",
     "module-utilities[dev-extras]",
 ]
-tools = [
-    "pre-commit", #
-    "scriv", # p2c: -p
-    "nbqa",
-    "pyright",
-]
 dev-complete = [
     "module-utilities[dev]", #
     "module-utilities[tools]",
     "module-utilities[nox]",
 ]
+dev-extras = [
+    "ipykernel",
+    "ipython",
+    "pytest-accept", # p2c: -p
+
+]
 docs = [
-    "ipython", #
-    "pyenchant",
+    "autodocsumm",
     "ghp-import",
-    "sphinx >= 5.3.0",
+    "ipython", #
+    "module-utilities[opt-all]",
+    "myst-nb",
+    "pyenchant",
+    "sphinx>=5.3",
+    "sphinx-autobuild",
+    "sphinx-book-theme",
     "sphinx-copybutton",
     "sphinxcontrib-spelling",
-    "sphinx-autobuild",
-    "myst-nb",
-    "sphinx-book-theme",
-    "autodocsumm",
+]
+inherit = ["docstring-inheritance"]
+nbval = ["nbval"]
+nox = ["nox", "ruamel.yaml"]
+opt-all = ["module-utilities[inherit]"]
+test = ["module-utilities[test-extras]", "module-utilities[opt-all]"]
+test-extras = [
+    "pytest", #
+    "pytest-cov",
+    "pytest-sugar",
+    "pytest-xdist",
+]
+tools = [
+    "nbqa",
+    "pre-commit", #
+    "pyright",
+    "scriv", # p2c: -p
+
+]
+typing = [
+    "module-utilities[typing-extras]", #
     "module-utilities[opt-all]",
+    "pytest",
+]
+typing-extras = [
+    "mypy>=1.4.1",
+    'pytype; python_version < "3.11"', #
+
 ]
 
-[tool.pyproject2conda]
-user_config = "config/userconfig.toml"
-template_python = "requirements/py{py}-{env}"
-template = "requirements/{env}"
-# defaults
-python = ["3.11"]
-channels = ["conda-forge"]
-style = ["yaml", "requirements"]
-default_envs = ["test", "typing", "docs", "dev", "dev-complete"]
+[project.urls]
+documentation = "https://pages.nist.gov/module-utilities/"
+homepage = "https://github.com/usnistgov/module-utilities"
 
-[tool.pyproject2conda.envs.test-extras]
-extras = ["test"]
-base = false
-
-[tool.pyproject2conda.envs.dev-base]
-extras = ["dev"]
-
-[tool.pyproject2conda.envs.build]
-extras = "build-system.requires"
-reqs = ["build"]
-base = false
-style = "requirements"
-
-# make sure pip available to all conda environments
-# that install the package
-[[tool.pyproject2conda.overrides]]
-envs = ["test", "dev", "dev-complete", "dev-base", "docs"]
-deps = ["pip"]
-
-[[tool.pyproject2conda.overrides]]
-envs = ["test", "typing", "test-extras"]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-# Project specific environments
-[tool.pyproject2conda.envs.test-notebook]
-extras = ["test", "nbval"]
-
-[tool.pyproject2conda.envs.test-noopt]
-extras = ["test-extras"]
-
-## grayskull still messes some things up, but use scripts/recipe-append.sh for this
 [tool.setuptools]
 zip-safe = true # if using mypy, must be False
 include-package-data = true
@@ -139,8 +99,6 @@ license-files = ["LICENSE"]
 namespaces = true
 where = ["src"]
 
-## include = []
-## exclude = []
 [tool.setuptools.dynamic]
 readme = { file = [
     "README.md",
@@ -151,26 +109,7 @@ readme = { file = [
 [tool.setuptools_scm]
 fallback_version = "999"
 
-[tool.aliases]
-test = "pytest"
-
-[tool.pytest.ini_options]
-addopts = "-n 4 --doctest-modules --doctest-glob='*.md'"
-# testpaths = ["src/module_utilities", "tests", "./README.md"]
-testpaths = ["src", "tests", "README.md"]
-markers = ["inherit: docstring_inheritance dependent code"]
-filterwarnings = ["ignore::UserWarning"]
-
-[tool.coverage.report]
-exclude_also = ["if TYPE_CHECKING:", "@overload"]
-omit = ["*/vendored/*"]
-include = ["src/*"]
-
-[tool.isort]
-profile = "black"
-skip_gitignore = true
-known_first_party = ["module_utilities"]
-
+# * Linting
 [tool.ruff]
 fix = true
 line-length = 88
@@ -277,8 +216,10 @@ known-first-party = ["module_utilities"]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
 
-[tool.nbqa.addopts]
-ruff = ["--fix", "--extend-ignore=D100,B018,D101"]
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+known_first_party = ["module_utilities"]
 
 [tool.flake8]
 docstring-convention = "numpy"
@@ -312,15 +253,20 @@ ignore = [
     "D212",
 ]
 
-[tool.scriv]
-format = "md"
-md_header_level = "2"
-new_fragment_template = "file: changelog.d/templates/new_fragment.md.j2"
+[tool.nbqa.addopts]
+ruff = ["--fix", "--extend-ignore=D100,B018,D101"]
 
-[tool.commitizen]
-use_shortcuts = true
+[tool.pytest.ini_options]
+addopts = "-n 4 --doctest-modules --doctest-glob='*.md'"
+# testpaths = ["src/module_utilities", "tests", "./README.md"]
+testpaths = ["src", "tests", "README.md"]
+markers = ["inherit: docstring_inheritance dependent code"]
+filterwarnings = ["ignore::UserWarning"]
 
-[tool.cruft]
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "@overload"]
+omit = ["*/vendored/*"]
+include = ["src/*"]
 
 [tool.mypy]
 files = ["src/**/*.py", "tests/**/*.py"]
@@ -378,3 +324,56 @@ reportUnboundVariable = false
 
 [tool.pytype]
 inputs = ["src", "tests"]
+
+[tool.pyproject2conda]
+user_config = "config/userconfig.toml"
+template_python = "requirements/py{py}-{env}"
+template = "requirements/{env}"
+# defaults
+python = ["3.11"]
+channels = ["conda-forge"]
+style = ["yaml", "requirements"]
+default_envs = ["test", "typing", "docs", "dev", "dev-complete"]
+
+[tool.pyproject2conda.envs.test-extras]
+extras = ["test"]
+base = false
+
+[tool.pyproject2conda.envs.dev-base]
+extras = ["dev"]
+
+[tool.pyproject2conda.envs.build]
+extras = "build-system.requires"
+reqs = ["build"]
+base = false
+style = "requirements"
+
+# make sure pip available to all conda environments
+# that install the package
+[tool.pyproject2conda.envs.test-notebook]
+extras = ["test", "nbval"]
+
+[tool.pyproject2conda.envs.test-noopt]
+extras = ["test-extras"]
+
+## grayskull still messes some things up, but use scripts/recipe-append.sh for this
+[[tool.pyproject2conda.overrides]]
+envs = ["test", "dev", "dev-complete", "dev-base", "docs"]
+deps = ["pip"]
+
+[[tool.pyproject2conda.overrides]]
+envs = ["test", "typing", "test-extras"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.aliases]
+test = "pytest"
+
+[tool.scriv]
+format = "md"
+md_header_level = "2"
+new_fragment_template = "file: changelog.d/templates/new_fragment.md.j2"
+
+[tool.commitizen]
+use_shortcuts = true
+
+[tool.cruft]

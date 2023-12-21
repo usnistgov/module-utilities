@@ -15,12 +15,8 @@ dependencies:
   - ipykernel
   - ipython
   - mypy>=1.4.1
-  - nbqa
   - nbval
   - nox
-  - pip-tools
-  - pre-commit
-  - pyright
   - pytest
   - pytest-cov
   - pytest-sugar
@@ -29,4 +25,3 @@ dependencies:
   - pip
   - pip:
       - pytest-accept
-      - scriv

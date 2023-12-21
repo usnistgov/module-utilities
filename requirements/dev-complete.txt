@@ -14,6 +14,7 @@ mypy>=1.4.1
 nbqa
 nbval
 nox
+pip-tools
 pre-commit
 pyright
 pytest
@@ -22,6 +23,5 @@ pytest-cov
 pytest-sugar
 pytest-xdist
 pytype;python_version<"3.11"
-ruamel.yaml
 scriv
 typing-extensions

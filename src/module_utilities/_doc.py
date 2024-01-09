@@ -51,7 +51,7 @@ def doc(
                 continue
             if hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
-                    docstring._docstring_components  # pyright: ignore # noqa: E501 # pyre-ignore
+                    docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
             elif isinstance(docstring, str):
                 docstring_components.append(docstring)

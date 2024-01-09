@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from module_utilities import cached
+from typing import Any, Generic, TypeVar, cast, overload
 
-from typing import Any, TypeVar, Generic, cast, overload
 from typing_extensions import Self
 
+from module_utilities import cached
 
 R = TypeVar("R")
-T = TypeVar("T", bound="Base[R]")  # type: ignore
+T = TypeVar("T", bound="Base[R]")  # type: ignore[valid-type]
 
 
 class Athing(Generic[T, R]):
@@ -25,8 +25,8 @@ class Athing(Generic[T, R]):
     def __getitem__(self, index: int | slice) -> R | T:
         if isinstance(index, int):
             return self.parent.val
-        else:
-            return self.parent
+
+        return self.parent
 
     @property
     def output(self) -> R:
@@ -105,87 +105,3 @@ class Derived(Base[int]):
 
 b: Base[str] = Base()
 d = Derived()
-
-# if TYPE_CHECKING:
-#     reveal_type(b.athing)
-#     reveal_type(d.athing)
-#     reveal_type(b.there.output)
-#     reveal_type(d.there.output)
-#     reveal_type(b.there.other)
-#     reveal_type(d.there.other)
-#     reveal_type(b.prop_cached)
-#     reveal_type(d.prop_cached)
-#     reveal_type(d.prop_derived)
-
-#     reveal_type(b.there[0])
-#     reveal_type(d.there[0])
-
-#     reveal_type(b.there[:])
-#     reveal_type(d.there[:])
-
-
-# T = TypeVar("T", bound="Base") # type: ignore
-
-
-# class Athing(Generic[T]):
-#     def __init__(self, parent: T) -> None:
-#         self.parent = parent
-
-#     @property
-#     def other(self) -> T:
-#         return self.parent
-
-
-# class Base:
-#     def __init__(self) -> None:
-#         self._cache: dict[str, Any] = {}
-
-
-#     @cached.prop
-#     def athing(self) -> Self:
-#         return self
-
-#     @cached.prop
-#     def there(self) -> Athing[Self]:
-#         return Athing(self)
-
-#     @property
-#     def prop_property(self) -> int:
-#         return 1
-
-#     @cached.prop
-#     def prop_cached(self) -> int:
-#         return 1
-
-#     def meth(self, x: int) -> int:
-#         return x
-
-#     @cached.meth
-#     def meth_cached(self, x: int) -> int:
-#         return x
-
-
-# class Derived(Base):
-
-#     @property
-#     def prop_property(self) -> int:
-#         return 1
-
-#     @cached.prop # type: ignore
-#     def prop_cached(self) -> int:
-#         return 1
-
-
-#     @cached.meth
-#     def meth_cached(self, x: int) -> int:
-#         return x
-
-
-# b = Base()
-# d = Derived()
-
-# if TYPE_CHECKING:
-#     reveal_type(b.athing)
-#     reveal_type(d.athing)
-#     reveal_type(b.there.other)
-#     reveal_type(d.there.other)

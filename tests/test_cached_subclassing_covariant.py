@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import Any
 
 from module_utilities import cached
-from functools import cached_property
 
 
 class Base:
@@ -58,8 +58,8 @@ class Derived1(Base):
 
 def test_stuff() -> None:
     b = Base()
-    d = Derived0()
+    Derived0()
 
-    c = Derived1()
+    Derived1()
 
-    b.f_prop
+    _ = b.f_prop

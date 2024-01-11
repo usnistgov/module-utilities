@@ -10,9 +10,11 @@
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
-  - anaconda-client
-  - boa
-  - conda-build
-  - conda-verify
-  - grayskull
+  - python=3.12
+  - docstring-inheritance
+  - pytest
+  - pytest-cov
+  - pytest-sugar
+  - pytest-xdist
+  - typing-extensions
+  - pip

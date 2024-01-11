@@ -10,10 +10,11 @@
 docstring-inheritance
 ipykernel
 ipython
-mypy >= 1.4.1
+mypy>=1.4.1
 nbqa
+nbval
 nox
-noxopt
+pip-tools
 pre-commit
 pyright
 pytest
@@ -21,8 +22,6 @@ pytest-accept
 pytest-cov
 pytest-sugar
 pytest-xdist
-pytype; python_version < '3.11'
-ruamel.yaml
+pytype;python_version<"3.11"
 scriv
-setuptools-scm>=8.0
 typing-extensions

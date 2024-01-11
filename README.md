@@ -45,7 +45,7 @@ place.
   a standard python dictionary for storage. Future versions will hopefully
   integrate with something like [cachetools].
 
-- `docfiller`: A module to share documentation. This is addapted from the
+- `docfiller`: A module to share documentation. This is adapted from the
   [pandas `doc` decorator](https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py).
   There are some convenience functions and classes for sharing documentation.
 
@@ -77,7 +77,7 @@ conda install -c conda-forge module-utilities
 Optionally, you can install [docstring-inheritance] to use the `docinherit`
 module:
 
-```base
+```bash
 pip install docstring-inheritance
 # or
 conda install -c conda-forge docstring-inheritance

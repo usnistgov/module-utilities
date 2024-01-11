@@ -10,6 +10,8 @@
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
-  - build
-  - twine
+  - python=3.12
+  - docstring-inheritance
+  - mypy>=1.4.1
+  - pytest
+  - typing-extensions

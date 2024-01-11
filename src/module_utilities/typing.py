@@ -5,7 +5,7 @@ Typing definitions (:mod:`~module_utilities.typing`)
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, Mapping, Protocol, TypeVar
+from typing import Any, Callable, Mapping, Protocol, TypeVar
 
 from typing_extensions import Concatenate, ParamSpec, TypeAlias
 
@@ -26,7 +26,6 @@ __all__ = [
     "C_meth",
     "C_prop",
     "HasCache",
-    "T_DocFiller",
 ]
 
 FuncType = Callable[..., Any]
@@ -67,10 +66,3 @@ NestedDictVal: TypeAlias = "str | NestedDict"
 """Nested dict value type"""
 NestedDict: TypeAlias = "dict[str, NestedDictVal]"
 """Nested dict type"""
-
-
-if TYPE_CHECKING:
-    from .docfiller import DocFiller
-
-T_DocFiller = TypeVar("T_DocFiller", bound="DocFiller")
-"""Docfiller type"""

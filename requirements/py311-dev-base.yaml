@@ -10,25 +10,17 @@
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.11
   - docstring-inheritance
   - ipykernel
   - ipython
-  - mypy >= 1.4.1
-  - nbqa
-  - nox
-  - pre-commit
-  - pyright
+  - mypy>=1.4.1
+  - nbval
   - pytest
   - pytest-cov
   - pytest-sugar
   - pytest-xdist
-  - pytype
-  - ruamel.yaml
-  - setuptools-scm>=8.0
   - typing-extensions
   - pip
   - pip:
-      - noxopt
       - pytest-accept
-      - scriv

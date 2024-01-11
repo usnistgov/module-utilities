@@ -1,11 +1,11 @@
 # mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
+
 from textwrap import dedent
 from typing import cast
 
 # from typing import TYPE_CHECKING
 # from typing_extensions import reveal_type
-
 import pytest
 
 from module_utilities import docfiller
@@ -17,52 +17,51 @@ from module_utilities.docfiller import DocFiller, dedent_recursive
 # --- simple (coverage filler) tests ---------------------------------------------------
 
 
-def test_append():
-    def func():
+def test_append() -> None:
+    def func() -> None:
         """Hello"""
 
     @docfiller.doc_decorate(func, x="there")
-    def func1():
+    def func1() -> None:
         """{x}"""
 
-    assert func1.__doc__.strip() == "Hellothere"  # type: ignore
+    assert func1.__doc__.strip() == "Hellothere"  # type: ignore[union-attr]
 
     @docfiller.doc_decorate(func, x="some", _prepend=True)
-    def func2():
+    def func2() -> None:
         """Yell"""
 
     assert func2.__doc__ == "YellHello"
 
-    def func_none():
+    def func_none() -> None:
         pass
 
     func_none.__doc__ = None
 
     @docfiller.doc_decorate(None, x="there")
-    def func3():
+    def func3() -> None:
         """Hello {x}"""
-        pass
 
     assert func3.__doc__ == "Hello there"
 
-    docfiller.DOC_SUB = False  # type: ignore
+    docfiller.DOC_SUB = False  # type: ignore[attr-defined]
 
     @docfiller.doc_decorate(func1, x="hello")
-    def func4a():
+    def func4a() -> None:
         """{x}"""
 
-    docfiller.DOC_SUB = True  # type: ignore
+    docfiller.DOC_SUB = True  # type: ignore[attr-defined]
 
     assert func4a.__doc__ == "{x}"
 
 
-def test_indent_docstring():
+def test_indent_docstring() -> None:
     assert docfiller.indent_docstring("hello", prefix=" ") == " hello"
     assert docfiller.indent_docstring("hello", prefix=None) == "hello"
 
 
-def test_build_params_docstring():
-    with pytest.raises(ValueError):
+def test_build_params_docstring() -> None:
+    with pytest.raises(ValueError):  # noqa: PT011
         s = docfiller._build_param_docstring(name="", ptype="", desc=["hello"])
 
     s = docfiller._build_param_docstring(name="hello", ptype=None, desc="stuff")
@@ -86,13 +85,13 @@ def test_build_params_docstring():
     assert s == "hello"
 
 
-def test_params_to_string():
+def test_params_to_string() -> None:
     s = docfiller._params_to_string("hello")
     assert s == "hello"
 
 
-def test_func_or_doc():
-    def template():
+def test_func_or_doc() -> None:
+    def template() -> None:
         """
         Parameters
         ----------
@@ -102,25 +101,25 @@ def test_func_or_doc():
     d = DocFiller.from_docstring(template, combine_keys="parameters")
 
     @d.decorate
-    def func():
+    def func() -> None:
         """{x}"""
 
     assert func.__doc__ == "x : int"
 
 
-def test_docfiller_creation():
-    d = DocFiller([("x", "hello")])  # type: ignore
+def test_docfiller_creation() -> None:
+    d = DocFiller([("x", "hello")])  # type: ignore[arg-type]
 
     @d.decorate
-    def func():
-        "{x}"
+    def func() -> None:
+        """{x}"""
 
     assert func.__doc__ == "hello"
 
     assert repr(d) == "DocFiller({'x': 'hello'})"
 
 
-def test_DocFiller_getitem():
+def test_docfiller_getitem() -> None:
     d = DocFiller.from_docstring(
         """
     Parameters
@@ -134,13 +133,13 @@ def test_DocFiller_getitem():
     dd = cast(DocFiller, d["parameters"])
 
     @dd.decorate
-    def func():
+    def func() -> None:
         """{x}"""
 
     assert func.__doc__ == "x : int"
 
     @dd.decorate
-    def func1():
+    def func1() -> None:
         """
         {x}
         {y}
@@ -149,14 +148,12 @@ def test_DocFiller_getitem():
     ddd = dd.assign_combined_key("z", ["x", "y"])
 
     @ddd.decorate
-    def func2():
-        """
-        {z}
-        """
+    def func2() -> None:
+        """{z}"""
 
-    assert func1.__doc__ == func2.__doc__
+    assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         ddd = d.assign_combined_key("zz", ["parameters"])
 
     d = DocFiller.from_docstring(
@@ -172,7 +169,7 @@ def test_DocFiller_getitem():
     )
 
     @d.decorate
-    def func3():
+    def func3() -> None:
         """{hello_x}"""
 
     assert func3.__doc__ == "x : int"
@@ -191,33 +188,33 @@ def test_DocFiller_getitem():
     )
 
     @d.decorate
-    def func4():
+    def func4() -> None:
         """{top.hello_x}"""
 
     assert func4.__doc__ == "x : int"
 
 
-@pytest.fixture
+@pytest.fixture()
 def params():
     return dedent_recursive(
-        dict(
-            summary="A thing",
-            a="""
+        {
+            "summary": "A thing",
+            "a": """
             a : int
                 A Parameter
         """,
-            b="""
+            "b": """
         b : float
             B Parameter
         """,
-            output="""
+            "output": """
         output : float
         """,
-        )
+        }
     )
 
 
-@pytest.fixture
+@pytest.fixture()
 def expected():
     return dedent(
         """
@@ -237,10 +234,10 @@ def expected():
     )
 
 
-@pytest.fixture
+@pytest.fixture()
 def template(params):
     @docfiller.doc_decorate(**params)
-    def func(*args, **kwargs):
+    def func(*args, **kwargs) -> None:  # noqa: ARG001
         """
         {summary}
 
@@ -258,35 +255,35 @@ def template(params):
 
 
 # Basic doc decorator
-def test_dedent_recursive(params):
+def test_dedent_recursive(params) -> None:
     assert params["a"] == "a : int\n    A Parameter"
 
 
-def test_doc(template, expected):
+def test_doc(template, expected) -> None:
     assert template.__doc__ == expected
 
 
-def test_doc_from_template(template, params, expected):
+def test_doc_from_template(template, params, expected) -> None:
     @docfiller.doc_decorate(template, **params)
-    def func():
+    def func() -> None:
         pass
 
     assert func.__doc__ == expected
 
 
-def test_doc_from_docstring(template, params, expected):
+def test_doc_from_docstring(template, params, expected) -> None:
     @docfiller.doc_decorate(template.__doc__, **params)
-    def func():
+    def func() -> None:
         pass
 
     assert func.__doc__ == expected
 
 
-def test_DocFiller(template, params, expected):
+def test_docfiller(template, params, expected) -> None:
     d = docfiller.DocFiller()
 
     @d(template, **params)
-    def func():
+    def func() -> None:
         pass
 
     assert func.__doc__ == expected
@@ -296,7 +293,7 @@ def test_DocFiller(template, params, expected):
     dd = d.update(**params)
 
     @dd(template)
-    def func2():
+    def func2() -> None:
         pass
 
     assert func2.__doc__ == expected
@@ -305,7 +302,7 @@ def test_DocFiller(template, params, expected):
     dd = d.update(params)
 
     @dd(template)
-    def func3():
+    def func3() -> None:
         pass
 
     assert func3.__doc__ == expected
@@ -313,13 +310,13 @@ def test_DocFiller(template, params, expected):
     d = docfiller.DocFiller.from_dict(params)
 
     @d(template)
-    def func4():
+    def func4() -> None:
         pass
 
     assert func4.__doc__ == expected
 
 
-def test_DocFiller_docstring():
+def test_docfiller_docstring() -> None:
     docstring = """
     A summary line
 
@@ -345,7 +342,7 @@ def test_DocFiller_docstring():
     docstring = dedent(docstring)
 
     @d()
-    def function():
+    def function() -> None:
         """
         {summary}
 
@@ -365,7 +362,7 @@ def test_DocFiller_docstring():
     assert docstring == function.__doc__
 
     @d.decorate
-    def function2():
+    def function2() -> None:
         """
         {summary}
 
@@ -396,7 +393,7 @@ def test_DocFiller_docstring():
     ).dedent()
 
     @dd.decorate
-    def function3():
+    def function3() -> None:
         """
         {summary}
 
@@ -442,13 +439,13 @@ def test_DocFiller_docstring():
     dd = d.append(d2)
 
     @dd(function3)
-    def function4():
+    def function4() -> None:
         pass
 
     assert function4.__doc__ == expected
 
 
-def test_DocFiller_namespace() -> None:
+def test_docfiller_namespace() -> None:
     s0 = """
     Parameters
     ----------
@@ -486,7 +483,7 @@ def test_DocFiller_namespace() -> None:
 
     dd1 = docfiller.DocFiller.concat(a=d0, b=d1, c={"type_": "int"})
 
-    assert dd1["c"]["type_"] == "int"  # type: ignore
+    assert dd1["c"]["type_"] == "int"  # type: ignore[index]
 
     expected = dedent(
         """
@@ -507,7 +504,7 @@ def test_DocFiller_namespace() -> None:
     for dd in [dd0, dd1]:
 
         @dd.decorate
-        def func():
+        def func() -> None:
             """
             Parameters
             ----------
@@ -519,11 +516,9 @@ def test_DocFiller_namespace() -> None:
             {b.returns.out}
             """
 
-            pass
-
         assert func.__doc__ == expected
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         d0.assign(x="hello").levels_to_top("x")
 
     dd0 = (
@@ -560,7 +555,7 @@ def test_DocFiller_namespace() -> None:
     assert func2(1, 1) == (1, 1)
 
 
-def test_assign_key():
+def test_assign_key() -> None:
     d = DocFiller.from_docstring(
         """
         Parameters
@@ -578,7 +573,7 @@ def test_assign_key():
     dd = d.assign_keys(x="x_float")
 
     @dd.decorate
-    def test0():
+    def test0() -> None:
         """
         Parameters
         ----------
@@ -599,7 +594,7 @@ def test_assign_key():
     dd = d.assign_keys(x="x_array")
 
     @dd.decorate
-    def test1():
+    def test1() -> None:
         """
         Parameters
         ----------
@@ -620,7 +615,7 @@ def test_assign_key():
     dd = d.assign_keys(x=["x_array", "y"])
 
     @dd.decorate
-    def test2():
+    def test2() -> None:
         """
         Parameters
         ----------
@@ -641,7 +636,7 @@ def test_assign_key():
     assert test2.__doc__ == expected
 
 
-def test_DocFiller_assign_param():
+def test_docfiller_assign_param() -> None:
     expected = dedent(
         """
     A summary
@@ -675,7 +670,7 @@ def test_DocFiller_assign_param():
     )
 
     @dd()
-    def func():
+    def func() -> None:
         """
         A summary
 
@@ -687,12 +682,11 @@ def test_DocFiller_assign_param():
         {y}
         {z}
         """
-        pass
 
     assert func.__doc__ == expected
 
 
-def test_DocFiller_on_class():
+def test_docfiller_on_class() -> None:
     expected = """
     A summary
 
@@ -742,7 +736,7 @@ def test_DocFiller_on_class():
     assert hello.__doc__ == expected
 
 
-def test_prepend():
+def test_prepend() -> None:
     expected = """
     A summary
 
@@ -798,13 +792,12 @@ def test_prepend():
 
     # prepend
     @d(template, _prepend=True)
-    def there():
+    def there() -> None:
         """
         Returns
         -------
         {returns.out}
         """
-        pass
 
     expected = """
     Returns

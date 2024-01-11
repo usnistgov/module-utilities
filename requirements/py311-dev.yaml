@@ -10,9 +10,18 @@
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.11
+  - docstring-inheritance
+  - ipykernel
+  - ipython
+  - mypy>=1.4.1
+  - nbval
+  - nox
   - pytest
   - pytest-cov
   - pytest-sugar
   - pytest-xdist
   - typing-extensions
+  - pip
+  - pip:
+      - pytest-accept

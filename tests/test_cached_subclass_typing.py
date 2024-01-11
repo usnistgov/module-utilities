@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from module_utilities import cached
-
 from typing import Any
+
+from module_utilities import cached
 
 
 class Base:

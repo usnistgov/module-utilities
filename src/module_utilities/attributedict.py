@@ -96,7 +96,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
 
         keys = list(self._entries.keys())
 
-        if isinstance(s.start, int) or s.start is None and isinstance(s.stop, int):
+        if isinstance(s.start, int) or (s.start is None and isinstance(s.stop, int)):
             slc = s
 
         else:
@@ -139,14 +139,14 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
 
         try:
             return self.__getattribute__(attr)
-        except AttributeError as err:
+        except AttributeError:
             # If Python is run with -OO, it will strip docstrings and our lookup
             # from self._entries will fail. We check for __debug__, which is actually
             # set to False by -O (it is True for normal execution).
             # But we only want to see an error when building the docs;
             # not something users should see, so this slight inconsistency is fine.
             if __debug__:  # pragma: no cover
-                raise err
+                raise
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._entries!r})"

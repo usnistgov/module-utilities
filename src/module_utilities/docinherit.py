@@ -113,13 +113,12 @@ if HAS_INHERIT:
         +      z parameter
 
         """
-
         docstring = parent.__doc__ or "" if callable(parent) else parent
 
         if DOC_SUB:
 
             def wrapper_inherit(func: F) -> F:
-                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # pyright: ignore[reportUnboundVariable]
+                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # pyright: ignore[reportUnboundVariable,reportUnknownMemberType,reportPossiblyUnboundVariable]
                 return func
 
             return wrapper_inherit

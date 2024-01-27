@@ -49,12 +49,12 @@ def doc(
         for docstring in docstrings:
             if docstring is None:
                 continue
-            if hasattr(docstring, "_docstring_components"):
+            if isinstance(docstring, str):
+                docstring_components.append(docstring)
+            elif hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
-            elif isinstance(docstring, str):
-                docstring_components.append(docstring)
             elif docstring.__doc__:
                 # docstring_components.append(docstring)
                 docstring_components.append(dedent(docstring.__doc__ or ""))

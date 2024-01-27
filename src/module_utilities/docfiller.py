@@ -120,7 +120,6 @@ def doc_decorate(
     +  -------
     +  output : float
     """
-
     if DOC_SUB:
         return _pd_doc(*docstrings, _prepend=_prepend, **params)
 
@@ -151,7 +150,6 @@ def _build_param_docstring(
         Multiline string for output.
 
     """
-
     no_name = not name
     no_type = not ptype
 
@@ -182,7 +180,7 @@ class TParameter(NamedTuple):
     """Interface to Parameters namedtuple in docscrape"""
 
     name: str
-    type: str  # noqa: A003
+    type: str
     desc: str
 
 
@@ -202,7 +200,6 @@ def _params_to_string(
     a : int
         A parameter
     """
-
     if len(params) == 0:
         return ""
 
@@ -286,7 +283,6 @@ def _parse_docstring(
 
 
     """
-
     doc = inspect.getdoc(func_or_doc) if callable(func_or_doc) else func_or_doc
 
     parsed = cast(
@@ -370,9 +366,7 @@ def _recursive_keys(data: NestedMap) -> list[str]:
     >>> _recursive_keys(d)
     Traceback (most recent call last):
     ...
-    ValueError: unknown type <class 'int'>
-
-
+    TypeError: unknown type <class 'int'>
     """
     keys: list[str] = []
     for k, v in data.items():
@@ -382,7 +376,7 @@ def _recursive_keys(data: NestedMap) -> list[str]:
             key_list = [k]
         else:
             msg = f"unknown type {type(v)}"
-            raise ValueError(msg)
+            raise TypeError(msg)
 
         keys.extend(key_list)
 
@@ -500,7 +494,7 @@ class DocFiller:
                 new_data.append(d)
             else:
                 msg = f"trying to combine key {k} with non-string value {d}"
-                raise ValueError(msg)
+                raise TypeError(msg)
 
         new.data[new_key] = "\n".join(new_data)
         return new
@@ -585,7 +579,6 @@ class DocFiller:
             A parameter
             with multiple levels
         """
-
         new = self.new_like()
 
         if desc is None:
@@ -627,7 +620,6 @@ class DocFiller:
         Use unnamed `args` to pass in underlying data.
         Use names ``kwargs`` to add namespace.
         """
-
         # create
 
         data: dict[str, NestedMapVal] = {}
@@ -665,13 +657,12 @@ class DocFiller:
 
     def levels_to_top(self, *names: str) -> DocFiller:
         """Make a level top level accessible"""
-
         new = self.new_like()
         for name in names:
             d = self.data[name]
             if isinstance(d, str):
                 msg = f"level {name} is not a dict"
-                raise ValueError(msg)
+                raise TypeError(msg)
 
             for k, v in d.items():
                 new.data[k] = v
@@ -898,7 +889,7 @@ class DocFiller:
         return docinherit.factory_docfiller_inherit_from_parent(cls, self)
 
     @classmethod
-    def from_dict(
+    def from_dict(  # noqa: C901, PLR0912
         cls,
         params: Mapping[str, Any],
         namespace: str | None = None,
@@ -936,7 +927,9 @@ class DocFiller:
         elif isinstance(keep_keys, str):
             keep_keys = [keep_keys]
 
-        assert isinstance(keep_keys, Iterable)
+        if not isinstance(keep_keys, Iterable):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
+            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"
+            raise TypeError(msg)
 
         if combine_keys:
             if isinstance(combine_keys, str):
@@ -963,7 +956,8 @@ class DocFiller:
         elif callable(key_map):
             updated_params = {key_map(k): v for k, v in updated_params.items()}
         else:
-            assert isinstance(key_map, Mapping)
+            if not isinstance(key_map, Mapping):  # pyright: ignore[reportUnnecessaryIsInstance]
+                raise TypeError
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 
         if namespace:

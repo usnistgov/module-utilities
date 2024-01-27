@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 from .typing import R, S
 
-__all__ = ["decorate", "prop", "meth", "clear", "CachedProperty"]
+__all__ = ["CachedProperty", "clear", "decorate", "meth", "prop"]
 
 
 class CachedProperty(Generic[S, R]):
@@ -57,13 +57,16 @@ class CachedProperty(Generic[S, R]):
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
         self.__name__: str | None = None
-        update_wrapper(self, prop)  # pyright: ignore[reportGeneralTypeIssues]
+        update_wrapper(self, prop)  # pyright: ignore[reportGeneralTypeIssues, reportArgumentType]
 
         self._prop = prop
 
         if key is None:
             key = prop.__name__
-        assert isinstance(key, str)
+
+        if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
+            msg = f"key must be a string.  Passed {type(key)=}"
+            raise TypeError(msg)
         self._key = key
         self._check_use_cache = check_use_cache
 
@@ -160,7 +163,7 @@ def decorate(
     """
     if as_property:
         return prop(key=key, check_use_cache=check_use_cache)
-    return meth(key=key, check_use_cache=check_use_cache)  # pyright: ignore[reportGeneralTypeIssues]
+    return meth(key=key, check_use_cache=check_use_cache)  # pyright: ignore[reportGeneralTypeIssues, reportReturnType]
 
 
 @overload
@@ -497,7 +500,6 @@ def clear(
     prop : corresponding decorator for cache creation of property
     meth : decorator for cache creation of function
     """
-
     if callable(key_or_func):
         function = key_or_func
         keys_inner = keys

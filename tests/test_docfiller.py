@@ -153,7 +153,7 @@ def test_docfiller_getitem() -> None:
 
     assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]
 
-    with pytest.raises(ValueError):  # noqa: PT011
+    with pytest.raises(TypeError):
         ddd = d.assign_combined_key("zz", ["parameters"])
 
     d = DocFiller.from_docstring(
@@ -518,7 +518,7 @@ def test_docfiller_namespace() -> None:
 
         assert func.__doc__ == expected
 
-    with pytest.raises(ValueError):  # noqa: PT011
+    with pytest.raises(TypeError):
         d0.assign(x="hello").levels_to_top("x")
 
     dd0 = (

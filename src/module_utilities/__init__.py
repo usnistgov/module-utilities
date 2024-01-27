@@ -16,7 +16,7 @@ __email__ = "wpk@nist.gov"
 from . import cached, docfiller
 
 __all__ = [
+    "__version__",
     "cached",
     "docfiller",
-    "__version__",
 ]

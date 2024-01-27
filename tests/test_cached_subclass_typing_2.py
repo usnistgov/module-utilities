@@ -24,13 +24,13 @@ class Athing(Generic[T, R]):
 
     def __getitem__(self, index: int | slice) -> R | T:
         if isinstance(index, int):
-            return self.parent.val
+            return self.parent.val  # pyright: ignore[reportReturnType]
 
         return self.parent
 
     @property
     def output(self) -> R:
-        return self.parent.val
+        return self.parent.val  # pyright: ignore[reportReturnType]
 
     @property
     def other(self) -> T:

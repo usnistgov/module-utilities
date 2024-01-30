@@ -18,7 +18,6 @@ dependencies:
   - nbqa
   - nbval
   - nox
-  - pip-tools
   - pre-commit
   - pyright
   - pytest

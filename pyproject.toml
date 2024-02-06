@@ -224,15 +224,31 @@ known-first-party = ["module_utilities"]
 [tool.ruff.format]
 docstring-code-format = true
 
+[tool.check-wheel-contents]
+toplevel = ["module_utilities"]
+src_dir = ["src"]
+
 # * Testing --------------------------------------------------------------------
 
 [tool.pytest.ini_options]
-addopts = "-n 4 --doctest-modules --doctest-glob='*.md' --pyargs"
-testpaths = ["module_utilities", "tests", "README.md"]
+addopts = [
+    "--doctest-modules",
+    "--doctest-glob=*.md",
+    "--pyargs",
+    "--cov-config=pyproject.toml",
+]
+testpaths = [
+    "README.md",
+    "module_utilities",
+    "tests",
+]
 markers = ["inherit: docstring_inheritance dependent code"]
-filterwarnings = ["ignore::UserWarning"]
+
+[tool.coverage.run]
+branch = true
 
 [tool.coverage.report]
+show_missing = true
 exclude_also = ["if TYPE_CHECKING:", "@overload"]
 omit = ["*/vendored/*", "*/_typing.py"]
 include = ["src/*"]
@@ -244,7 +260,6 @@ source = ["src/", ".nox/**/site-packages/"]
 
 [tool.mypy]
 files = ["src/**/*.py", "tests/**/*.py"]
-# files = ["src", "tests"]
 show_error_codes = true
 warn_unused_ignores = true
 warn_return_any = true

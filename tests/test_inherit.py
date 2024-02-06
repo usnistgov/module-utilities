@@ -363,19 +363,24 @@ def test_func_5(
 
     d = docfiller_float.assign(type_="float").inherit(example_func)
 
-    @d
-    def func3(x: float, y: float, z: int) -> float:
-        """
-        Testz
+    import warnings
 
-        Returns
-        -------
-        new_output : {type_}
-            New output
-        """
-        return x + y + z
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
 
-    compare_func(func3, expected_template, summary="Testz", type_="float")
+        @d
+        def func3(x: float, y: float, z: int) -> float:
+            """
+            Testz
+
+            Returns
+            -------
+            new_output : {type_}
+                New output
+            """
+            return x + y + z
+
+        compare_func(func3, expected_template, summary="Testz", type_="float")
 
 
 # --- Class filling --------------------------------------------------------------------

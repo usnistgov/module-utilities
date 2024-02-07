@@ -17,6 +17,62 @@ from module_utilities.docfiller import DocFiller, dedent_recursive
 # --- simple (coverage filler) tests ---------------------------------------------------
 
 
+def test_doc_decorate_simple() -> None:
+    def func():
+        """
+        Thing
+
+        Parameters
+        ----------
+        {a}
+        """
+
+    @docfiller.doc_decorate(func, a="there")
+    def other():
+        pass
+
+    @docfiller.doc_decorate(func.__doc__, a="there")
+    def other2():
+        pass
+
+    @docfiller.doc_decorate(None, func.__doc__, a="there")
+    def other3():
+        pass
+
+    @docfiller.doc_decorate(other, a="there")
+    def there():
+        pass
+
+    @docfiller.doc_decorate(a="there")
+    def another():
+        """
+        Thing
+
+        Parameters
+        ----------
+        {a}
+        """
+
+    expected = dedent(
+        """
+    Thing
+
+    Parameters
+    ----------
+    there
+    """
+    ).strip()
+
+    for f in [other, other2, other3, there, another]:
+        assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]
+
+    with pytest.raises(ValueError):  # noqa: PT011
+
+        @docfiller.doc_decorate(1, a="there")  # type: ignore[arg-type]
+        def bad_func():
+            pass
+
+
 def test_append() -> None:
     def func() -> None:
         """Hello"""
@@ -314,6 +370,17 @@ def test_docfiller(template, params, expected) -> None:
         pass
 
     assert func4.__doc__ == expected
+
+    # convoluted way to test from_dict with combine_keys
+    data = docfiller.DocFiller.from_docstring(expected).data
+
+    d = docfiller.DocFiller.from_dict(data, combine_keys=["parameters", "returns"])
+
+    @d(template)
+    def func5() -> None:
+        pass
+
+    assert func5.__doc__ == expected
 
 
 def test_docfiller_docstring() -> None:
@@ -651,6 +718,9 @@ def test_docfiller_assign_param() -> None:
     y : int
         y param
     z : float
+    a : int
+        Another
+        parameter
     """
     )
 
@@ -658,15 +728,17 @@ def test_docfiller_assign_param() -> None:
 
     dd = (
         d.assign_param(
-            "x",
+            name="x",
             ptype="float",
             desc="""
             x param
             With an extra line
             """,
+            key="x_thing",
         )
         .assign_param("y", ptype="int", desc="y param")
         .assign_param("z", ptype="float")
+        .assign_param("a", ptype="int", desc=["Another", "parameter"])
     )
 
     @dd()
@@ -678,9 +750,10 @@ def test_docfiller_assign_param() -> None:
 
         Parameters
         ----------
-        {x}
+        {x_thing}
         {y}
         {z}
+        {a}
         """
 
     assert func.__doc__ == expected

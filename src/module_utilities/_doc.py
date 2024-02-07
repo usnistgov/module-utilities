@@ -55,9 +55,12 @@ def doc(
                 docstring_components.extend(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
-            elif docstring.__doc__:
+            elif callable(docstring) and hasattr(docstring, "__doc__"):
                 # docstring_components.append(docstring)
                 docstring_components.append(dedent(docstring.__doc__ or ""))
+            else:
+                msg = f"Unknown docstring caught {type(docstring)=}"
+                raise ValueError(msg)
 
         # make default to append
         if decorated.__doc__:

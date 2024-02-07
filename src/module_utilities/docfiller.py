@@ -889,7 +889,7 @@ class DocFiller:
         return docinherit.factory_docfiller_inherit_from_parent(cls, self)
 
     @classmethod
-    def from_dict(  # noqa: C901, PLR0912
+    def from_dict(  # noqa: C901
         cls,
         params: Mapping[str, Any],
         namespace: str | None = None,
@@ -956,8 +956,6 @@ class DocFiller:
         elif callable(key_map):
             updated_params = {key_map(k): v for k, v in updated_params.items()}
         else:
-            if not isinstance(key_map, Mapping):  # pyright: ignore[reportUnnecessaryIsInstance]
-                raise TypeError
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 
         if namespace:

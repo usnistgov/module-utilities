@@ -36,6 +36,42 @@ def test_cachedproperty() -> None:
         x.thing = 2
 
 
+# NOTE: specifically testing class without _cache defined
+# so need ignores
+def test_cachedproperty_without_cache() -> None:
+    class Tmp:
+        @cached.CachedProperty  # type: ignore[type-var]
+        def thing(self) -> int:
+            """A test"""
+            return 1
+
+        @cached.prop  # type: ignore[type-var]
+        def there(self) -> int:
+            """B test"""
+            return 2
+
+        @cached.clear  # type: ignore[type-var]
+        def clear(self) -> None:
+            pass
+
+    x = Tmp()
+
+    assert not hasattr(x, "_cache")
+    x.clear()
+
+    assert x.thing == 1
+
+    assert x._cache == {"thing": 1}  # type: ignore[attr-defined]
+    assert Tmp.there.__name__ == "there"
+    assert Tmp.there.__doc__ == "B test"
+
+    with pytest.raises(AttributeError):
+        x.thing = 2
+
+    x.clear()
+    assert x._cache == {}  # type: ignore[attr-defined]
+
+
 def test_meth_bad_hash() -> None:
     # test that passing unhashable just returns the func
     class Tmp:

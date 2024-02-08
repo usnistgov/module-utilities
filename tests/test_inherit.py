@@ -268,7 +268,7 @@ def test_func_4(
     expected_func_template_z: str,
     docfiller_float: DocFiller,
 ) -> None:
-    # Note: there's a bug with custom_inhert.  Need the extra space to make indentation work
+    # Note: there's a bug with custom_inherit.  Need the extra space to make indentation work
     @docfiller_float.inherit(example_func)
     def func(x: float, y: float, z: int) -> float:
         """

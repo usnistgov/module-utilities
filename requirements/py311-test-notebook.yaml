@@ -17,4 +17,3 @@ dependencies:
   - pytest-cov
   - pytest-sugar
   - pytest-xdist
-  - typing-extensions

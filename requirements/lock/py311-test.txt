@@ -28,11 +28,9 @@ pytest==8.0.0
     #   pytest-xdist
 pytest-cov==4.1.0
     # via -r requirements/test.txt
-pytest-sugar==0.9.7
+pytest-sugar==1.0.0
     # via -r requirements/test.txt
 pytest-xdist==3.5.0
     # via -r requirements/test.txt
 termcolor==2.4.0
     # via pytest-sugar
-typing-extensions==4.9.0
-    # via -r requirements/test.txt

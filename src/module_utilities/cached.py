@@ -16,13 +16,10 @@ if TYPE_CHECKING:
     from typing import (
         Any,
         Callable,
-    )
-
-    from typing_extensions import (
         Literal,
-        Self,
     )
 
+    from ._typing_compat import Self
     from .typing import C_meth, C_prop, P
 
 from .typing import R, S

@@ -11,4 +11,4 @@ docstring-inheritance
 mypy>=1.4.1
 pytest
 pytype;python_version<"3.11"
-typing-extensions
+typing-extensions;python_version<"3.11"

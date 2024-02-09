@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Mapping, Protocol, TypeVar
 
-from typing_extensions import Concatenate, ParamSpec, TypeAlias
+from ._typing_compat import Concatenate, ParamSpec, TypeAlias
 
 # to maintain type information across generic functions and parametrization
 # T = TypeVar("T")

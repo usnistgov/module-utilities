@@ -19,6 +19,4 @@ pluggy==1.4.0
 pytest==8.0.0
     # via -r requirements/typing.txt
 typing-extensions==4.9.0
-    # via
-    #   -r requirements/typing.txt
-    #   mypy
+    # via mypy

@@ -11,4 +11,4 @@ pytest
 pytest-cov
 pytest-sugar
 pytest-xdist
-typing-extensions
+typing-extensions;python_version<"3.11"

@@ -14,4 +14,3 @@ dependencies:
   - docstring-inheritance
   - mypy>=1.4.1
   - pytest
-  - typing-extensions

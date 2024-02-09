@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Any, Generic, TypeVar, cast, overload
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, overload
 
 from module_utilities import cached
+
+if TYPE_CHECKING:
+    from module_utilities._typing_compat import Self
 
 R = TypeVar("R")
 T = TypeVar("T", bound="Base[R]")  # type: ignore[valid-type]

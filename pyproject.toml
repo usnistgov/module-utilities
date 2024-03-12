@@ -39,25 +39,20 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-    "module-utilities[nbval]",
-    "module-utilities[test]",
-    "module-utilities[typing-extras]",
-    "module-utilities[dev-extras]",
+    "module-utilities[dev-extras,test,typing,pipxrun,mypy,nbval]",
 ]
 dev-complete = [
-    "module-utilities[dev]",
-    "module-utilities[tools]",
+    "module-utilities[dev,tools]",
 ]
 dev-extras = [
     "ipykernel",
     "ipython",
-    "nox",
+    "nbclient",
+    "nox >= 2024.3.2",
     "pytest-accept",
 ]
 docs = [
     "autodocsumm",
-    "ghp-import",
-    "ipython",
     "module-utilities[opt-all]",
     "myst-nb",
     "pyenchant",
@@ -70,15 +65,30 @@ docs = [
 inherit = [
     "docstring-inheritance",
 ]
+mypy = [
+    "mypy >= 1.9.0",
+]
 nbval = [
     "nbval",
 ]
 opt-all = [
     "module-utilities[inherit]",
 ]
+pipxrun = [
+    # Anything needed to run tools/pipxrun.py
+    "packaging",
+]
+pipxrun-tools = [
+    # these used solely for specking tools to be used with tools/pipxrun.py
+    "conda-lock >= 2.5.5",
+    "grayskull >= 2.5.3",
+    "module-utilities[mypy]",
+    "nbqa >= 1.8.4",
+    "pyright >= 1.1.353",
+    "twine >= 5.0.0",
+]
 test = [
-    "module-utilities[test-extras]",
-    "module-utilities[opt-all]",
+    "module-utilities[test-extras,opt-all]",
 ]
 test-extras = [
     "pytest",
@@ -87,19 +97,13 @@ test-extras = [
     "pytest-xdist",
 ]
 tools = [
-    "nbqa",
+    "pipx",
     "pre-commit",
-    "pyright",
     "scriv",
 ]
 typing = [
-    "module-utilities[typing-extras]",
-    "module-utilities[opt-all]",
+    "module-utilities[pipxrun,opt-all]",
     "pytest",
-]
-typing-extras = [
-    "mypy >= 1.4.1",
-    "pytype; python_version < '3.11'",
 ]
 [project.urls]
 Documentation = "https://pages.nist.gov/module-utilities/"
@@ -207,7 +211,7 @@ max-public-methods = 30
 [tool.ruff.lint.per-file-ignores]
 "docs/conf.py" = ["INP001"]
 "noxfile.py" = ["RUF009"]
-"tools/*.py" = ["S", "A", "SLF001"]
+"tools/*.py" = ["S", "A", "SLF001", "D102"]
 "tests/*.py" = ["D", "S101"]
 "**/*.ipynb" = ["D100", "B018", "INP001"]
 
@@ -332,6 +336,11 @@ scriv = { pip = true }
 [tool.pyproject2conda.envs.build]
 extras = "build-system.requires"
 reqs = ["build"]
+base = false
+style = "requirements"
+
+[tool.pyproject2conda.envs.pipxrun-tools]
+extras = "pipxrun-tools"
 base = false
 style = "requirements"
 

@@ -8,7 +8,6 @@
 # Instead edit the corresponding pyproject.toml file.
 #
 docstring-inheritance
-mypy>=1.4.1
+packaging
 pytest
-pytype;python_version<"3.11"
 typing-extensions;python_version<"3.11"

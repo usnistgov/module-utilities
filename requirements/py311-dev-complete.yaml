@@ -14,12 +14,13 @@ dependencies:
   - docstring-inheritance
   - ipykernel
   - ipython
-  - mypy>=1.4.1
-  - nbqa
+  - mypy>=1.9.0
+  - nbclient
   - nbval
-  - nox
+  - nox>=2024.3.2
+  - packaging
+  - pipx
   - pre-commit
-  - pyright
   - pytest
   - pytest-cov
   - pytest-sugar

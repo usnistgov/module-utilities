@@ -9,8 +9,6 @@
 #
 autodocsumm
 docstring-inheritance
-ghp-import
-ipython
 myst-nb
 pyenchant
 sphinx-autobuild

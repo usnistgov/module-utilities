@@ -10,13 +10,14 @@
 docstring-inheritance
 ipykernel
 ipython
-mypy>=1.4.1
+mypy>=1.9.0
+nbclient
 nbval
-nox
+nox>=2024.3.2
+packaging
 pytest
 pytest-accept
 pytest-cov
 pytest-sugar
 pytest-xdist
-pytype;python_version<"3.11"
 typing-extensions;python_version<"3.11"

@@ -13,8 +13,6 @@ dependencies:
   - python=3.11
   - autodocsumm
   - docstring-inheritance
-  - ghp-import
-  - ipython
   - myst-nb
   - pyenchant
   - sphinx-autobuild

@@ -638,7 +638,7 @@ def test_error_with_slots() -> None:
 
     # but this should work fine:
     class test2:
-        __slots__ = ["a", "b", "_cache"]
+        __slots__ = ["_cache", "a", "b"]
 
         def __init__(self, a, b) -> None:
             self.a = a
@@ -657,7 +657,7 @@ def test_error_with_slots() -> None:
 
 def test_error_with_slots2() -> None:
     class test:
-        __slots__ = ["a", "b", "_cache"]
+        __slots__ = ["_cache", "a", "b"]
 
         def __init__(self, a, b) -> None:
             self.a = a

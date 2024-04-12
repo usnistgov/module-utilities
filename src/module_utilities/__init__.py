@@ -2,6 +2,7 @@
 Top level API :mod:`module_utilities`
 =====================================
 """
+
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _version
 

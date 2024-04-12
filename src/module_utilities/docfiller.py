@@ -2,6 +2,7 @@
 Fill and share documentation (:mod:`~module_utilities.docfiller`)
 =================================================================
 """
+
 from __future__ import annotations
 
 import inspect

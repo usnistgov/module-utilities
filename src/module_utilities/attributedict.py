@@ -2,6 +2,7 @@
 Attribute dictionary (:mod:`~module_utilities.attributedict`)
 =============================================================
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, MutableMapping, overload
@@ -13,13 +14,11 @@ from .typing import NestedMap, NestedMapVal
 
 
 @overload
-def _get_nested_values(d: NestedMap, join_string: None) -> list[str]:
-    ...
+def _get_nested_values(d: NestedMap, join_string: None) -> list[str]: ...
 
 
 @overload
-def _get_nested_values(d: NestedMap, join_string: str = ...) -> str:
-    ...
+def _get_nested_values(d: NestedMap, join_string: str = ...) -> str: ...
 
 
 def _get_nested_values(d: NestedMap, join_string: str | None = "\n") -> str | list[str]:
@@ -62,7 +61,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     2
     """
 
-    __slots__ = ("_entries", "_recursive", "_allow_missing")
+    __slots__ = ("_allow_missing", "_entries", "_recursive")
 
     def __init__(
         self,

@@ -16,12 +16,10 @@ class Athing(Generic[T, R]):
         self.parent = parent
 
     @overload
-    def __getitem__(self, index: int) -> R:
-        ...
+    def __getitem__(self, index: int) -> R: ...
 
     @overload
-    def __getitem__(self, index: slice) -> T:
-        ...
+    def __getitem__(self, index: slice) -> T: ...
 
     def __getitem__(self, index: int | slice) -> R | T:
         if isinstance(index, int):

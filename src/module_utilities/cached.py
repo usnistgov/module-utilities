@@ -5,6 +5,7 @@ Cached class properties/methods (:mod:`~module_utilities.cached`)
 
 Routines to define cached properties/methods in a class.
 """
+
 from __future__ import annotations
 
 import contextlib
@@ -78,12 +79,10 @@ class CachedProperty(Generic[S, R]):
             raise TypeError(msg)
 
     @overload
-    def __get__(self, instance: None, owner: type[Any] | None = None) -> Self:
-        ...
+    def __get__(self, instance: None, owner: type[Any] | None = None) -> Self: ...
 
     @overload
-    def __get__(self, instance: S, owner: type[Any] | None = None) -> R:
-        ...
+    def __get__(self, instance: S, owner: type[Any] | None = None) -> R: ...
 
     def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:
         if instance is None:
@@ -127,8 +126,7 @@ def decorate(
     key: str | None = ...,
     check_use_cache: bool = ...,
     as_property: Literal[True] = ...,
-) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
-    ...
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]: ...
 
 
 @overload
@@ -140,8 +138,7 @@ def decorate(
 ) -> (
     Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
     | Callable[[C_prop[S, R]], CachedProperty[S, R]]
-):
-    ...
+): ...
 
 
 def decorate(
@@ -170,15 +167,13 @@ def prop(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> CachedProperty[S, R]:
-    ...
+) -> CachedProperty[S, R]: ...
 
 
 @overload
 def prop(
     func: None = None, /, *, key: str | None = ..., check_use_cache: bool = ...
-) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
-    ...
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]: ...
 
 
 def prop(
@@ -295,8 +290,7 @@ def meth(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> C_meth[S, P, R]:
-    ...
+) -> C_meth[S, P, R]: ...
 
 
 @overload
@@ -306,8 +300,7 @@ def meth(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]: ...
 
 
 def meth(  # noqa: C901
@@ -430,13 +423,13 @@ def meth(  # noqa: C901
 
 
 @overload
-def clear(key_or_func: C_meth[S, P, R], *keys: str) -> C_meth[S, P, R]:
-    ...
+def clear(key_or_func: C_meth[S, P, R], *keys: str) -> C_meth[S, P, R]: ...
 
 
 @overload
-def clear(key_or_func: str, *keys: str) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
+def clear(
+    key_or_func: str, *keys: str
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]: ...
 
 
 def clear(

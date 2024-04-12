@@ -7,4 +7,4 @@ packaging==24.0           # via pytest
 pluggy==1.4.0             # via pytest
 pytest==8.1.1
 tomli==2.0.1              # via pytest
-typing-extensions==4.10.0
+typing-extensions==4.11.0

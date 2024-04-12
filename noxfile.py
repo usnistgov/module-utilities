@@ -564,7 +564,7 @@ def pip_compile(
 
     envs_all = ["test", "typing"]
     envs_dev = ["dev", "dev-complete", "docs"]
-    envs_dev_optional = ["test-notebook", "pipxrun-tools"]
+    envs_dev_optional = ["test-notebook", "pipxrun-tools", "test-noopt"]
 
     if session.python == PYTHON_DEFAULT_VERSION:
         envs = envs_all + envs_dev + envs_dev_optional
@@ -606,7 +606,7 @@ def uv_compile(
 
     envs_all = ["test", "typing"]
     envs_dev = ["dev", "dev-complete", "docs"]
-    envs_dev_optional = ["test-notebook", "pipxrun-tools"]
+    envs_dev_optional = ["test-notebook", "pipxrun-tools", "test-noopt"]
 
     for python in set(PYTHON_ALL_VERSIONS).union({PYTHON_DEFAULT_VERSION}):
         if python == PYTHON_DEFAULT_VERSION:

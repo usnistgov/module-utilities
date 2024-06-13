@@ -150,8 +150,8 @@ def expected_func_template() -> str:
     )
 
 
-def compare_func(__func: Callable[..., Any], __template: str, **kwargs: str) -> None:
-    assert __func.__doc__.strip() == __template.format(**kwargs).strip()  # type: ignore[union-attr]
+def compare_func(func: Callable[..., Any], template: str, /, **kwargs: str) -> None:
+    assert func.__doc__.strip() == template.format(**kwargs).strip()  # type: ignore[union-attr]
 
 
 def test_func_1(example_func: Callable[..., Any], expected_func_template: str) -> None:

@@ -6,7 +6,6 @@ Fill and share documentation (:mod:`~module_utilities.docfiller`)
 from __future__ import annotations
 
 import inspect
-from collections.abc import Mapping
 from textwrap import dedent, indent
 from typing import (
     TYPE_CHECKING,
@@ -29,6 +28,8 @@ if TYPE_CHECKING:
     )
 
     from .typing import F, NestedMap, NestedMapVal
+
+from typing import Mapping
 
 
 def indent_docstring(
@@ -371,9 +372,9 @@ def _recursive_keys(data: NestedMap) -> list[str]:
     """
     keys: list[str] = []
     for k, v in data.items():
-        if isinstance(v, dict):
+        if isinstance(v, Mapping):
             key_list = [f"{k}.{x}" for x in _recursive_keys(v)]
-        elif isinstance(v, str):
+        elif isinstance(v, str):  # pyright: ignore[reportUnnecessaryIsInstance]
             key_list = [k]
         else:
             msg = f"unknown type {type(v)}"

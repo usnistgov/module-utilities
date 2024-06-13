@@ -8,7 +8,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, MutableMapping, overload
 
 if TYPE_CHECKING:
-    from typing import Any, Iterator, Mapping
+    from typing import Any, Iterator
+
+from typing import Mapping
 
 from .typing import NestedMap, NestedMapVal
 
@@ -65,7 +67,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
 
     def __init__(
         self,
-        entries: Mapping[str, NestedMapVal] | None = None,
+        entries: NestedMap | None = None,
         recursive: bool = True,
         allow_missing: bool = True,
     ) -> None:
@@ -73,7 +75,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             entries = {}
         if not isinstance(entries, dict):
             entries = dict(entries)
-        self._entries = entries
+        self._entries: dict[str, NestedMapVal] = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
 
@@ -132,7 +134,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     def __getattr__(self, attr: str) -> Any:
         if attr in self._entries:
             out = self._entries[attr]
-            if self._recursive and isinstance(out, dict):
+            if self._recursive and isinstance(out, Mapping):
                 out = type(self)(out)
             return out
 
@@ -153,7 +155,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     @classmethod
     def _from_dict(
         cls,
-        params: Mapping[str, NestedMapVal],
+        params: NestedMap,
         max_level: int = 1,
         level: int = 0,
         recursive: bool = True,
@@ -162,7 +164,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         out = cls(recursive=recursive)
         for k in params:
             v = params[k]
-            if isinstance(v, dict) and level < max_level:
+            if isinstance(v, Mapping) and level < max_level:
                 v = cls._from_dict(
                     v, max_level=max_level, level=level + 1, recursive=recursive
                 )
@@ -172,7 +174,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     @classmethod
     def from_dict(
         cls,
-        params: Mapping[str, NestedMapVal],
+        params: NestedMap,
         max_level: int = 1,
         recursive: bool = True,
     ) -> AttributeDict:

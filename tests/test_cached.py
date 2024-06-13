@@ -79,7 +79,7 @@ def test_meth_bad_hash() -> None:
             self._cache: dict[str, Any] = {}
 
         @cached.meth
-        def thing(self, x):
+        def thing(self, x: Any) -> Any:
             return x
 
     x = Tmp()

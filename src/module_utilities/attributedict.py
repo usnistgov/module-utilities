@@ -5,12 +5,14 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, MutableMapping, overload
+from typing import TYPE_CHECKING, overload
 
 if TYPE_CHECKING:
-    from typing import Any, Iterator
+    from collections.abc import Iterator
+    from typing import Any
 
-from typing import Mapping
+from collections.abc import Mapping
+from typing import MutableMapping
 
 from .typing import NestedMap, NestedMapVal
 

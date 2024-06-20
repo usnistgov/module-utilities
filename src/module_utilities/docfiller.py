@@ -6,10 +6,10 @@ Fill and share documentation (:mod:`~module_utilities.docfiller`)
 from __future__ import annotations
 
 import inspect
+from collections.abc import Iterable
 from textwrap import dedent, indent
 from typing import (
     TYPE_CHECKING,
-    Iterable,
     NamedTuple,
     cast,
 )
@@ -21,15 +21,15 @@ from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from typing import (
         Any,
         Callable,
-        Sequence,
     )
 
     from .typing import F, NestedMap, NestedMapVal
 
-from typing import Mapping
+from collections.abc import Mapping
 
 
 def indent_docstring(

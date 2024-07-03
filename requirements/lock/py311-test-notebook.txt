@@ -4,16 +4,16 @@ appnope==0.1.4            # via ipykernel
 asttokens==2.4.1          # via stack-data
 attrs==23.2.0             # via jsonschema, referencing
 comm==0.2.2               # via ipykernel
-coverage==7.5.3           # via nbval, pytest-cov
-debugpy==1.8.1            # via ipykernel
+coverage==7.5.4           # via nbval, pytest-cov
+debugpy==1.8.2            # via ipykernel
 decorator==5.1.1          # via ipython
 docstring-inheritance==2.2.0  # via -r requirements/test-notebook.txt
 execnet==2.1.1            # via pytest-xdist
 executing==2.0.1          # via stack-data
 fastjsonschema==2.20.0    # via nbformat
 iniconfig==2.0.0          # via pytest
-ipykernel==6.29.4         # via nbval
-ipython==8.25.0           # via ipykernel
+ipykernel==6.29.5         # via nbval
+ipython==8.26.0           # via ipykernel
 jedi==0.19.1              # via ipython
 jsonschema==4.22.0        # via nbformat
 jsonschema-specifications==2023.12.1  # via jsonschema

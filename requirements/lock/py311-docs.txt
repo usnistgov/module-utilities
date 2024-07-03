@@ -14,7 +14,7 @@ charset-normalizer==3.3.2  # via requests
 click==8.1.7              # via jupyter-cache, uvicorn
 colorama==0.4.6           # via sphinx-autobuild
 comm==0.2.2               # via ipykernel
-debugpy==1.8.1            # via ipykernel
+debugpy==1.8.2            # via ipykernel
 decorator==5.1.1          # via ipython
 docstring-inheritance==2.2.0  # via -r requirements/docs.txt
 docutils==0.21.2          # via myst-parser, pydata-sphinx-theme, sphinx
@@ -24,9 +24,9 @@ greenlet==3.0.3           # via sqlalchemy
 h11==0.14.0               # via uvicorn
 idna==3.7                 # via anyio, requests
 imagesize==1.4.1          # via sphinx
-importlib-metadata==7.2.0  # via jupyter-cache, myst-nb
-ipykernel==6.29.4         # via myst-nb
-ipython==8.25.0           # via ipykernel, myst-nb
+importlib-metadata==8.0.0  # via jupyter-cache, myst-nb
+ipykernel==6.29.5         # via myst-nb
+ipython==8.26.0           # via ipykernel, myst-nb
 jedi==0.19.1              # via ipython
 jinja2==3.1.4             # via myst-parser, sphinx
 jsonschema==4.22.0        # via nbformat
@@ -39,7 +39,7 @@ markupsafe==2.1.5         # via jinja2
 matplotlib-inline==0.1.7  # via ipykernel, ipython
 mdit-py-plugins==0.4.1    # via myst-parser
 mdurl==0.1.2              # via markdown-it-py
-myst-nb==1.1.0            # via -r requirements/docs.txt
+myst-nb==1.1.1            # via -r requirements/docs.txt
 myst-parser==3.0.1        # via myst-nb
 nbclient==0.10.0          # via jupyter-cache, myst-nb
 nbformat==5.10.4          # via jupyter-cache, myst-nb, nbclient
@@ -52,7 +52,7 @@ prompt-toolkit==3.0.47    # via ipython
 psutil==6.0.0             # via ipykernel
 ptyprocess==0.7.0         # via pexpect
 pure-eval==0.2.2          # via stack-data
-pydata-sphinx-theme==0.15.3  # via sphinx-book-theme
+pydata-sphinx-theme==0.15.4  # via sphinx-book-theme
 pyenchant==3.2.2          # via sphinxcontrib-spelling, -r requirements/docs.txt
 pygments==2.18.0          # via accessible-pygments, ipython, pydata-sphinx-theme, sphinx
 python-dateutil==2.9.0.post0  # via jupyter-client

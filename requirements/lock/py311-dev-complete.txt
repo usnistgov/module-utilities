@@ -11,20 +11,20 @@ click==8.1.7              # via click-log, scriv, userpath
 click-log==0.4.0          # via scriv
 colorlog==6.8.2           # via nox
 comm==0.2.2               # via ipykernel
-coverage==7.5.3           # via nbval, pytest-cov
-debugpy==1.8.1            # via ipykernel
+coverage==7.5.4           # via nbval, pytest-cov
+debugpy==1.8.2            # via ipykernel
 decorator==5.1.1          # via ipython
 distlib==0.3.8            # via virtualenv
 docstring-inheritance==2.2.0  # via -r requirements/dev-complete.txt
 execnet==2.1.1            # via pytest-xdist
 executing==2.0.1          # via stack-data
 fastjsonschema==2.20.0    # via nbformat
-filelock==3.15.3          # via virtualenv
+filelock==3.15.4          # via virtualenv
 identify==2.5.36          # via pre-commit
 idna==3.7                 # via requests
 iniconfig==2.0.0          # via pytest
-ipykernel==6.29.4         # via nbval, -r requirements/dev-complete.txt
-ipython==8.25.0           # via ipykernel, -r requirements/dev-complete.txt
+ipykernel==6.29.5         # via nbval, -r requirements/dev-complete.txt
+ipython==8.26.0           # via ipykernel, -r requirements/dev-complete.txt
 jedi==0.19.1              # via ipython
 jinja2==3.1.4             # via scriv
 jsonschema==4.22.0        # via nbformat
@@ -35,7 +35,7 @@ markdown-it-py==3.0.0     # via scriv
 markupsafe==2.1.5         # via jinja2
 matplotlib-inline==0.1.7  # via ipykernel, ipython
 mdurl==0.1.2              # via markdown-it-py
-mypy==1.10.0              # via -r requirements/dev-complete.txt
+mypy==1.10.1              # via -r requirements/dev-complete.txt
 mypy-extensions==1.0.0    # via mypy
 nbclient==0.10.0          # via -r requirements/dev-complete.txt
 nbformat==5.10.4          # via nbclient, nbval
@@ -75,5 +75,5 @@ traitlets==5.14.3         # via comm, ipykernel, ipython, jupyter-client, jupyte
 typing-extensions==4.12.2  # via ipython, mypy
 urllib3==2.2.2            # via requests
 userpath==1.9.2           # via pipx
-virtualenv==20.26.2       # via nox, pre-commit
+virtualenv==20.26.3       # via nox, pre-commit
 wcwidth==0.2.13           # via prompt-toolkit

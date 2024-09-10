@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-# from typing_extensions import reveal_type
 import pytest
 
 from module_utilities import cached
@@ -92,24 +91,6 @@ def test_meth_bad_hash() -> None:
     v = {"a": 1}
     assert x.thing(v) == v
     assert len(x._cache["thing"]) == 0
-
-    # class tmp2:
-    #     def __init__(self):
-    #         self._cache: dict[str, Any] = {}
-
-    #     @cached.prop
-    #     def prop(self) -> int:
-    #         return 1
-
-    #     @cached.meth
-    #     def meth(self) -> int:
-    #         return 2
-
-    # y = tmp2()
-
-    # reveal_type(y.prop)
-    # reveal_type(y.meth)
-    # reveal_type(y.meth())
 
 
 class Baseclass:
@@ -569,16 +550,6 @@ def test_use_cache2() -> None:  # noqa: C901
 
     x = Tmp()
 
-    # if TYPE_CHECKING:
-    #     reveal_type(x.prop2)
-    #     reveal_type(x.meth())
-    #     reveal_type(x.there())
-    #     reveal_type(x.prop4)
-    #     reveal_type(x.meth1())
-    #     reveal_type(x.meth2(2))
-    #     reveal_type(x.prop_test)
-    #     reveal_type(x.clearer())
-
     for p in ["prop0", "prop1", "prop2", "prop3"]:
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
@@ -694,23 +665,11 @@ def test_with_kwargs() -> None:
         def meth2(self, /, **kws: int) -> dict[str, int]:
             return kws
 
-        # need to have / above
-        # the following will give an error with mypy
-        # @cached.meth
-        # def meth2b(self, **kws: int) -> dict[str, int]:
-        #     return kws
-
         @cached.meth
         def meth3(
             self, /, *args: int, **kwargs: int
         ) -> tuple[tuple[int, ...], dict[str, int]]:
             return args, kwargs
-
-        # need to have slash above
-        # the following will give an error with mypy
-        # @cached.meth
-        # def meth3b(self, *args: int, **kwargs: int) -> tuple[tuple[int, ...], dict[str, int]]:
-        #     return args, kwargs
 
         @cached.meth
         def meth4(self, beta: float, *args: int) -> tuple[float, tuple[int, ...]]:
@@ -730,15 +689,6 @@ def test_with_kwargs() -> None:
             return beta, args, kwargs
 
     test()
-    # reveal_type(x.meth0)
-    # reveal_type(x.meth1)
-    # reveal_type(x.meth2)
-    # reveal_type(x.meth2b)
-    # reveal_type(x.meth3)
-    # reveal_type(x.meth3b)
-    # reveal_type(x.meth4)
-    # reveal_type(x.meth5)
-    # reveal_type(x.meth5b)
 
 
 def test_meth_single_arg() -> None:

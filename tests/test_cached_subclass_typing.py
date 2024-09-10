@@ -36,9 +36,6 @@ class Derived(Base):
     def prop_cached(self) -> int:
         return 1
 
-    # def meth(self, x: float) -> float:
-    #     return x
-
     @cached.meth
     def meth_cached(self, x: int) -> int:
         return x

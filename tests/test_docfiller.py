@@ -4,8 +4,6 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import cast
 
-# from typing import TYPE_CHECKING
-# from typing_extensions import reveal_type
 import pytest
 
 from module_utilities import docfiller
@@ -250,7 +248,7 @@ def test_docfiller_getitem() -> None:
     assert func4.__doc__ == "x : int"
 
 
-@pytest.fixture()
+@pytest.fixture
 def params():
     return dedent_recursive(
         {
@@ -270,7 +268,7 @@ def params():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def expected():
     return dedent(
         """
@@ -290,10 +288,10 @@ def expected():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def template(params):
     @docfiller.doc_decorate(**params)
-    def func(*args, **kwargs) -> None:  # noqa: ARG001
+    def func(*args, **kwargs) -> None:
         """
         {summary}
 
@@ -846,9 +844,6 @@ def test_prepend() -> None:
         """
         return x + y
 
-    # reveal_type(template)
-    # reveal_type(template(1.0, 2.0))
-
     @d(template)
     def hello(x: float, y: float) -> float:
         """
@@ -859,9 +854,6 @@ def test_prepend() -> None:
         return x + y
 
     assert hello.__doc__ == expected
-
-    # reveal_type(hello)
-    # reveal_type(hello(1., 2.))
 
     # prepend
     @d(template, _prepend=True)

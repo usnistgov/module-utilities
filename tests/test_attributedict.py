@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from module_utilities.typing import NestedMap
 
 
-@pytest.fixture()
+@pytest.fixture
 def data() -> NestedMap:
     return {
         "a": "a_val",
@@ -20,12 +20,12 @@ def data() -> NestedMap:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def ref_values() -> list[str]:
     return ["a_val", "b_val", "c_val", "b0b1_val", "c0c1_val"]
 
 
-@pytest.fixture()
+@pytest.fixture
 def adata(data: NestedMap) -> attributedict.AttributeDict:
     return attributedict.AttributeDict(data)
 

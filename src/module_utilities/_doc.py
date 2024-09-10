@@ -43,8 +43,6 @@ def doc(
     def decorator(decorated: F) -> F:
         # collecting docstring and docstring templates
         docstring_components: list[str | Callable[..., Any]] = []
-        # if decorated.__doc__:
-        #     docstring_components.append(dedent(decorated.__doc__))
 
         for docstring in docstrings:
             if docstring is None:
@@ -56,7 +54,6 @@ def doc(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
             elif callable(docstring) and hasattr(docstring, "__doc__"):
-                # docstring_components.append(docstring)
                 docstring_components.append(dedent(docstring.__doc__ or ""))
             else:
                 msg = f"Unknown docstring caught {type(docstring)=}"
@@ -70,7 +67,6 @@ def doc(
                 docstring_components.append(dedent(decorated.__doc__ or ""))
 
         params_applied = [
-            # component.format(**params)
             component.format_map(params)
             if isinstance(component, str) and len(params) > 0
             else component

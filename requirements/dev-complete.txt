@@ -10,12 +10,11 @@
 docstring-inheritance
 ipykernel
 ipython
-mypy>=1.10.0
+mypy>=1.11.2
 nbclient>=0.10.0
 nbval
 nox>=2024.4.15
 packaging
-pipx
 pre-commit
 pytest
 pytest-accept

@@ -95,10 +95,6 @@ class Derived(Base[int]):
         return x
 
     def derived(self) -> None:
-        # reveal_type(self.there.output)
-        # reveal_type(self.there.other)
-        # reveal_type(self.there.__getitem__(0))
-        # reveal_type(self.there[:])
         pass
 
 

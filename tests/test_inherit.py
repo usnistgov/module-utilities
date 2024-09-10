@@ -94,7 +94,6 @@ def test_basic() -> None:
         return x + y
 
     docinherit.DOC_SUB = True  # type: ignore[attr-defined]
-    # module_utilities.options.DOC_SUB = True
     assert (
         dedent(func3.__doc__ or "").strip()
         == dedent(
@@ -537,8 +536,8 @@ def test_inherit_3(
     )
 
     for d in [
-        docinherit.factory_docfiller_from_parent(example_class, docfiller_float),  # type: ignore[list-item]
-        docfiller_float.factory_from_parent(example_class),  # type: ignore[list-item]
+        docinherit.factory_docfiller_from_parent(example_class, docfiller_float),
+        docfiller_float.factory_from_parent(example_class),
     ]:
 
         @d(example_class)
@@ -701,8 +700,8 @@ def test_inherit_5(example_class: Any, docfiller_str: DocFiller) -> None:
     for d in [
         docinherit.factory_docfiller_inherit_from_parent(
             example_class, docfiller=docfiller_str
-        ),  # type: ignore[list-item]
-        docfiller_str.factory_inherit_from_parent(example_class),  # type: ignore[list-item]
+        ),
+        docfiller_str.factory_inherit_from_parent(example_class),
     ]:
 
         @d(example_class)

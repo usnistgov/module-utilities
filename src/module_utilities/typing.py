@@ -9,11 +9,6 @@ from typing import Any, Callable, Mapping, Protocol, TypeVar
 
 from ._typing_compat import Concatenate, ParamSpec, TypeAlias
 
-# to maintain type information across generic functions and parametrization
-# T = TypeVar("T")
-# used in decorators to preserve the signature of the function it decorates
-# see https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
-
 __all__ = [
     "C_meth",
     "C_prop",

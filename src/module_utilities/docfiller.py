@@ -628,7 +628,6 @@ class DocFiller:
 
         def _update_data(x: DocFiller | NestedMap | dict[str, NestedMap]) -> None:
             if isinstance(x, DocFiller):
-                # x = x.params
                 x = x.data
             data.update(**x)
 
@@ -682,28 +681,6 @@ class DocFiller:
     def params(self) -> AttributeDict:
         """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
-
-    # @cached.prop
-    # def atest(self) -> int:
-    #     """
-    #     A thing that does stuff
-
-    #     Returns
-    #     -------
-    #     int
-    #     """
-    #     return 1
-
-    # @property
-    # def btest(self) -> int:
-    #     """
-    #     B thing that does stuff
-
-    #     Returns
-    #     -------
-    #     int
-    #     """
-    #     return 2
 
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
@@ -938,14 +915,6 @@ class DocFiller:
                 combine_keys = [combine_keys]
 
             updated_params = {k: params[k] for k in keep_keys}
-
-            # if isinstance(combine_keys, (list, tuple)):
-            #     combine_keys = {'': combine_keys}
-
-            # for k, v in combine_keys.items():
-
-            #     if k in updated_params:
-            #         updated_params =
 
             for k in combine_keys:
                 updated_params.update(**params[k])

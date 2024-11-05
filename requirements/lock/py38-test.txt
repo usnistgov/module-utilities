@@ -12,5 +12,5 @@ pytest-cov==5.0.0         # via -r requirements/test.txt
 pytest-sugar==1.0.0       # via -r requirements/test.txt
 pytest-xdist==3.6.1       # via -r requirements/test.txt
 termcolor==2.4.0          # via pytest-sugar
-tomli==2.0.1              # via coverage, pytest
+tomli==2.0.2              # via coverage, pytest
 typing-extensions==4.12.2  # via -r requirements/test.txt

@@ -101,6 +101,8 @@ UVXRUN_MIN_REQUIREMENTS = "requirements/uvxrun-tools.txt"
 def get_uvxrun_specs(requirements: str | None = None) -> uvxrun.Specifications:
     """Get specs for uvxrun."""
     requirements = requirements or UVXRUN_MIN_REQUIREMENTS
+    if not Path(requirements).exists():
+        requirements = None
     return uvxrun.Specifications.from_requirements(requirements=requirements)
 
 
@@ -305,6 +307,17 @@ def add_opts(
 
 
 # * Environments------------------------------------------------------------------------
+# ** test-all
+@nox.session(name="test-all", python=False)
+def test_all(session: Session) -> None:
+    """Run all tests and coverage"""
+    for py in PYTHON_ALL_VERSIONS:
+        session.notify(f"test-{py}")
+    session.notify("test-noopt")
+    session.notify("test-notebook")
+    session.notify("coverage")
+
+
 # ** Dev (conda)
 @add_opts
 def dev(
@@ -370,12 +383,13 @@ def requirements(
     These will be placed in the directory "./requirements".
     """
     uvxrun.run(
-        "pyproject2conda>=0.11.0",
+        "pyproject2conda",
         "project",
         "--verbose",
         *(["--overwrite=force"] if opts.requirements_force else []),
         session=session,
         external=True,
+        specs=get_uvxrun_specs(),
     )
 
     if not opts.requirements_no_notify and opts.lock:

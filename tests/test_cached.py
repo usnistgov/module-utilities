@@ -1,4 +1,5 @@
 # mypy: disable-error-code="no-untyped-def, no-untyped-call"
+# pylint: disable=protected-access,missing-class-docstring,no-member,attribute-defined-outside-init
 
 from __future__ import annotations
 
@@ -312,7 +313,7 @@ def test_meth4() -> None:
 
 def test_clear() -> None:  # noqa: C901
     class test(Baseclass):
-        def __init__(self, a, b) -> None:
+        def __init__(self, a, b) -> None:  # pylint: disable=super-init-not-called
             self._a = a
             self._b = b
 
@@ -622,7 +623,7 @@ def test_error_with_slots() -> None:
 
     x2 = test2(1, 2)
 
-    assert x2.prop == (1, 2)
+    assert x2.prop == (1, 2)  # pylint: disable=comparison-with-callable
     assert x2._cache["prop"] == (1, 2)
 
 

@@ -6,7 +6,7 @@ Fill and share documentation (:mod:`~module_utilities.docfiller`)
 from __future__ import annotations
 
 import inspect
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from textwrap import dedent, indent
 from typing import (
     TYPE_CHECKING,
@@ -21,15 +21,12 @@ from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Callable, Sequence
     from typing import (
         Any,
-        Callable,
     )
 
     from .typing import F, NestedMap, NestedMapVal
-
-from collections.abc import Mapping
 
 
 def indent_docstring(
@@ -289,7 +286,7 @@ def _parse_docstring(
 
     parsed = cast(
         "dict[str, str | list[str] | list[Parameter]]",
-        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]
+        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]  # pylint: disable=protected-access
     )
 
     if expand:
@@ -684,7 +681,7 @@ class DocFiller:
 
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
-        return doc_decorate(**self.params)
+        return doc_decorate(**self.params)  # pylint: disable=not-a-mapping)
 
     def update(self, *args: Any, **kwargs: Any) -> DocFiller:
         """Update parameters"""
@@ -710,7 +707,7 @@ class DocFiller:
 
 
         """
-        return self._default_decorator(func)
+        return self._default_decorator(func)  # pylint: disable=too-many-function-args
 
     def __call__(
         self,
@@ -778,7 +775,7 @@ class DocFiller:
         if ntemplates == nparams == 0 and not _prepend:
             return self.decorate
         if nparams == 0:
-            return doc_decorate(*templates, _prepend=_prepend, **self.params)
+            return doc_decorate(*templates, _prepend=_prepend, **self.params)  # pylint: disable=not-a-mapping
 
         return self.update(params)(*templates, _prepend=_prepend)
 

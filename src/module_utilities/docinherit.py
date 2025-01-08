@@ -10,9 +10,11 @@ Note that to use this module, you must install
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from .docfiller import DocFiller
     from .typing import F
 
@@ -25,8 +27,6 @@ except ImportError:  # pragma: no cover
 
 
 if HAS_INHERIT:
-    from typing import Any, Callable
-
     from .options import DOC_SUB
 
     def doc_inherit(

@@ -1,4 +1,5 @@
 # mypy: disable-error-code="no-untyped-def"
+# pylint: disable=protected-access
 from __future__ import annotations
 
 from textwrap import dedent
@@ -184,7 +185,7 @@ def test_docfiller_getitem() -> None:
         keep_keys="parameters",
     )
 
-    dd = cast(DocFiller, d["parameters"])
+    dd = cast("DocFiller", d["parameters"])
 
     @dd.decorate
     def func() -> None:
@@ -568,7 +569,7 @@ def test_docfiller_namespace() -> None:
 
     for dd in [dd0, dd1]:
 
-        @dd.decorate
+        @dd.decorate  # pylint: disable=cell-var-from-loop
         def func() -> None:
             """
             Parameters
@@ -801,7 +802,7 @@ def test_docfiller_on_class() -> None:
     assert hello.__doc__ == expected
 
     @d(hello)
-    class hello2(hello):
+    class hello2(hello):  # pylint: disable=missing-class-docstring,unused-variable
         pass
 
     assert hello.__doc__ == expected

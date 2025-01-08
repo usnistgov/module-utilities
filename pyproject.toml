@@ -98,6 +98,7 @@ test-notebook = [
     { include-group = "test" },
 ]
 typing = [
+    "pylint",
     "pytest",
     { include-group = "optional" },
     { include-group = "uvxrun" },

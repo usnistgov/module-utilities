@@ -5,16 +5,14 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, overload
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, MutableMapping, overload
+
+from .typing import NestedMap, NestedMapVal
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from typing import Any
-
-from collections.abc import Mapping
-from typing import MutableMapping
-
-from .typing import NestedMap, NestedMapVal
 
 
 @overload
@@ -133,7 +131,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     def _update(self, *args: Any, **kwargs: Any) -> None:
         self._entries.update(*args, **kwargs)
 
-    def __getattr__(self, attr: str) -> Any:
+    def __getattr__(self, attr: str) -> Any:  # pylint: disable=inconsistent-return-statements)
         if attr in self._entries:
             out = self._entries[attr]
             if self._recursive and isinstance(out, Mapping):

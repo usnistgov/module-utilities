@@ -1,13 +1,18 @@
 # pyright: strict
+# pylint: disable=missing-class-docstring,cell-var-from-loop
 from __future__ import annotations
 
 from textwrap import dedent
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
 from module_utilities import docinherit
 from module_utilities.docfiller import DocFiller
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 
 pytestmark = [
     pytest.mark.inherit,

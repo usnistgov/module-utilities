@@ -19,6 +19,7 @@ dependencies:
   - nbval
   - nox>=2024.4.15
   - packaging
+  - pylint
   - pytest
   - pytest-cov
   - pytest-sugar

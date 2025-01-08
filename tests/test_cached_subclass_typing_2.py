@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, overload
@@ -42,7 +43,7 @@ class Base(Generic[R]):
 
     @property
     def val(self) -> R:
-        return cast(R, 1)
+        return cast("R", 1)
 
     @cached.prop
     def athing(self) -> Self:

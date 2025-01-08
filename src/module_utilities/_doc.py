@@ -4,6 +4,7 @@ See https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py
 would just use the pandas version, but since it's a private
 module, feel it's better to have static version here.
 """
+# pylint: disable=protected-access
 
 from __future__ import annotations
 
@@ -11,13 +12,14 @@ from textwrap import dedent
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from collections.abc import Callable
+    from typing import Any
 
     from .typing import F
 
 
 def doc(
-    *docstrings: None | str | Callable[..., Any], _prepend: bool = False, **params: str
+    *docstrings: str | Callable[..., Any] | None, _prepend: bool = False, **params: str
 ) -> Callable[[F], F]:  # pyre-ignore
     """
     A decorator to take docstring templates, concatenate them and perform string

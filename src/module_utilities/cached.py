@@ -4,6 +4,7 @@ Cached class properties/methods (:mod:`~module_utilities.cached`)
 
 Routines to define cached properties/methods in a class.
 """
+# pylint: disable=protected-access
 
 from __future__ import annotations
 
@@ -12,17 +13,18 @@ from functools import update_wrapper, wraps
 from inspect import signature
 from typing import TYPE_CHECKING, Generic, cast, overload
 
+from .typing import R, S
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from typing import (
         Any,
-        Callable,
         Literal,
     )
 
     from ._typing_compat import Self
     from .typing import C_meth, C_prop, P
 
-from .typing import R, S
 
 __all__ = ["CachedProperty", "clear", "decorate", "meth", "prop"]
 
@@ -90,7 +92,7 @@ class CachedProperty(Generic[S, R]):
         if (not self._check_use_cache) or (getattr(instance, "_use_cache", False)):
             try:
                 return cast(
-                    R,
+                    "R",
                     instance._cache[self._key],  # pyright: ignore [reportPrivateUsage]
                 )
             except AttributeError:
@@ -362,7 +364,7 @@ def meth(  # noqa: C901
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                     try:
                         return cast(
-                            R,
+                            "R",
                             self._cache[key_func],  # pyright: ignore [reportPrivateUsage]
                         )
                     except AttributeError:
@@ -398,7 +400,7 @@ def meth(  # noqa: C901
                 )
 
                 try:
-                    return cast(R, self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
+                    return cast("R", self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
                 except TypeError:
                     # this means that key_lookup is bad hash
                     return _func(self, *args, **kwargs)

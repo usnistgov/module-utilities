@@ -129,6 +129,7 @@ requirements: ## rebuild all requirements/environment files
 
 # * Typing ---------------------------------------------------------------------
 .PHONY: mypy pyright pyright-watch pylint _typecheck typecheck
+PYLINT_OPTS = --enable-all-extensions
 mypy: ## Run mypy
 	$(UVXRUN) $(UVXRUN_OPTS) -c mypy
 pyright: ## Run pyright
@@ -136,7 +137,7 @@ pyright: ## Run pyright
 pyright-watch: ## Run pyright in watch mode
 	$(UVXRUN) $(UVXRUN_OPTS) -c "pyright -w"
 pylint: ## Run pylint
-	$(UVRUN) pylint src tests
+	$(UVRUN) pylint $(PYLINT_OPTS) src tests
 _typecheck:
 	$(UVXRUN) $(UVXRUN_OPTS) -c mypy -c pyright
 typecheck: _typecheck pylint ## Run mypy and pyright
@@ -144,7 +145,7 @@ typecheck: _typecheck pylint ## Run mypy and pyright
 .PHONY: tools-typecheck
 tools-typecheck:
 	$(UVXRUN) $(UVXRUN_OPTS) -c "mypy --strict" -c pyright -- noxfile.py tools/*.py
-	$(UVRUN) pylint noxfile.py tools
+	$(UVRUN) pylint $(PYLINT_OPTS) noxfile.py tools
 
 # * NOX ------------------------------------------------------------------------
 # ** docs
@@ -182,13 +183,21 @@ typing-typecheck:
 	$(NOX) -s typing -- +m mypy pyright pylint
 
 # ** dist pypi
-.PHONY: build release-test release
+.PHONY: build publish publish-test
 build: ## build dist
 	$(NOX) -s build
-release: ## release to pypi, can pass posargs=...
+publish: ## publish to pypi
 	$(NOX) -s publish -- +p release
-release-test: ## test release on testpypi
+publish-test: ## publish to testpypi
 	$(NOX) -s publish -- +p test
+
+.PHONY: uv-publish uv-publish-test
+_UV_PUBLISH = uv publish --username __token__ --keyring-provider subprocess
+uv-publish: ## uv release
+	$(_UV_PUBLISH)
+uv-publish-test: ## uv test release on testpypi
+	$(_UV_PUBLISH) --publish-url https://test.pypi.org/legacy/
+
 
 # ** dist conda
 .PHONY: conda-recipe conda-build
@@ -233,7 +242,7 @@ notebook-pyright: _NBQA = -c pyright
 notebook-pyright: ## run nbqa pyright
 	$(NBQA)
 notebook-pylint:: ## run nbqa pylint
-	$(_NBQA_UVXRUN) $(UVXRUN_OPTS) -c "nbqa --nbqa-shell \"$(_PYTHON) -m pylint\" $(NOTEBOOKS)"
+	$(_NBQA_UVXRUN) $(UVXRUN_OPTS) -c "nbqa --nbqa-shell \"$(_PYTHON) -m pylint $(PYLINT_OPTS)\" $(NOTEBOOKS)"
 notebook-typecheck: _NBQA = -c mypy -c pyright
 notebook-typecheck: notebook-pylint ## run nbqa mypy/pyright
 	$(NBQA)

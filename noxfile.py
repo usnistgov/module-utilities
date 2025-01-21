@@ -275,11 +275,14 @@ def install_dependencies(
     no_dev: bool = True,
     only_group: bool = False,
     include_editable_package: bool = False,
+    lock: bool | None = None,
 ) -> None:
     """General dependencies installer"""
     if python_version is None:
         assert isinstance(session.python, str)  # noqa: S101
         python_version = session.python
+
+    lock = lock if lock is not None else opts.lock
 
     if isinstance(session.virtualenv, CondaEnv):
         environment_file = infer_requirement_path(
@@ -311,7 +314,7 @@ def install_dependencies(
         if include_editable_package:
             install_package(session, editable=True, update=True)
 
-    elif opts.lock:
+    elif lock:  # pylint: disable=confusing-consecutive-elif
         session.run_install(
             "uv",
             "sync",
@@ -606,7 +609,7 @@ def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     test_opts = (
         (opts.test_opts or [])
         + test_nbval_opts
-        + list(map(str, Path("examples/usage").glob("*.ipynb")))
+        + [str(p) for p in Path("examples/usage").glob("*.ipynb")]
     )
 
     session.log(f"{test_opts = }")
@@ -703,14 +706,15 @@ def docs(  # noqa: C901
     calls 'make -C docs html'. With 'release' option, you can set the
     message with 'message=...' in posargs.
     """
-    install_dependencies(session, name="docs", opts=opts, include_editable_package=True)
+    cmd = opts.docs or []
+    cmd = ["html"] if not opts.docs_run and not cmd else list(cmd)
+    name = "docs-live" if "livehtml" in cmd else "docs"
+
+    install_dependencies(session, name=name, opts=opts, include_editable_package=True)
 
     if opts.version:
         session.env["SETUPTOOLS_SCM_PRETEND_VERSION"] = opts.version
     session_run_commands(session, opts.docs_run)
-
-    cmd = opts.docs or []
-    cmd = ["html"] if not opts.docs_run and not cmd else list(cmd)
 
     if "symlink" in cmd:
         cmd.remove("symlink")
@@ -727,7 +731,7 @@ def docs(  # noqa: C901
         common_opts = ["--doctree-dir=docs/_build/doctree"]
         for c in combine_list_str(cmd):
             if c == "clean":
-                for d in ["docs/_build", "generated", "reference/generated"]:
+                for d in ("docs/_build", "generated", "reference/generated"):
                     shutil.rmtree(Path(d), ignore_errors=True)
                 session.log("cleaned docs")
             elif c == "livehtml":
@@ -741,12 +745,12 @@ def docs(  # noqa: C901
                     "--open-browser",
                     *(
                         f"--ignore='*/{d}/*'"
-                        for d in [
+                        for d in (
                             "_build",
                             "generated",
                             "jupyter_execute",
                             ".ipynb_checkpoints",
-                        ]
+                        )
                     ),
                 )
             else:
@@ -818,7 +822,7 @@ def typing(  # noqa: C901, PLR0912
         cmd = list(cmd)
         cmd.remove("clean")
 
-        for name in [".mypy_cache", ".pytype"]:
+        for name in (".mypy_cache", ".pytype"):
             p = Path(session.create_tmp()) / name
             if p.exists():
                 session.log(f"removing cache {p}")
@@ -849,6 +853,7 @@ def typing(  # noqa: C901, PLR0912
                 # A bit dangerous, but needed to allow pylint
                 # to work across versions.
                 "--disable=unrecognized-option",
+                "--enable-all-extensions",
                 "src",
                 "tests",
             )
@@ -863,7 +868,9 @@ def typing(  # noqa: C901, PLR0912
 # NOTE: you can skip having the build environment and
 # just use uv build, but faster to use environment ...
 USE_ENVIRONMENT_FOR_BUILD = False
-_build_dec = nox.session if USE_ENVIRONMENT_FOR_BUILD else nox.session(python=False)
+_build_dec = nox.session(
+    python=PYTHON_DEFAULT_VERSION if USE_ENVIRONMENT_FOR_BUILD else False
+)
 
 
 @_build_dec
@@ -876,7 +883,7 @@ def build(session: nox.Session, opts: SessionParams) -> None:  # noqa: C901
     Pass `--build-isolation` to use build isolation.
     """
     if USE_ENVIRONMENT_FOR_BUILD:
-        install_dependencies(session, name="build", opts=opts)
+        install_dependencies(session, name="build", opts=opts, lock=False)
 
     if opts.version:
         session.env["SETUPTOOLS_SCM_PRETEND_VERSION"] = opts.version

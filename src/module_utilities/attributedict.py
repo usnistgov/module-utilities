@@ -2,24 +2,26 @@
 Attribute dictionary (:mod:`~module_utilities.attributedict`)
 =============================================================
 """
+
+# pylint: disable=deprecated-typing-alias
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, MutableMapping, overload
-
-if TYPE_CHECKING:
-    from typing import Any, Iterator, Mapping
 
 from .typing import NestedMap, NestedMapVal
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from typing import Any
+
 
 @overload
-def _get_nested_values(d: NestedMap, join_string: None) -> list[str]:
-    ...
+def _get_nested_values(d: NestedMap, join_string: None) -> list[str]: ...
 
 
 @overload
-def _get_nested_values(d: NestedMap, join_string: str = ...) -> str:
-    ...
+def _get_nested_values(d: NestedMap, join_string: str = ...) -> str: ...
 
 
 def _get_nested_values(d: NestedMap, join_string: str | None = "\n") -> str | list[str]:
@@ -62,11 +64,11 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     2
     """
 
-    __slots__ = ("_entries", "_recursive", "_allow_missing")
+    __slots__ = ("_allow_missing", "_entries", "_recursive")
 
     def __init__(
         self,
-        entries: Mapping[str, NestedMapVal] | None = None,
+        entries: NestedMap | None = None,
         recursive: bool = True,
         allow_missing: bool = True,
     ) -> None:
@@ -74,7 +76,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             entries = {}
         if not isinstance(entries, dict):
             entries = dict(entries)
-        self._entries = entries
+        self._entries: dict[str, NestedMapVal] = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
 
@@ -96,7 +98,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
 
         keys = list(self._entries.keys())
 
-        if isinstance(s.start, int) or s.start is None and isinstance(s.stop, int):
+        if isinstance(s.start, int) or (s.start is None and isinstance(s.stop, int)):
             slc = s
 
         else:
@@ -130,23 +132,23 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     def _update(self, *args: Any, **kwargs: Any) -> None:
         self._entries.update(*args, **kwargs)
 
-    def __getattr__(self, attr: str) -> Any:
+    def __getattr__(self, attr: str) -> Any:  # pylint: disable=inconsistent-return-statements)
         if attr in self._entries:
             out = self._entries[attr]
-            if self._recursive and isinstance(out, dict):
+            if self._recursive and isinstance(out, Mapping):
                 out = type(self)(out)
             return out
 
         try:
             return self.__getattribute__(attr)
-        except AttributeError as err:
+        except AttributeError:
             # If Python is run with -OO, it will strip docstrings and our lookup
             # from self._entries will fail. We check for __debug__, which is actually
             # set to False by -O (it is True for normal execution).
             # But we only want to see an error when building the docs;
             # not something users should see, so this slight inconsistency is fine.
             if __debug__:  # pragma: no cover
-                raise err
+                raise
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._entries!r})"
@@ -154,7 +156,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     @classmethod
     def _from_dict(
         cls,
-        params: Mapping[str, NestedMapVal],
+        params: NestedMap,
         max_level: int = 1,
         level: int = 0,
         recursive: bool = True,
@@ -163,7 +165,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         out = cls(recursive=recursive)
         for k in params:
             v = params[k]
-            if isinstance(v, dict) and level < max_level:
+            if isinstance(v, Mapping) and level < max_level:
                 v = cls._from_dict(
                     v, max_level=max_level, level=level + 1, recursive=recursive
                 )
@@ -173,7 +175,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
     @classmethod
     def from_dict(
         cls,
-        params: Mapping[str, NestedMapVal],
+        params: NestedMap,
         max_level: int = 1,
         recursive: bool = True,
     ) -> AttributeDict:

@@ -1,13 +1,18 @@
 # pyright: strict
+# pylint: disable=missing-class-docstring,cell-var-from-loop,no-self-use,differing-param-doc,differing-type-doc
 from __future__ import annotations
 
 from textwrap import dedent
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
 from module_utilities import docinherit
 from module_utilities.docfiller import DocFiller
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 
 pytestmark = [
     pytest.mark.inherit,
@@ -94,7 +99,6 @@ def test_basic() -> None:
         return x + y
 
     docinherit.DOC_SUB = True  # type: ignore[attr-defined]
-    # module_utilities.options.DOC_SUB = True
     assert (
         dedent(func3.__doc__ or "").strip()
         == dedent(
@@ -150,8 +154,8 @@ def expected_func_template() -> str:
     )
 
 
-def compare_func(__func: Callable[..., Any], __template: str, **kwargs: str) -> None:
-    assert __func.__doc__.strip() == __template.format(**kwargs).strip()  # type: ignore[union-attr]
+def compare_func(func: Callable[..., Any], template: str, /, **kwargs: str) -> None:
+    assert func.__doc__.strip() == template.format(**kwargs).strip()  # type: ignore[union-attr]
 
 
 def test_func_1(example_func: Callable[..., Any], expected_func_template: str) -> None:
@@ -268,7 +272,7 @@ def test_func_4(
     expected_func_template_z: str,
     docfiller_float: DocFiller,
 ) -> None:
-    # Note: there's a bug with custom_inhert.  Need the extra space to make indentation work
+    # Note: there's a bug with custom_inherit.  Need the extra space to make indentation work
     @docfiller_float.inherit(example_func)
     def func(x: float, y: float, z: int) -> float:
         """
@@ -363,19 +367,24 @@ def test_func_5(
 
     d = docfiller_float.assign(type_="float").inherit(example_func)
 
-    @d
-    def func3(x: float, y: float, z: int) -> float:
-        """
-        Testz
+    import warnings
 
-        Returns
-        -------
-        new_output : {type_}
-            New output
-        """
-        return x + y + z
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
 
-    compare_func(func3, expected_template, summary="Testz", type_="float")
+        @d
+        def func3(x: float, y: float, z: int) -> float:
+            """
+            Testz
+
+            Returns
+            -------
+            new_output : {type_}
+                New output
+            """
+            return x + y + z
+
+        compare_func(func3, expected_template, summary="Testz", type_="float")
 
 
 # --- Class filling --------------------------------------------------------------------
@@ -531,10 +540,10 @@ def test_inherit_3(
     """
     )
 
-    for d in [
-        docinherit.factory_docfiller_from_parent(example_class, docfiller_float),  # type: ignore[list-item]
-        docfiller_float.factory_from_parent(example_class),  # type: ignore[list-item]
-    ]:
+    for d in (
+        docinherit.factory_docfiller_from_parent(example_class, docfiller_float),
+        docfiller_float.factory_from_parent(example_class),
+    ):
 
         @d(example_class)
         class Ex3(example_class):  # type: ignore[misc]
@@ -693,12 +702,12 @@ def test_inherit_5(example_class: Any, docfiller_str: DocFiller) -> None:
     {notes}
     """
 
-    for d in [
+    for d in (
         docinherit.factory_docfiller_inherit_from_parent(
             example_class, docfiller=docfiller_str
-        ),  # type: ignore[list-item]
-        docfiller_str.factory_inherit_from_parent(example_class),  # type: ignore[list-item]
-    ]:
+        ),
+        docfiller_str.factory_inherit_from_parent(example_class),
+    ):
 
         @d(example_class)
         class Ex5(example_class):  # type: ignore[misc]

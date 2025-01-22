@@ -1,10 +1,12 @@
+# pylint: disable=missing-class-docstring,no-self-use
 from __future__ import annotations
 
-from typing import Any, Generic, TypeVar, cast, overload
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, overload
 
 from module_utilities import cached
+
+if TYPE_CHECKING:
+    from module_utilities._typing_compat import Self
 
 R = TypeVar("R")
 T = TypeVar("T", bound="Base[R]")  # type: ignore[valid-type]
@@ -15,22 +17,20 @@ class Athing(Generic[T, R]):
         self.parent = parent
 
     @overload
-    def __getitem__(self, index: int) -> R:
-        ...
+    def __getitem__(self, index: int) -> R: ...
 
     @overload
-    def __getitem__(self, index: slice) -> T:
-        ...
+    def __getitem__(self, index: slice) -> T: ...
 
     def __getitem__(self, index: int | slice) -> R | T:
         if isinstance(index, int):
-            return self.parent.val
+            return self.parent.val  # pyright: ignore[reportReturnType]
 
         return self.parent
 
     @property
     def output(self) -> R:
-        return self.parent.val
+        return self.parent.val  # pyright: ignore[reportReturnType]
 
     @property
     def other(self) -> T:
@@ -43,7 +43,7 @@ class Base(Generic[R]):
 
     @property
     def val(self) -> R:
-        return cast(R, 1)
+        return cast("R", 1)
 
     @cached.prop
     def athing(self) -> Self:
@@ -96,10 +96,6 @@ class Derived(Base[int]):
         return x
 
     def derived(self) -> None:
-        # reveal_type(self.there.output)
-        # reveal_type(self.there.other)
-        # reveal_type(self.there.__getitem__(0))
-        # reveal_type(self.there[:])
         pass
 
 

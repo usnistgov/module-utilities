@@ -7,21 +7,12 @@
 # You should not manually edit this file.
 # Instead edit the corresponding pyproject.toml file.
 #
-docstring-inheritance
-ipykernel
-ipython
-mypy>=1.4.1
-nbqa
-nbval
-nox
-pip-tools
+conda-lock>=2.5.5
+grayskull>=2.5.3
+mypy>=1.14.0
+nbqa>=1.8.4
 pre-commit
-pyright
-pytest
-pytest-accept
-pytest-cov
-pytest-sugar
-pytest-xdist
-pytype;python_version<"3.11"
+pyproject2conda>=0.16.0
+pyright>=1.1.391
 scriv
-typing-extensions
+twine>=5.0.0

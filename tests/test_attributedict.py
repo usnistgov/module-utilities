@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     from module_utilities.typing import NestedMap
 
 
-@pytest.fixture()
+@pytest.fixture
 def data() -> NestedMap:
     return {
         "a": "a_val",
@@ -20,12 +21,12 @@ def data() -> NestedMap:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def ref_values() -> list[str]:
     return ["a_val", "b_val", "c_val", "b0b1_val", "c0c1_val"]
 
 
-@pytest.fixture()
+@pytest.fixture
 def adata(data: NestedMap) -> attributedict.AttributeDict:
     return attributedict.AttributeDict(data)
 
@@ -69,7 +70,7 @@ def test_methods(adata: attributedict.AttributeDict, data: NestedMap) -> None:
     d = attributedict.AttributeDict(data, allow_missing=False)
 
     with pytest.raises(KeyError):
-        d["d"]
+        d["d"]  # pylint: disable=pointless-statement
 
     # delete item
     del dnum["a"]
@@ -89,4 +90,4 @@ def test_methods(adata: attributedict.AttributeDict, data: NestedMap) -> None:
 
     # missing keys
     with pytest.raises(AttributeError):
-        adata.thing  # noqa: B018
+        adata.thing  # noqa: B018  # pylint: disable=pointless-statement

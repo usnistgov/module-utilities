@@ -1,10 +1,10 @@
 # mypy: disable-error-code="no-untyped-def, no-untyped-call"
+# pylint: disable=protected-access,missing-class-docstring,no-member,attribute-defined-outside-init,no-self-use
 
 from __future__ import annotations
 
 from typing import Any
 
-# from typing_extensions import reveal_type
 import pytest
 
 from module_utilities import cached
@@ -36,6 +36,42 @@ def test_cachedproperty() -> None:
         x.thing = 2
 
 
+# NOTE: specifically testing class without _cache defined
+# so need ignores
+def test_cachedproperty_without_cache() -> None:
+    class Tmp:
+        @cached.CachedProperty  # type: ignore[type-var]
+        def thing(self) -> int:
+            """A test"""
+            return 1
+
+        @cached.prop  # type: ignore[type-var]
+        def there(self) -> int:
+            """B test"""
+            return 2
+
+        @cached.clear  # type: ignore[type-var]
+        def clear(self) -> None:
+            pass
+
+    x = Tmp()
+
+    assert not hasattr(x, "_cache")
+    x.clear()
+
+    assert x.thing == 1  # type: ignore[call-overload]
+
+    assert x._cache == {"thing": 1}  # type: ignore[attr-defined]
+    assert Tmp.there.__name__ == "there"
+    assert Tmp.there.__doc__ == "B test"
+
+    with pytest.raises(AttributeError):
+        x.thing = 2  # type: ignore[call-overload]
+
+    x.clear()
+    assert x._cache == {}  # type: ignore[attr-defined]
+
+
 def test_meth_bad_hash() -> None:
     # test that passing unhashable just returns the func
     class Tmp:
@@ -43,7 +79,7 @@ def test_meth_bad_hash() -> None:
             self._cache: dict[str, Any] = {}
 
         @cached.meth
-        def thing(self, x):
+        def thing(self, x: Any) -> Any:
             return x
 
     x = Tmp()
@@ -55,25 +91,7 @@ def test_meth_bad_hash() -> None:
     x._cache = {}
     v = {"a": 1}
     assert x.thing(v) == v
-    assert len(x._cache["thing"]) == 0
-
-    # class tmp2:
-    #     def __init__(self):
-    #         self._cache: dict[str, Any] = {}
-
-    #     @cached.prop
-    #     def prop(self) -> int:
-    #         return 1
-
-    #     @cached.meth
-    #     def meth(self) -> int:
-    #         return 2
-
-    # y = tmp2()
-
-    # reveal_type(y.prop)
-    # reveal_type(y.meth)
-    # reveal_type(y.meth())
+    assert not x._cache["thing"]
 
 
 class Baseclass:
@@ -139,7 +157,7 @@ def do_prop_test(x, key=None, docstring="A doc string", check_empty=True) -> Non
 
     # nothing here
     if check_empty:
-        assert not hasattr(x, "_cache") or len(x._cache) == 0
+        assert not hasattr(x, "_cache") or not x._cache
     prop_test(x, prop="prop", value=(1, 2), key=key, docstring=docstring)
 
     assert tuple(x._cache.keys()) == (key,)  # pytype: disable=attribute-error
@@ -220,7 +238,7 @@ def do_meth_test(x, key=None, docstring="A doc string", check_empty=True) -> Non
 
     target = (1, 2, 3, 4)
     if check_empty:
-        assert not hasattr(x, "_cache") or len(x._cache) == 0
+        assert not hasattr(x, "_cache") or not x._cache
     meth_test(x, "meth", target, args=(3, 4), key=key_tot, docstring=docstring)
     test_keys(x)
 
@@ -295,7 +313,7 @@ def test_meth4() -> None:
 
 def test_clear() -> None:  # noqa: C901
     class test(Baseclass):
-        def __init__(self, a, b) -> None:
+        def __init__(self, a, b) -> None:  # pylint: disable=super-init-not-called
             self._a = a
             self._b = b
 
@@ -395,7 +413,7 @@ def test_clear() -> None:  # noqa: C901
     assert type(x).clear_all.__doc__ == "A clear string"
 
     x.clear_all()
-    assert len(x._cache) == 0
+    assert not x._cache
 
     _ = x.prop
     x.meth(3, 4)
@@ -462,11 +480,11 @@ def test_use_cache() -> None:
 
     x = Tmp()
 
-    for p in ["prop0", "prop2"]:
+    for p in ("prop0", "prop2"):
         assert getattr(x, p) is not getattr(x, p)
         assert not hasattr(x, "_cache") or p not in x._cache
 
-    for p in ["prop1", "prop3"]:
+    for p in ("prop1", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
@@ -533,17 +551,7 @@ def test_use_cache2() -> None:  # noqa: C901
 
     x = Tmp()
 
-    # if TYPE_CHECKING:
-    #     reveal_type(x.prop2)
-    #     reveal_type(x.meth())
-    #     reveal_type(x.there())
-    #     reveal_type(x.prop4)
-    #     reveal_type(x.meth1())
-    #     reveal_type(x.meth2(2))
-    #     reveal_type(x.prop_test)
-    #     reveal_type(x.clearer())
-
-    for p in ["prop0", "prop1", "prop2", "prop3"]:
+    for p in ("prop0", "prop1", "prop2", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
@@ -572,11 +580,11 @@ def test_use_cache3() -> None:
 
     x = Tmp()
 
-    for p in ["prop0", "prop2"]:
+    for p in ("prop0", "prop2"):
         assert getattr(x, p) is not getattr(x, p)
         assert not hasattr(x, "_cache") or p not in x._cache
 
-    for p in ["prop1", "prop3"]:
+    for p in ("prop1", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
@@ -598,11 +606,11 @@ def test_error_with_slots() -> None:
     x = test(1, 2)
 
     with pytest.raises(AttributeError):
-        _ = x.prop
+        _ = x.prop  # type: ignore[call-overload]
 
     # but this should work fine:
     class test2:
-        __slots__ = ["a", "b", "_cache"]
+        __slots__ = ["_cache", "a", "b"]
 
         def __init__(self, a, b) -> None:
             self.a = a
@@ -615,13 +623,13 @@ def test_error_with_slots() -> None:
 
     x2 = test2(1, 2)
 
-    assert x2.prop == (1, 2)
+    assert x2.prop == (1, 2)  # pylint: disable=comparison-with-callable
     assert x2._cache["prop"] == (1, 2)
 
 
 def test_error_with_slots2() -> None:
     class test:
-        __slots__ = ["a", "b", "_cache"]
+        __slots__ = ["_cache", "a", "b"]
 
         def __init__(self, a, b) -> None:
             self.a = a
@@ -658,23 +666,11 @@ def test_with_kwargs() -> None:
         def meth2(self, /, **kws: int) -> dict[str, int]:
             return kws
 
-        # need to have / above
-        # the following will give an error with mypy
-        # @cached.meth
-        # def meth2b(self, **kws: int) -> dict[str, int]:
-        #     return kws
-
         @cached.meth
         def meth3(
             self, /, *args: int, **kwargs: int
         ) -> tuple[tuple[int, ...], dict[str, int]]:
             return args, kwargs
-
-        # need to have slash above
-        # the following will give an error with mypy
-        # @cached.meth
-        # def meth3b(self, *args: int, **kwargs: int) -> tuple[tuple[int, ...], dict[str, int]]:
-        #     return args, kwargs
 
         @cached.meth
         def meth4(self, beta: float, *args: int) -> tuple[float, tuple[int, ...]]:
@@ -694,15 +690,6 @@ def test_with_kwargs() -> None:
             return beta, args, kwargs
 
     test()
-    # reveal_type(x.meth0)
-    # reveal_type(x.meth1)
-    # reveal_type(x.meth2)
-    # reveal_type(x.meth2b)
-    # reveal_type(x.meth3)
-    # reveal_type(x.meth3b)
-    # reveal_type(x.meth4)
-    # reveal_type(x.meth5)
-    # reveal_type(x.meth5b)
 
 
 def test_meth_single_arg() -> None:

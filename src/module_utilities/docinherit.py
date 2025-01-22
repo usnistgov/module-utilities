@@ -10,13 +10,15 @@ Note that to use this module, you must install
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from .docfiller import DocFiller
     from .typing import F
 
-try:
+try:  # pylint: disable=too-many-try-statements
     import docstring_inheritance
 
     HAS_INHERIT = True
@@ -25,8 +27,6 @@ except ImportError:  # pragma: no cover
 
 
 if HAS_INHERIT:
-    from typing import Any, Callable
-
     from .options import DOC_SUB
 
     def doc_inherit(
@@ -113,13 +113,12 @@ if HAS_INHERIT:
         +      z parameter
 
         """
-
         docstring = parent.__doc__ or "" if callable(parent) else parent
 
         if DOC_SUB:
 
             def wrapper_inherit(func: F) -> F:
-                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # pyright: ignore[reportUnboundVariable]
+                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # pyright: ignore[reportUnboundVariable,reportUnknownMemberType,reportPossiblyUnboundVariable]
                 return func
 
             return wrapper_inherit
@@ -150,10 +149,11 @@ if HAS_INHERIT:
             **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return docfiller(template, _prepend=_prepend, **params)(method)
 
             return decorated
@@ -167,10 +167,11 @@ if HAS_INHERIT:
             name_or_method: str | Callable[..., Any] | None = None,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return doc_inherit(parent=template)(method)
 
             return decorated
@@ -199,11 +200,11 @@ if HAS_INHERIT:
             **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
-
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return docfiller.inherit(template, _prepend=_prepend, **params)(method)
 
             return decorated

@@ -4,6 +4,7 @@ See https://github.com/pandas-dev/pandas/blob/main/pandas/util/_decorators.py
 would just use the pandas version, but since it's a private
 module, feel it's better to have static version here.
 """
+# pylint: disable=protected-access
 
 from __future__ import annotations
 
@@ -11,13 +12,14 @@ from textwrap import dedent
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from collections.abc import Callable
+    from typing import Any
 
     from .typing import F
 
 
-def doc(
-    *docstrings: None | str | Callable[..., Any], _prepend: bool = False, **params: str
+def doc(  # pylint: disable=useless-param-doc
+    *docstrings: str | Callable[..., Any] | None, _prepend: bool = False, **params: str
 ) -> Callable[[F], F]:  # pyre-ignore
     """
     A decorator to take docstring templates, concatenate them and perform string
@@ -43,21 +45,21 @@ def doc(
     def decorator(decorated: F) -> F:
         # collecting docstring and docstring templates
         docstring_components: list[str | Callable[..., Any]] = []
-        # if decorated.__doc__:
-        #     docstring_components.append(dedent(decorated.__doc__))
 
         for docstring in docstrings:
             if docstring is None:
                 continue
-            if hasattr(docstring, "_docstring_components"):
+            if isinstance(docstring, str):
+                docstring_components.append(docstring)
+            elif hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
-            elif isinstance(docstring, str):
-                docstring_components.append(docstring)
-            elif docstring.__doc__:
-                # docstring_components.append(docstring)
+            elif callable(docstring) and hasattr(docstring, "__doc__"):
                 docstring_components.append(dedent(docstring.__doc__ or ""))
+            else:
+                msg = f"Unknown docstring caught {type(docstring)=}"
+                raise ValueError(msg)
 
         # make default to append
         if decorated.__doc__:
@@ -67,7 +69,6 @@ def doc(
                 docstring_components.append(dedent(decorated.__doc__ or ""))
 
         params_applied = [
-            # component.format(**params)
             component.format_map(params)
             if isinstance(component, str) and len(params) > 0
             else component

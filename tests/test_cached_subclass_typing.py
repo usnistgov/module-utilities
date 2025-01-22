@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring,no-self-use
 from __future__ import annotations
 
 from typing import Any
@@ -35,9 +36,6 @@ class Derived(Base):
     @cached.meth
     def prop_cached(self) -> int:
         return 1
-
-    # def meth(self, x: float) -> float:
-    #     return x
 
     @cached.meth
     def meth_cached(self, x: int) -> int:

@@ -1,11 +1,10 @@
 # mypy: disable-error-code="no-untyped-def"
+# pylint: disable=protected-access
 from __future__ import annotations
 
 from textwrap import dedent
 from typing import cast
 
-# from typing import TYPE_CHECKING
-# from typing_extensions import reveal_type
 import pytest
 
 from module_utilities import docfiller
@@ -15,6 +14,62 @@ from module_utilities.docfiller import DocFiller, dedent_recursive
 
 
 # --- simple (coverage filler) tests ---------------------------------------------------
+
+
+def test_doc_decorate_simple() -> None:
+    def func():
+        """
+        Thing
+
+        Parameters
+        ----------
+        {a}
+        """
+
+    @docfiller.doc_decorate(func, a="there")
+    def other():
+        pass
+
+    @docfiller.doc_decorate(func.__doc__, a="there")
+    def other2():
+        pass
+
+    @docfiller.doc_decorate(None, func.__doc__, a="there")
+    def other3():
+        pass
+
+    @docfiller.doc_decorate(other, a="there")
+    def there():
+        pass
+
+    @docfiller.doc_decorate(a="there")
+    def another():
+        """
+        Thing
+
+        Parameters
+        ----------
+        {a}
+        """
+
+    expected = dedent(
+        """
+    Thing
+
+    Parameters
+    ----------
+    there
+    """
+    ).strip()
+
+    for f in (other, other2, other3, there, another):
+        assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]
+
+    with pytest.raises(ValueError):  # noqa: PT011
+
+        @docfiller.doc_decorate(1, a="there")  # type: ignore[arg-type]
+        def bad_func():
+            pass
 
 
 def test_append() -> None:
@@ -91,7 +146,7 @@ def test_params_to_string() -> None:
 
 
 def test_func_or_doc() -> None:
-    def template() -> None:
+    def template() -> None:  # pylint: disable=differing-param-doc,differing-type-doc
         """
         Parameters
         ----------
@@ -130,7 +185,7 @@ def test_docfiller_getitem() -> None:
         keep_keys="parameters",
     )
 
-    dd = cast(DocFiller, d["parameters"])
+    dd = cast("DocFiller", d["parameters"])
 
     @dd.decorate
     def func() -> None:
@@ -153,7 +208,7 @@ def test_docfiller_getitem() -> None:
 
     assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]
 
-    with pytest.raises(ValueError):  # noqa: PT011
+    with pytest.raises(TypeError):
         ddd = d.assign_combined_key("zz", ["parameters"])
 
     d = DocFiller.from_docstring(
@@ -194,7 +249,7 @@ def test_docfiller_getitem() -> None:
     assert func4.__doc__ == "x : int"
 
 
-@pytest.fixture()
+@pytest.fixture
 def params():
     return dedent_recursive(
         {
@@ -214,7 +269,7 @@ def params():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def expected():
     return dedent(
         """
@@ -234,10 +289,10 @@ def expected():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def template(params):
     @docfiller.doc_decorate(**params)
-    def func(*args, **kwargs) -> None:  # noqa: ARG001
+    def func(*args, **kwargs) -> None:
         """
         {summary}
 
@@ -314,6 +369,17 @@ def test_docfiller(template, params, expected) -> None:
         pass
 
     assert func4.__doc__ == expected
+
+    # convoluted way to test from_dict with combine_keys
+    data = docfiller.DocFiller.from_docstring(expected).data
+
+    d = docfiller.DocFiller.from_dict(data, combine_keys=["parameters", "returns"])
+
+    @d(template)
+    def func5() -> None:
+        pass
+
+    assert func5.__doc__ == expected
 
 
 def test_docfiller_docstring() -> None:
@@ -501,9 +567,9 @@ def test_docfiller_namespace() -> None:
         """
     )
 
-    for dd in [dd0, dd1]:
+    for dd in (dd0, dd1):
 
-        @dd.decorate
+        @dd.decorate  # pylint: disable=cell-var-from-loop
         def func() -> None:
             """
             Parameters
@@ -518,7 +584,7 @@ def test_docfiller_namespace() -> None:
 
         assert func.__doc__ == expected
 
-    with pytest.raises(ValueError):  # noqa: PT011
+    with pytest.raises(TypeError):
         d0.assign(x="hello").levels_to_top("x")
 
     dd0 = (
@@ -651,6 +717,9 @@ def test_docfiller_assign_param() -> None:
     y : int
         y param
     z : float
+    a : int
+        Another
+        parameter
     """
     )
 
@@ -658,15 +727,17 @@ def test_docfiller_assign_param() -> None:
 
     dd = (
         d.assign_param(
-            "x",
+            name="x",
             ptype="float",
             desc="""
             x param
             With an extra line
             """,
+            key="x_thing",
         )
         .assign_param("y", ptype="int", desc="y param")
         .assign_param("z", ptype="float")
+        .assign_param("a", ptype="int", desc=["Another", "parameter"])
     )
 
     @dd()
@@ -678,9 +749,10 @@ def test_docfiller_assign_param() -> None:
 
         Parameters
         ----------
-        {x}
+        {x_thing}
         {y}
         {z}
+        {a}
         """
 
     assert func.__doc__ == expected
@@ -730,7 +802,7 @@ def test_docfiller_on_class() -> None:
     assert hello.__doc__ == expected
 
     @d(hello)
-    class hello2(hello):
+    class hello2(hello):  # pylint: disable=missing-class-docstring,unused-variable
         pass
 
     assert hello.__doc__ == expected
@@ -773,9 +845,6 @@ def test_prepend() -> None:
         """
         return x + y
 
-    # reveal_type(template)
-    # reveal_type(template(1.0, 2.0))
-
     @d(template)
     def hello(x: float, y: float) -> float:
         """
@@ -786,9 +855,6 @@ def test_prepend() -> None:
         return x + y
 
     assert hello.__doc__ == expected
-
-    # reveal_type(hello)
-    # reveal_type(hello(1., 2.))
 
     # prepend
     @d(template, _prepend=True)

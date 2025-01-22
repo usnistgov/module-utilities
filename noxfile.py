@@ -1,58 +1,56 @@
+# pylint: disable=wrong-import-position
 """Config file for nox."""
+
 # * Imports ----------------------------------------------------------------------------
 from __future__ import annotations
 
 import shlex
 import shutil
 import sys
-from functools import lru_cache, wraps
-
-# Should only use on python version > 3.10
-assert sys.version_info >= (3, 10)
-
 from dataclasses import dataclass
+from functools import lru_cache, partial, wraps
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Annotated,
-    Callable,
-    Iterable,
-    Iterator,
     Literal,
-    Sequence,
     TypeAlias,
     TypedDict,
 )
 
-# fmt: off
+import nox
+from nox.virtualenv import CondaEnv
+
 sys.path.insert(0, ".")
-from tools.dataclass_parser import DataclassParser, add_option, option
+from tools import uvxrun
+from tools.dataclass_parser import (
+    DataclassParser,
+    add_option,
+    option,
+)
 from tools.noxtools import (
-    Installer,
     check_for_change_manager,
+    combine_list_list_str,
     combine_list_str,
-    factory_conda_backend,
-    factory_virtualenv_backend,
+    get_python_full_path,
     infer_requirement_path,
-    is_conda_session,
-    load_nox_config,
     open_webpage,
-    prepend_flag,
     session_run_commands,
-    update_target,
 )
 
 sys.path.pop(0)
 
-# make sure these afeter
-import nox  # type: ignore[unused-ignore,import]
-
-# fmt: on
 
 if TYPE_CHECKING:
-    from nox import Session
-    from nox.virtualenv import CondaEnv
+    from collections.abc import Callable, Iterable, Iterator, Sequence
 
+    from nox import Session
+
+
+# Should only use on python version > 3.10
+if sys.version_info < (3, 10):
+    msg = "python>=3.10 required"
+    raise RuntimeError(msg)
 
 # * Names ------------------------------------------------------------------------------
 
@@ -66,26 +64,34 @@ ROOT = Path(__file__).parent
 
 nox.options.reuse_existing_virtualenvs = True
 nox.options.sessions = ["test"]
-
-# * User Config ------------------------------------------------------------------------
-
-CONFIG = load_nox_config()
+nox.options.default_venv_backend = "uv"
 
 # * Options ---------------------------------------------------------------------------
 
-LOCK = True
+# if True, use uv lock/sync.  If False, use uv pip compile/sync...
+UV_LOCK = True
 
-PYTHON_ALL_VERSIONS = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-PYTHON_DEFAULT_VERSION = "3.11"
+PYTHON_ALL_VERSIONS = [
+    c.split()[-1]
+    for c in nox.project.load_toml("pyproject.toml")["project"]["classifiers"]
+    if c.startswith("Programming Language :: Python :: 3.")
+]
+PYTHON_DEFAULT_VERSION = Path(".python-version").read_text(encoding="utf-8").strip()
 
-# conda/mamba
-for backend in ["mamba", "micromamba", "conda"]:
-    if shutil.which(backend):
-        CONDA_BACKEND: Literal["mamba", "micromamba", "conda"] = backend  # type: ignore[assignment]
-        break
-else:
-    msg = "no conda-like backend found"
-    raise ValueError(msg)
+UVXRUN_LOCK_REQUIREMENTS = "requirements/lock/py{}-uvxrun-tools.txt".format(
+    PYTHON_DEFAULT_VERSION.replace(".", "")
+)
+UVXRUN_MIN_REQUIREMENTS = "requirements/uvxrun-tools.txt"
+PIP_COMPILE_CONFIG = "requirements/uv.toml"
+
+
+@lru_cache
+def get_uvxrun_specs(requirements: str | None = None) -> uvxrun.Specifications:
+    """Get specs for uvxrun."""
+    requirements = requirements or UVXRUN_MIN_REQUIREMENTS
+    if not Path(requirements).exists():
+        requirements = None
+    return uvxrun.Specifications.from_requirements(requirements=requirements)
 
 
 class SessionOptionsDict(TypedDict, total=False):
@@ -97,11 +103,11 @@ class SessionOptionsDict(TypedDict, total=False):
 
 CONDA_DEFAULT_KWS: SessionOptionsDict = {
     "python": PYTHON_DEFAULT_VERSION,
-    "venv_backend": factory_conda_backend(CONDA_BACKEND),
+    "venv_backend": "micromamba|mamba|conda",
 }
 CONDA_ALL_KWS: SessionOptionsDict = {
     "python": PYTHON_ALL_VERSIONS,
-    "venv_backend": factory_conda_backend(CONDA_BACKEND),
+    "venv_backend": "micromamba|mamba|conda",
 }
 
 DEFAULT_KWS: SessionOptionsDict = {"python": PYTHON_DEFAULT_VERSION}
@@ -129,57 +135,36 @@ class SessionParams(DataclassParser):
     # common parameters
     lock: bool = False
     update: bool = add_option("--update", "-U", help="update dependencies/package")
-    update_package: bool = add_option(
-        "--update-package",
+    version: str | None = add_option(
+        "--version", "-V", help="pretend version", default=None
+    )
+    prune: bool = add_option(default=False, help="Pass `--prune` to conda env update")
+    no_frozen: bool = add_option(
+        "--no-frozen",
+        "-N",
+        help="run `uv sync` without --frozen (default is to use `--frozen`)",
+    )
+    reinstall_package: bool = add_option(
+        "--reinstall-package",
         "-P",
-        help="update package only",
+        help="reinstall package.  Only works with uv sync and editable installs",
     )
-    log_session: bool = add_option("--log-session")
-    version: str | None = None
-
-    # dev
-    dev_run: RUN_ANNO = None
-    dev_envname: Literal["dev", "dev-complete", "dev-user"] = add_option(
-        help="Name of environment to use for development session",
-        default="dev",
-    )
-
-    # config
-    dev_extras: OPT_TYPE = add_option(help="`extras` to include in dev environment")
-    python_paths: OPT_TYPE = add_option(help="paths to python executables")
 
     # requirements
     requirements_force: bool = False
-    requirements_run: RUN_ANNO = None
     requirements_no_notify: bool = add_option(
         default=False,
-        help="Skip notification of pip-compile",
+        help="Skip notification of lock-compile",
     )
 
-    # conda-lock
-    conda_lock_channel: OPT_TYPE = add_option(help="conda channels")
-    conda_lock_platform: list[
-        Literal["osx-64", "linux-64", "win-64", "osx-arm64", "all"]
-    ] | None = add_option(help="platform(s) to buiuld lock file for.")
-    conda_lock_include: OPT_TYPE = add_option(help="lock files to create")
-    conda_lock_run: RUN_ANNO = None
-    conda_lock_mamba: bool = False
-    conda_lock_force: bool = False
-
-    # pip-compile
-    pip_compile_force: bool = False
-    pip_compile_upgrade: bool = add_option(
-        "--pip-compile-upgrade",
+    # lock
+    lock_force: bool = False
+    lock_upgrade: bool = add_option(
+        "--lock-upgrade",
         "-L",
-        help="Upgrade all packages in lock file",
+        help="Upgrade all packages in lock files",
         default=False,
     )
-    pip_compile_upgrade_package: OPT_TYPE = add_option(
-        help="Upgrade package(s) in lock file",
-        default=None,
-    )
-    pip_compile_opts: OPT_TYPE = add_option(help="options to pip-compile")
-    pip_compile_run: RUN_ANNO = None
 
     # test
     test_no_pytest: bool = False
@@ -189,32 +174,29 @@ class SessionParams(DataclassParser):
 
     # coverage
     coverage: list[Literal["erase", "combine", "report", "html", "open"]] | None = None
-    coverage_run: RUN_ANNO = None
-    coverage_run_internal: RUN_TYPE = None
 
     # testdist
     testdist_run: RUN_ANNO = None
 
     # docs
-    docs: list[
-        Literal[
-            "html",
-            "build",
-            "symlink",
-            "clean",
-            "livehtml",
-            "linkcheck",
-            "spelling",
-            "showlinks",
-            "release",
-            "open",
-            "serve",
+    docs: (
+        list[
+            Literal[
+                "html",
+                "build",
+                "symlink",
+                "clean",
+                "livehtml",
+                "linkcheck",
+                "spelling",
+                "showlinks",
+                "open",
+                "serve",
+            ]
         ]
-    ] | None = add_option("--docs", "-d", help="doc commands")
+        | None
+    ) = add_option("--docs", "-d", help="doc commands")
     docs_run: RUN_ANNO = None
-
-    # lint (pre-commit)
-    lint_run: RUN_ANNO = None
 
     # typing
     typing: list[
@@ -222,11 +204,12 @@ class SessionParams(DataclassParser):
             "clean",
             "mypy",
             "pyright",
+            "pylint",
             "pytype",
             "all",
-            "mypy-notebook",
-            "pyright-notebook",
-            "typing-notebook",
+            "notebook-mypy",
+            "notebook-pyright",
+            "notebook-typecheck",
         ]
     ] = add_option("--typing", "-m")
     typing_run: RUN_ANNO = None
@@ -243,12 +226,12 @@ class SessionParams(DataclassParser):
     build_silent: bool = False
 
     # publish
-    publish: list[Literal["release", "test"]] | None = add_option("-p", "--publish")
-    publish_run: RUN_ANNO = None
+    publish: list[Literal["release", "test", "check"]] | None = add_option(
+        "-p", "--publish"
+    )
 
     # conda-recipe/grayskull
     conda_recipe: list[Literal["recipe", "recipe-full"]] | None = None
-    conda_recipe_run: RUN_ANNO = None
     conda_recipe_sdist_path: str | None = None
 
     # conda-build
@@ -265,14 +248,15 @@ def parse_posargs(*posargs: str) -> SessionParams:
     without escaping.
     """
     opts = SessionParams.from_posargs(posargs=posargs, prefix_char="+")
-    opts.lock = opts.lock or LOCK
-
+    opts.lock = opts.lock or UV_LOCK
     return opts
 
 
 def add_opts(
     func: Callable[[Session, SessionParams], None],
 ) -> Callable[[Session], None]:
+    """Fill in `opts` from cli options."""
+
     @wraps(func)
     def wrapped(session: Session) -> None:
         opts = parse_posargs(*session.posargs)
@@ -281,71 +265,179 @@ def add_opts(
     return wrapped
 
 
+def install_dependencies(
+    session: Session,
+    *args: str,
+    name: str,
+    opts: SessionParams,
+    python_version: str | None = None,
+    location: str | None = None,
+    no_dev: bool = True,
+    only_group: bool = False,
+    include_editable_package: bool = False,
+    lock: bool | None = None,
+) -> None:
+    """General dependencies installer"""
+    if python_version is None:
+        assert isinstance(session.python, str)  # noqa: S101
+        python_version = session.python
+
+    lock = lock if lock is not None else opts.lock
+
+    if isinstance(session.virtualenv, CondaEnv):
+        environment_file = infer_requirement_path(
+            name,
+            ext=".yaml",
+            python_version=python_version,
+            lock=False,
+        )
+        with check_for_change_manager(
+            environment_file,
+            hash_path=Path(session.create_tmp()) / "env.json",
+        ) as changed:
+            if changed or opts.update:
+                session.run_install(
+                    session.virtualenv.conda_cmd,
+                    "env",
+                    "update",
+                    "--yes",
+                    *(["--prune"] if opts.prune else []),
+                    "-f",
+                    environment_file,
+                    "--prefix",
+                    session.virtualenv.location,
+                    *args,
+                )
+            else:
+                session.log("Using cached install")
+
+        if include_editable_package:
+            install_package(session, editable=True, update=True)
+
+    elif lock:  # pylint: disable=confusing-consecutive-elif
+        session.run_install(
+            "uv",
+            "sync",
+            *(["-U"] if opts.update else []),
+            *(["--no-dev"] if no_dev else []),
+            *([] if opts.no_frozen else ["--frozen"]),
+            *(["--only-group"] if only_group else ["--group"]),
+            name,
+            # Handle package install here?
+            # "--no-editable",
+            # "--reinstall-package",
+            # "open-notebook",
+            *([] if include_editable_package else ["--no-install-project"]),
+            *(
+                [f"--reinstall-package={PACKAGE_NAME}"]
+                if opts.reinstall_package and include_editable_package
+                else []
+            ),
+            *(
+                []
+                if any("--python" in a for a in args)
+                else [f"--python={python_version}"]
+            ),
+            *args,
+            env={"UV_PROJECT_ENVIRONMENT": location or session.virtualenv.location},
+        )
+
+    else:
+        session.run_install(
+            "uv",
+            "pip",
+            "sync",
+            f"--config-file={PIP_COMPILE_CONFIG}",
+            infer_requirement_path(
+                name,
+                ext=".txt",
+                python_version=python_version,
+                lock=True,
+            ),
+            *args,
+        )
+
+        if include_editable_package:
+            install_package(session, editable=True, update=True)
+
+
+def install_package(
+    session: Session,
+    *args: str,
+    editable: bool = False,
+    update: bool = True,
+) -> None:
+    """Install current package"""
+    if editable:
+        run = session.run if update else session.run_install
+        opts = [*args, "-e", "."]
+    else:
+        run = session.run
+        opts = [*args, get_package_wheel(session)]
+
+    run(
+        "uv",
+        "pip",
+        "install",
+        *opts,
+        "--no-deps",
+        "--force-reinstall",
+        external=True,
+    )
+
+
 # * Environments------------------------------------------------------------------------
-# ** Dev (conda)
+# ** test-all
+@nox.session(name="test-all", python=False)
+def test_all(session: Session) -> None:
+    """Run all tests and coverage"""
+    for py in PYTHON_ALL_VERSIONS:
+        session.notify(f"test-{py}")
+    session.notify("test-notebook")
+    session.notify("test-noopt")
+    session.notify("coverage")
+
+
+# ** dev
+@nox.session(name="dev", python=False)
 @add_opts
 def dev(
     session: Session,
     opts: SessionParams,
 ) -> None:
-    """Create development environment using either conda (dev) or virtualenv (dev-venv) in location ~/.venv"""
+    """Create development environment"""
+    session.run("uv", "venv", ".venv", "--allow-existing")
 
-    (
-        Installer.from_envname(
-            session=session,
-            envname=opts.dev_envname,
-            lock=opts.lock,
-            update=opts.update,
-            package=True,
-        )
-        .install_all(
-            update_package=opts.update_package,
-            log_session=opts.log_session,
-        )
-        .set_ipykernel_display_name(name=f"{PACKAGE_NAME}-dev", update=True)
-        .run_commands(opts.dev_run)
+    python_opt = "--python=.venv/bin/python"
+
+    install_dependencies(
+        session,
+        python_opt,
+        name="dev",
+        opts=opts,
+        python_version=PYTHON_DEFAULT_VERSION,
+        location=".venv",
+        no_dev=False,
+        include_editable_package=True,
+    )
+
+    session.run(
+        "uv",
+        "run",
+        "--frozen",
+        python_opt,
+        "python",
+        "-m",
+        "ipykernel",
+        "install",
+        "--user",
+        "--name=testpackage-book-nocli-dev",
+        "--display-name='Python [venv: testpackage-book-nocli-dev]'",
     )
 
 
-nox.session(
-    name="dev-venv",
-    python=PYTHON_DEFAULT_VERSION,
-    venv_backend=factory_virtualenv_backend(location="./.venv"),
-)(dev)
-nox.session(
-    name="dev",
-    python=PYTHON_DEFAULT_VERSION,
-    venv_backend=factory_conda_backend(backend=CONDA_BACKEND, location="./.venv"),
-)(dev)
-
-
-@nox.session(python=False)
-@add_opts
-def config(
-    session: Session,
-    opts: SessionParams,
-) -> None:
-    """Create the file ./config/userconfig.toml"""
-    args: list[str] = []
-    if opts.dev_extras:
-        args += ["--dev-extras", *opts.dev_extras]
-    if opts.python_paths:
-        args += ["--python-paths", *opts.python_paths]
-
-    session.run("python", "tools/projectconfig.py", *args)
-
-
 # ** requirements
-@nox.session(python=False)
-def pyproject2conda(
-    session: Session,
-) -> None:
-    """Alias to reqs"""
-
-    session.notify("requirements")
-
-
-@nox.session
+@nox.session(name="requirements", python=False)
 @add_opts
 def requirements(
     session: Session,
@@ -356,177 +448,73 @@ def requirements(
 
     These will be placed in the directory "./requirements".
     """
-
-    runner = Installer(
+    uvxrun.run(
+        "pyproject2conda",
+        "project",
+        "--verbose",
+        *(["--overwrite=force"] if opts.requirements_force else []),
         session=session,
-        pip_deps="pyproject2conda>=0.11.0",
-        update=opts.update,
-    ).install_all(log_session=opts.log_session)
+        external=True,
+        specs=get_uvxrun_specs(),
+    )
 
-    if opts.requirements_run:
-        runner.run_commands(opts.requirements_run)
-    else:
-        session.run(
-            "pyproject2conda",
-            "project",
-            "--verbose",
-            *(["--overwrite", "force"] if opts.requirements_force else []),
-        )
-
-        if not opts.requirements_no_notify and opts.lock:
-            for py in PYTHON_ALL_VERSIONS:
-                session.notify(f"pip-compile-{py}")
+    if not opts.requirements_no_notify:
+        session.notify("lock")
 
 
-# # ** conda-lock
-@nox.session(name="conda-lock", **DEFAULT_KWS)
+# ** uv lock compile
+@nox.session(name="lock", python=False)
 @add_opts
-def conda_lock(
+def lock(
     session: Session,
     opts: SessionParams,
 ) -> None:
-    """Create lock files using conda-lock."""
+    """Run uv pip compile ..."""
+    options: list[str] = ["-U"] if opts.lock_upgrade else []
+    force = opts.lock_force or opts.lock_upgrade
 
-    (
-        Installer(
-            session=session,
-            pip_deps="conda-lock>=2.2.0",
-            update=opts.update,
-        ).install_all()
-    )
+    if opts.lock and opts.lock_upgrade:
+        session.run("uv", "lock", "--upgrade", env={"VIRTUAL_ENV": ".venv"})
 
-    session.run("conda-lock", "--version")
-
-    conda_lock_exclude = ["test-extras"]
-    conda_lock_include = opts.conda_lock_include or [
-        "test",
-        "dev",
-        "dev-complete",
-        "nox",
-    ]
-
-    platform = opts.conda_lock_platform
-    if platform is None or "all" in platform:
-        # for now, skip osx-arm64 and win-64.  Leads to some problems.
-        platform = ["osx-64", "linux-64"]  # , "win-64"]
-
-    channel = opts.conda_lock_channel
-    if not channel:
-        channel = ["conda-forge"]
-
-    def create_lock(path: Path) -> None:
-        name = path.with_suffix("").name
-        lockfile = path.parent / "lock" / f"{name}-conda-lock.yml"
-        deps = [str(path)]
-
-        # check if skip
-        env = "-".join(name.split("-")[1:])
-        if conda_lock_include and not any(c == env for c in conda_lock_include):
-            session.log(f"Skipping {lockfile} (include)")
-            return
-
-        if conda_lock_exclude and any(c == env for c in conda_lock_exclude):
-            session.log(f"Skipping {lockfile} (exclude)")
-            return
-
-        # check hashes
-
-        with check_for_change_manager(
-            *deps,
-            target_path=lockfile,
-            force_write=opts.conda_lock_force,
-        ) as changed:
-            if opts.conda_lock_force or changed:
-                session.log(f"Creating {lockfile}")
-                # insert -f for each arg
-                if lockfile.exists():
-                    lockfile.unlink()
-                session.run(
-                    "conda-lock",
-                    "--mamba" if opts.conda_lock_mamba else "--no-mamba",
-                    *prepend_flag("-c", *channel),
-                    *prepend_flag("-p", *platform),
-                    *prepend_flag("-f", *deps),
-                    f"--lockfile={lockfile}",
-                )
-            else:
-                session.log(f"Skipping {lockfile} (exists)")
-
-    session_run_commands(session, opts.conda_lock_run)
-    for path in (ROOT / "requirements").relative_to(ROOT.cwd()).glob("py*.yaml"):
-        create_lock(path)
-
-
-@nox.session(name="pip-compile", **ALL_KWS)
-@add_opts
-def pip_compile(
-    session: Session,
-    opts: SessionParams,
-) -> None:
-    """Run pip-compile."""
-
-    runner = Installer(
-        session=session,
-        pip_deps=["pip-tools"],
-        update=opts.update,
-    ).install_all(log_session=opts.log_session)
-
-    if opts.pip_compile_run:
-        # run commands and exit
-        runner.run_commands(opts.pip_compile_run)
-        return
-
-    options = opts.pip_compile_opts or []
-
-    force = (
-        opts.pip_compile_force
-        or opts.pip_compile_upgrade
-        or bool(opts.pip_compile_upgrade_package)
-    )
-
-    if opts.pip_compile_upgrade:
-        options = [*options, "-U"]
-
-    if opts.pip_compile_upgrade_package:
-        options = options + prepend_flag("-P", opts.pip_compile_upgrade_package)
-
-    envs_all = ["test", "typing"]
-    envs_dev = ["dev", "dev-complete", "docs"]
-    envs_dev_optional = ["test-notebook"]
-
-    if session.python == PYTHON_DEFAULT_VERSION:
-        envs = envs_all + envs_dev + envs_dev_optional
-    else:
-        envs = envs_all
-
-    for env in envs:
-        assert isinstance(session.python, str)
-        reqspath = infer_requirement_path(env, ext=".txt", check_exists=False)
-        if not reqspath.is_file():
-            if env in envs_dev_optional:
-                continue
-            msg = f"Missing file {reqspath}"
-            raise ValueError(msg)
-
-        lockpath = infer_requirement_path(
-            env,
-            ext=".txt",
-            python_version=session.python,
-            lock=True,
-            check_exists=False,
+    reqs_path = Path("./requirements")
+    for path in reqs_path.glob("*.txt"):
+        python_versions = (
+            PYTHON_ALL_VERSIONS
+            if path.name in {"test.txt", "test-extras.txt", "typing.txt"}
+            else [PYTHON_DEFAULT_VERSION]
         )
 
-        with check_for_change_manager(
-            reqspath,
-            target_path=lockpath,
-            force_write=force,
-        ) as changed:
-            if force or changed:
-                session.log(f"Creating {lockpath}")
-                session.run("pip-compile", *options, "-o", str(lockpath), str(reqspath))
+        for python_version in python_versions:
+            lockpath = infer_requirement_path(
+                path.name,
+                ext=".txt",
+                python_version=python_version,
+                lock=True,
+                check_exists=False,
+            )
 
-            else:
-                session.log(f"Skipping {lockpath}")
+            with check_for_change_manager(
+                path,
+                target_path=lockpath,
+                force_write=force,
+            ) as changed:
+                if force or changed:
+                    session.run(
+                        "uv",
+                        "pip",
+                        "compile",
+                        "--universal",
+                        f"--config-file={PIP_COMPILE_CONFIG}",
+                        "-q",
+                        "-p",
+                        python_version,
+                        *options,
+                        path,
+                        "-o",
+                        lockpath,
+                    )
+                else:
+                    session.log(f"Skipping {lockpath}")
 
 
 # ** testing
@@ -567,18 +555,8 @@ def test(
     opts: SessionParams,
 ) -> None:
     """Test environments with conda installs."""
-    (
-        Installer.from_envname(
-            session=session,
-            envname="test",
-            lock=opts.lock,
-            # To use editable install
-            # package=True,
-            # To use full install
-            package=get_package_wheel(session, opts="--no-deps --force-reinstall"),
-            update=opts.update,
-        ).install_all(log_session=opts.log_session, update_package=opts.update_package)
-    )
+    install_dependencies(session, name="test", opts=opts)
+    install_package(session, editable=False, update=True)
 
     _test(
         session=session,
@@ -589,22 +567,35 @@ def test(
     )
 
 
-nox.session(name="test", **ALL_KWS)(test)
+nox.session(**ALL_KWS)(test)
 nox.session(name="test-conda", **CONDA_ALL_KWS)(test)
+
+
+@nox.session(name="test-noopt", **DEFAULT_KWS)
+@add_opts
+def test_noopt(
+    session: Session,
+    opts: SessionParams,
+) -> None:
+    """Test environments with conda installs."""
+    install_dependencies(session, name="test-noopt", opts=opts)
+    install_package(session, editable=False, update=True)
+
+    _test(
+        session=session,
+        run=opts.test_run,
+        test_no_pytest=opts.test_no_pytest,
+        test_opts=opts.test_opts,
+        no_cov=opts.no_cov,
+    )
 
 
 @nox.session(name="test-notebook", **DEFAULT_KWS)
 @add_opts
 def test_notebook(session: nox.Session, opts: SessionParams) -> None:
-    (
-        Installer.from_envname(
-            session=session,
-            envname="test-notebook",
-            lock=opts.lock,
-            package=get_package_wheel(session, opts="--no-deps --force-reinstall"),
-            update=opts.update,
-        ).install_all(log_session=opts.log_session, update_package=opts.update_package)
-    )
+    """Run pytest --nbval."""
+    install_dependencies(session, name="test-notebook", opts=opts)
+    install_package(session, editable=False, update=True)
 
     test_nbval_opts = shlex.split(
         """
@@ -612,11 +603,14 @@ def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     --nbval-current-env
     --nbval-sanitize-with=config/nbval.ini
     --dist loadscope
-     examples/usage
    """,
     )
 
-    test_opts = (opts.test_opts or []) + test_nbval_opts
+    test_opts = (
+        (opts.test_opts or [])
+        + test_nbval_opts
+        + [str(p) for p in Path("examples/usage").glob("*.ipynb")]
+    )
 
     session.log(f"{test_opts = }")
 
@@ -629,99 +623,61 @@ def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     )
 
 
-# *** No opts
-@add_opts
-def test_noopt(
-    session: Session,
-    opts: SessionParams,
-) -> None:
-    """Test environments with conda installs."""
-    (
-        Installer.from_envname(
-            session=session,
-            envname="test-noopt",
-            lock=opts.lock,
-            package=get_package_wheel(session, opts="--no-deps --force-reinstall"),
-            update=opts.update,
-        ).install_all(log_session=opts.log_session, update_package=opts.update_package)
-    )
-
-    _test(
-        session=session,
-        run=opts.test_run,
-        test_no_pytest=opts.test_no_pytest,
-        test_opts=opts.test_opts,
-        no_cov=opts.no_cov,
-    )
-
-
-nox.session(name="test-noopt", **DEFAULT_KWS)(test_noopt)
-nox.session(name="test-noopt-conda", **CONDA_DEFAULT_KWS)(test_noopt)
-
-
-# *** coverage
-@nox.session
+@nox.session(python=False)
 @add_opts
 def coverage(
     session: Session,
     opts: SessionParams,
 ) -> None:
-    runner = Installer(
-        session=session,
-        pip_deps="coverage[toml]",
-        update=opts.update,
-    ).install_all()
+    """Run coverage."""
+    cmd = opts.coverage or ["combine", "html", "report"]
 
-    runner.run_commands(opts.coverage_run)
+    run = partial(uvxrun.run, specs=get_uvxrun_specs(), session=session)
 
-    cmd = opts.coverage or []
-    if not cmd and not opts.coverage_run and not opts.coverage_run_internal:
-        cmd = ["combine", "html", "report"]
+    paths = list(Path(".nox").glob("test-*/tmp/.coverage*"))
 
-    session.log(f"{cmd}")
+    if "erase" in cmd:
+        for path in paths:
+            if path.exists():
+                session.log(f"removing {path}")
+                path.unlink()
 
     for c in cmd:
         if c == "combine":
-            paths = list(
-                Path(session.virtualenv.location).parent.glob("test-*/tmp/.coverage"),
+            run(
+                "coverage",
+                "combine",
+                "--keep",
+                "-a",
+                *paths,
             )
-            if update_target(".coverage", *paths):
-                session.run("coverage", "combine", "--keep", "-a", *map(str, paths))
         elif c == "open":
             open_webpage(path="htmlcov/index.html")
-        else:
-            session.run("coverage", c)
 
-    runner.run_commands(opts.coverage_run_internal)
+        else:
+            run(
+                "coverage",
+                c,
+            )
 
 
 # *** testdist (conda)
+@add_opts
 def testdist(
     session: Session,
+    opts: SessionParams,
 ) -> None:
     """Test conda distribution."""
-
-    opts = parse_posargs(*session.posargs)
-
     install_str = PACKAGE_NAME
     if opts.version:
         install_str = f"{install_str}=={opts.version}"
 
-    if is_conda_session(session):
-        pip_deps, conda_deps = None, install_str
-    else:
-        pip_deps, conda_deps = install_str, None
+    install_dependencies(session, name="test-extras", only_group=True, opts=opts)
 
-    (
-        Installer.from_envname(
-            session=session,
-            envname="test-extras",
-            conda_deps=conda_deps,
-            pip_deps=pip_deps,
-            update=opts.update,
-            channels="conda-forge",
-        ).install_all(log_session=opts.log_session)
-    )
+    if isinstance(session.virtualenv, CondaEnv):
+        session.conda_install(install_str)
+    else:
+        session.install(install_str)
 
     _test(
         session=session,
@@ -737,35 +693,28 @@ nox.session(name="testdist-conda", **CONDA_ALL_KWS)(testdist)
 
 
 # # ** Docs
+@nox.session(name="docs", **DEFAULT_KWS)
 @add_opts
-def docs(
+def docs(  # noqa: C901
     session: nox.Session,
     opts: SessionParams,
 ) -> None:
     """
-    Runs make in docs directory. For example, 'nox -s docs -- +d html'
+    Run `make` in docs directory.
+
+    For example, 'nox -s docs -- +d html'
     calls 'make -C docs html'. With 'release' option, you can set the
     message with 'message=...' in posargs.
     """
-    runner = Installer.from_envname(
-        session=session,
-        envname="docs",
-        lock=opts.lock,
-        package=True,
-        update=opts.update,
-    ).install_all(
-        update_package=opts.update_package,
-        log_session=opts.log_session,
-    )
+    cmd = opts.docs or []
+    cmd = ["html"] if not opts.docs_run and not cmd else list(cmd)
+    name = "docs-live" if "livehtml" in cmd else "docs"
+
+    install_dependencies(session, name=name, opts=opts, include_editable_package=True)
 
     if opts.version:
         session.env["SETUPTOOLS_SCM_PRETEND_VERSION"] = opts.version
-
-    runner.run_commands(opts.docs_run)
-
-    cmd = opts.docs or []
-    if not opts.docs_run and not cmd:
-        cmd = ["html"]
+    session_run_commands(session, opts.docs_run)
 
     if "symlink" in cmd:
         cmd.remove("symlink")
@@ -779,8 +728,35 @@ def docs(
         cmd.remove("serve")
 
     if cmd:
-        args = ["make", "-C", "docs", *combine_list_str(cmd)]
-        session.run(*args, external=True)
+        common_opts = ["--doctree-dir=docs/_build/doctree"]
+        for c in combine_list_str(cmd):
+            if c == "clean":
+                for d in ("docs/_build", "generated", "reference/generated"):
+                    shutil.rmtree(Path(d), ignore_errors=True)
+                session.log("cleaned docs")
+            elif c == "livehtml":
+                session.run(
+                    "sphinx-autobuild",
+                    "-b",
+                    "html",
+                    "docs",
+                    "docs/_build/html",
+                    *common_opts,
+                    "--open-browser",
+                    *(
+                        f"--ignore='*/{d}/*'"
+                        for d in (
+                            "_build",
+                            "generated",
+                            "jupyter_execute",
+                            ".ipynb_checkpoints",
+                        )
+                    ),
+                )
+            else:
+                session.run(
+                    "sphinx-build", "-b", c, *common_opts, "docs", f"docs/_build/{c}"
+                )
 
     if open_page:
         open_webpage(path="./docs/_build/html/index.html")
@@ -798,16 +774,10 @@ def docs(
         )
 
 
-nox.session(name="docs", **DEFAULT_KWS)(docs)
-nox.session(name="docs-conda", **CONDA_DEFAULT_KWS)(docs)
-
-
 # ** lint
-@nox.session
-@add_opts
+@nox.session(python=False)
 def lint(
     session: nox.Session,
-    opts: SessionParams,
 ) -> None:
     """
     Run linters with pre-commit.
@@ -816,123 +786,132 @@ def lint(
     To run something else pass, e.g.,
     `nox -s lint -- --lint-run "pre-commit run --hook-stage manual --all-files`
     """
-    runner = Installer(
+    uvxrun.run(
+        "pre-commit",
+        "run",
+        "--all-files",  # "--show-diff-on-failure",
+        specs=get_uvxrun_specs(),
         session=session,
-        pip_deps="pre-commit",
-        update=opts.update,
-    ).install_all(log_session=opts.log_session)
-
-    if opts.lint_run:
-        runner.run_commands(opts.lint_run, external=True)
-    else:
-        session.run("pre-commit", "run", "--all-files")
+    )
 
 
 # ** type checking
+@nox.session(name="typing", **ALL_KWS)
 @add_opts
-def typing(  # noqa: C901
+def typing(  # noqa: C901, PLR0912
     session: nox.Session,
     opts: SessionParams,
 ) -> None:
     """Run type checkers (mypy, pyright, pytype)."""
-    runner = (
-        Installer.from_envname(
-            session=session,
-            envname="typing",
-            lock=opts.lock,
-            update=opts.update,
-            # need package for nbqa checks
-            package=True,
-        )
-        .install_all(log_session=opts.log_session)
-        .run_commands(opts.typing_run)
+    install_dependencies(
+        session, name="typing", opts=opts, include_editable_package=True
     )
+    session_run_commands(session, opts.typing_run)
 
     cmd = opts.typing or []
     if not opts.typing_run and not opts.typing_run_internal and not cmd:
-        cmd = ["mypy", "pyright"]
+        cmd = ["mypy", "pyright", "pylint"]
 
     if "all" in cmd:
-        cmd = ["mypy", "pyright", "pytype"]
+        cmd = ["mypy", "pyright", "pylint", "pytype"]
 
     # set the cache directory for mypy
     session.env["MYPY_CACHE_DIR"] = str(Path(session.create_tmp()) / ".mypy_cache")
 
-    def _run_info(cmd: str) -> None:
-        session.run("which", cmd, external=True)
-        session.run(cmd, "--version", external=True)
-
     if "clean" in cmd:
+        cmd = list(cmd)
         cmd.remove("clean")
 
-        for name in [".mypy_cache", ".pytype"]:
+        for name in (".mypy_cache", ".pytype"):
             p = Path(session.create_tmp()) / name
             if p.exists():
                 session.log(f"removing cache {p}")
-                shutil.rmtree(str(p))
+                shutil.rmtree(p)
+
+    if not isinstance(session.python, str):
+        raise TypeError
+
+    run = partial(
+        uvxrun.run,
+        specs=get_uvxrun_specs(UVXRUN_LOCK_REQUIREMENTS),
+        session=session,
+        python_version=session.python,
+        python_executable=get_python_full_path(session),
+        external=True,
+    )
 
     for c in cmd:
-        if c.endswith("-notebook"):
+        if c.startswith("notebook-"):
             session.run("make", c, external=True)
-            continue
-
-        _run_info(c)
-
-        if c == "mypy":
-            session.run("mypy", "--color-output")
+        elif c == "mypy":
+            run("mypy", "--color-output")
         elif c == "pyright":
-            session.run("pyright", external=True)
-        elif c == "pytype":
-            session.run("pytype", "-o", str(Path(session.create_tmp()) / ".pytype"))
+            run("pyright")
+        elif c == "pylint":
+            session.run(
+                "pylint",
+                # A bit dangerous, but needed to allow pylint
+                # to work across versions.
+                "--disable=unrecognized-option",
+                "--enable-all-extensions",
+                "src",
+                "tests",
+            )
         else:
-            session.log(f"skipping unknown command {c}")
+            session.log(f"Skipping unknown command {c}")
 
-    runner.run_commands(opts.typing_run_internal, external=False)
-
-
-nox.session(name="typing", **ALL_KWS)(typing)
-nox.session(name="typing-conda", **CONDA_ALL_KWS)(typing)
+    for cmds in combine_list_list_str(opts.typing_run_internal or []):
+        run(*cmds)
 
 
-# # ** Dist pypi
-@nox.session
+# ** Dist pypi
+# NOTE: you can skip having the build environment and
+# just use uv build, but faster to use environment ...
+USE_ENVIRONMENT_FOR_BUILD = False
+_build_dec = nox.session(
+    python=PYTHON_DEFAULT_VERSION if USE_ENVIRONMENT_FOR_BUILD else False
+)
+
+
+@_build_dec
 @add_opts
-def build(session: nox.Session, opts: SessionParams) -> None:
+def build(session: nox.Session, opts: SessionParams) -> None:  # noqa: C901
     """
     Build the distribution.
 
     Note that default is to not use build isolation.
     Pass `--build-isolation` to use build isolation.
     """
-    (
-        Installer.from_envname(
-            session=session,
-            envname="build",
-            update=opts.update,
-        ).install_all(log_session=opts.log_session)
-    )
+    if USE_ENVIRONMENT_FOR_BUILD:
+        install_dependencies(session, name="build", opts=opts, lock=False)
 
     if opts.version:
         session.env["SETUPTOOLS_SCM_PRETEND_VERSION"] = opts.version
 
     for cmd in opts.build or ["build"]:
         if cmd == "version":
-            session.run("python", "-m", "setuptools_scm")
-
+            if USE_ENVIRONMENT_FOR_BUILD:
+                session.run(get_python_full_path(session), "-m", "hatchling", "version")  # pyright: ignore[reportPossiblyUnboundVariable]
+            else:
+                session.run(
+                    "uvx", "--with", "hatch-vcs", "hatchling", "version", external=True
+                )
         elif cmd == "build":
-            if Path(outdir := opts.build_outdir).exists():
-                shutil.rmtree(outdir)
+            outdir = opts.build_outdir
+            shutil.rmtree(outdir, ignore_errors=True)
 
-            args = f"python -m build --outdir {outdir}".split()
-            if not opts.build_isolation:
-                args.append("--no-isolation")
+            args = f"uv build --out-dir={outdir}".split()
+            if USE_ENVIRONMENT_FOR_BUILD and not opts.build_isolation:
+                args.append("--no-build-isolation")
 
             if opts.build_opts:
                 args.extend(opts.build_opts)
 
             out = session.run(*args, silent=opts.build_silent)
             if opts.build_silent:
-                assert isinstance(out, str)
+                if not isinstance(out, str):
+                    msg = "session.run output not a string"
+                    raise ValueError(msg)
                 session.log(out.strip().split("\n")[-1])
 
 
@@ -952,25 +931,23 @@ def get_package_wheel(
     Should be straightforward to extend this to isolated builds
     that depend on python version (something like have session build-3.11 ....)
     """
-
     dist_location = Path(session.cache_dir) / "dist"
     if reuse and getattr(get_package_wheel, "_called", False):
         session.log("Reuse isolated build")
     else:
-        cmd = f"nox -s build -- ++build-outdir {dist_location} ++build-opts -w ++build-silent"
-        session.run(*shlex.split(cmd), external=True)
+        cmd = f"nox -s build -- ++build-outdir {dist_location} ++build-opts --wheel ++build-silent"
+        session.run_always(*shlex.split(cmd), external=True)
 
         # save that this was called:
         if reuse:
-            get_package_wheel._called = True  # type: ignore[attr-defined]
+            get_package_wheel._called = True  # type: ignore[attr-defined]  # noqa: SLF001  # pylint: disable=protected-access
 
     paths = list(dist_location.glob("*.whl"))
     if len(paths) != 1:
-        msg = "something wonky with paths {paths}"
+        msg = f"something wonky with paths {paths}"
         raise ValueError(msg)
 
-    path = str(paths[0])
-
+    path = f"{PACKAGE_NAME}@{paths[0]}"
     if extras:
         if not isinstance(extras, str):
             extras = ",".join(extras)
@@ -984,51 +961,34 @@ def get_package_wheel(
     return path
 
 
-@nox.session
+@nox.session(python=False)
 @add_opts
 def publish(session: nox.Session, opts: SessionParams) -> None:
     """Publish the distribution"""
-
-    (
-        Installer(session=session, pip_deps="twine", update=opts.update)
-        .install_all(log_session=opts.log_session)
-        .run_commands(opts.publish_run)
-    )
+    run = partial(uvxrun.run, specs=get_uvxrun_specs(), session=session, external=True)
 
     for cmd in opts.publish or []:
         if cmd == "test":
-            session.run("twine", "upload", "--repository", "testpypi", "dist/*")
-
+            run("twine", "upload", "--repository", "testpypi", "dist/*")
         elif cmd == "release":
-            session.run("twine", "upload", "dist/*")
+            run("twine", "upload", "dist/*")
+        elif cmd == "check":
+            run("twine", "check", "--strict", "dist/*")
 
 
 # # ** Dist conda
-@nox.session(name="conda-recipe")
+@nox.session(name="conda-recipe", python=False)
 @add_opts
 def conda_recipe(
     session: nox.Session,
     opts: SessionParams,
 ) -> None:
     """Run grayskull to create recipe"""
-    runner = Installer(
-        session=session,
-        pip_deps=["grayskull"],
-        update=opts.update,
-    ).install_all(log_session=opts.log_session)
+    commands = opts.conda_recipe or ["recipe"]
 
-    run, commands = opts.conda_recipe_run, opts.conda_recipe
+    run = partial(uvxrun.run, specs=get_uvxrun_specs(), session=session)
 
-    runner.run_commands(run)
-
-    if not run and not commands:
-        commands = ["recipe"]
-
-    if not commands:
-        return
-
-    sdist_path = opts.conda_recipe_sdist_path
-    if not sdist_path:
+    if not (sdist_path := opts.conda_recipe_sdist_path):
         sdist_path = PACKAGE_NAME
         if opts.version:
             sdist_path = f"{sdist_path}=={opts.version}"
@@ -1039,7 +999,7 @@ def conda_recipe(
             if not (d := Path("./dist-conda")).exists():
                 d.mkdir()
 
-            session.run(
+            run(
                 "grayskull",
                 "pypi",
                 sdist_path,
@@ -1051,6 +1011,7 @@ def conda_recipe(
                 "-o",
                 "dist-conda",
             )
+
             _append_recipe(
                 f"dist-conda/{PACKAGE_NAME}/meta.yaml",
                 "config/recipe-append.yaml",
@@ -1061,32 +1022,28 @@ def conda_recipe(
             import tempfile
 
             with tempfile.TemporaryDirectory() as d:  # type: ignore[assignment,unused-ignore]
-                session.run(
+                run(
                     "grayskull",
                     "pypi",
                     sdist_path,
                     "-o",
                     str(d),
                 )
-                session.run(
-                    "cat",
-                    str(Path(d) / PACKAGE_NAME / "meta.yaml"),
-                    external=True,
-                )
+                path = Path(d) / PACKAGE_NAME / "meta.yaml"
+                session.log(f"cat {path}:")
+                with path.open() as f:
+                    for line in f:
+                        print(line, end="")  # noqa: T201
 
 
 @nox.session(name="conda-build", **CONDA_DEFAULT_KWS)
 @add_opts
 def conda_build(session: nox.Session, opts: SessionParams) -> None:
-    runner = Installer.from_envname(
-        session=session,
-        update=opts.update,
-        conda_deps=["boa", "anaconda-client"],
-    ).install_all(log_session=opts.log_session)
-
+    """Run `conda mambabuild`."""
+    session.conda_install("boa", "anaconda-client")
     cmds, run = opts.conda_build, opts.conda_build_run
 
-    runner.run_commands(run)
+    session_run_commands(session, run)
 
     if not run and not cmds:
         cmds = ["build", "clean"]
@@ -1094,11 +1051,11 @@ def conda_build(session: nox.Session, opts: SessionParams) -> None:
     if cmds is None:
         cmds = []
 
+    cmds = list(cmds)
     if "clean" in cmds:
         cmds.remove("clean")
         session.log("removing directory dist-conda/build")
-        if Path("./dist-conda/build").exists():
-            shutil.rmtree("./dist-conda/build")
+        shutil.rmtree(Path("./dist-conda/build"), ignore_errors=True)
 
     for cmd in cmds:
         if cmd == "build":
@@ -1116,23 +1073,17 @@ def conda_build(session: nox.Session, opts: SessionParams) -> None:
 
 
 # ** Other utilities
-@nox.session
+@nox.session(**DEFAULT_KWS)
 @add_opts
 def cog(session: nox.Session, opts: SessionParams) -> None:
     """Run cog."""
-
-    Installer.from_envname(
-        session=session,
-        update=opts.update,
-        pip_deps="cogapp",
-    ).install_all(log_session=opts.log_session)
+    install_dependencies(session, name="cog", opts=opts, include_editable_package=True)
     session.run("cog", "-rP", "README.md", env={"COLUMNS": "90"})
 
 
 # * Utilities -------------------------------------------------------------------------
 def _create_doc_examples_symlinks(session: nox.Session, clean: bool = True) -> None:  # noqa: C901
     """Create symlinks from docs/examples/*.md files to /examples/usage/..."""
-
     import os
 
     def usage_paths(path: Path) -> Iterator[Path]:
@@ -1148,7 +1099,9 @@ def _create_doc_examples_symlinks(session: nox.Session, clean: bool = True) -> N
     ) -> Path:
         path = Path(prefix_dir) / Path(usage_path)
 
-        assert all(ext.startswith(".") for ext in exts)
+        if not all(ext.startswith(".") for ext in exts):
+            msg = "Bad extensions.  Should start with '.'"
+            raise ValueError(msg)
 
         if path.exists():
             return path
@@ -1163,8 +1116,6 @@ def _create_doc_examples_symlinks(session: nox.Session, clean: bool = True) -> N
 
     root = Path("./docs/examples/")
     if clean:
-        import shutil
-
         shutil.rmtree(root / "usage", ignore_errors=True)
 
     # get all md files

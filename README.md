@@ -60,29 +60,6 @@ place.
 This package is actively used by the author. Please feel free to create a pull
 request for wanted features and suggestions!
 
-## Quick start
-
-Use one of the following
-
-```bash
-pip install module-utilities
-```
-
-or
-
-```bash
-conda install -c conda-forge module-utilities
-```
-
-Optionally, you can install [docstring-inheritance] to use the `docinherit`
-module:
-
-```bash
-pip install docstring-inheritance
-# or
-conda install -c conda-forge docstring-inheritance
-```
-
 ## Example usage
 
 Simple example of using `cached` module.
@@ -151,9 +128,8 @@ Simple example of using `DocFiller`.
 ...     output1 | output : float
 ...         Float output
 ...     """,
-...     combine_keys='parameters'
+...     combine_keys="parameters",
 ... )
-...
 >>> @d.decorate
 ... def func(x, y, z):
 ...     """
@@ -162,6 +138,7 @@ Simple example of using `DocFiller`.
 ...     {x}
 ...     {y}
 ...     {z0}
+...
 ...     Returns
 ...     --------
 ...     {returns.output0}
@@ -177,6 +154,7 @@ Simple example of using `DocFiller`.
 +      y param
 +  z : int
 +      z int param
+<BLANKLINE>
 +  Returns
 +  --------
 +  output : int
@@ -185,7 +163,7 @@ Simple example of using `DocFiller`.
 # Note that for python version <= 3.8 that method chaining
 # in decorators doesn't work, so have to do the following.
 # For newer python, you can inline this.
->>> dd = d.assign_keys(z='z0', out='returns.output0')
+>>> dd = d.assign_keys(z="z0", out="returns.output0")
 >>> @dd.decorate
 ... def func1(x, y, z):
 ...     """
@@ -214,10 +192,11 @@ Simple example of using `DocFiller`.
 +  output : int
 +      Integer output.
 
->>> dd = d.assign_keys(z='z1', out='returns.output1')
+>>> dd = d.assign_keys(z="z1", out="returns.output1")
 >>> @dd(func1)
 ... def func2(x, y, z):
 ...     pass
+...
 
 >>> print(indent_docstring(func2))
 +  Parameters
@@ -237,6 +216,29 @@ Simple example of using `DocFiller`.
 ```
 
 <!-- end-docs -->
+
+## Quick start
+
+Use one of the following
+
+```bash
+pip install module-utilities
+```
+
+or
+
+```bash
+conda install -c conda-forge module-utilities
+```
+
+Optionally, you can install [docstring-inheritance] to use the `docinherit`
+module:
+
+```bash
+pip install docstring-inheritance
+# or
+conda install -c conda-forge docstring-inheritance
+```
 
 ## Documentation
 

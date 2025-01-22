@@ -2,14 +2,14 @@
 Fill and share documentation (:mod:`~module_utilities.docfiller`)
 =================================================================
 """
+
 from __future__ import annotations
 
 import inspect
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from textwrap import dedent, indent
 from typing import (
     TYPE_CHECKING,
-    Iterable,
     NamedTuple,
     cast,
 )
@@ -21,10 +21,9 @@ from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
     from typing import (
         Any,
-        Callable,
-        Sequence,
     )
 
     from .typing import F, NestedMap, NestedMapVal
@@ -44,7 +43,7 @@ def indent_docstring(
 
 
 # Factory method to create doc_decorate
-def doc_decorate(
+def doc_decorate(  # pylint: disable=useless-param-doc
     *docstrings: str | Callable[..., Any] | None,
     _prepend: bool = False,
     **params: str,
@@ -120,7 +119,6 @@ def doc_decorate(
     +  -------
     +  output : float
     """
-
     if DOC_SUB:
         return _pd_doc(*docstrings, _prepend=_prepend, **params)
 
@@ -151,7 +149,6 @@ def _build_param_docstring(
         Multiline string for output.
 
     """
-
     no_name = not name
     no_type = not ptype
 
@@ -173,8 +170,8 @@ def _build_param_docstring(
         desc = []
 
     if len(desc) > 0:
-        desc = "\n    ".join(desc)
-        s += f"\n    {desc}"
+        desc_ = "\n    ".join(desc)
+        s += f"\n    {desc_}"
     return s
 
 
@@ -182,7 +179,7 @@ class TParameter(NamedTuple):
     """Interface to Parameters namedtuple in docscrape"""
 
     name: str
-    type: str  # noqa: A003
+    type: str
     desc: str
 
 
@@ -202,8 +199,7 @@ def _params_to_string(
     a : int
         A parameter
     """
-
-    if len(params) == 0:
+    if not params:
         return ""
 
     if isinstance(params, Parameter):
@@ -286,18 +282,17 @@ def _parse_docstring(
 
 
     """
-
     doc = inspect.getdoc(func_or_doc) if callable(func_or_doc) else func_or_doc
 
     parsed = cast(
         "dict[str, str | list[str] | list[Parameter]]",
-        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]
+        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]  # pylint: disable=protected-access
     )
 
-    if expand:
-        parsed_out = {
+    return (
+        {
             k.replace(" ", "_").lower(): _params_to_string(parsed[k], key_char=key_char)
-            for k in [
+            for k in (
                 "Summary",
                 "Extended Summary",
                 "Parameters",
@@ -310,11 +305,11 @@ def _parse_docstring(
                 "Methods",
                 "References",
                 "Examples",
-            ]
+            )
         }
-    else:
-        parsed_out = cast("dict[str, str | dict[str, str]]", parsed)
-    return parsed_out
+        if expand
+        else cast("dict[str, str | dict[str, str]]", parsed)
+    )
 
 
 def dedent_recursive(data: NestedMap) -> NestedMap:
@@ -370,19 +365,17 @@ def _recursive_keys(data: NestedMap) -> list[str]:
     >>> _recursive_keys(d)
     Traceback (most recent call last):
     ...
-    ValueError: unknown type <class 'int'>
-
-
+    TypeError: unknown type <class 'int'>
     """
     keys: list[str] = []
     for k, v in data.items():
-        if isinstance(v, dict):
+        if isinstance(v, Mapping):
             key_list = [f"{k}.{x}" for x in _recursive_keys(v)]
-        elif isinstance(v, str):
+        elif isinstance(v, str):  # pyright: ignore[reportUnnecessaryIsInstance]
             key_list = [k]
         else:
             msg = f"unknown type {type(v)}"
-            raise ValueError(msg)
+            raise TypeError(msg)
 
         keys.extend(key_list)
 
@@ -500,7 +493,7 @@ class DocFiller:
                 new_data.append(d)
             else:
                 msg = f"trying to combine key {k} with non-string value {d}"
-                raise ValueError(msg)
+                raise TypeError(msg)
 
         new.data[new_key] = "\n".join(new_data)
         return new
@@ -585,7 +578,6 @@ class DocFiller:
             A parameter
             with multiple levels
         """
-
         new = self.new_like()
 
         if desc is None:
@@ -627,14 +619,12 @@ class DocFiller:
         Use unnamed `args` to pass in underlying data.
         Use names ``kwargs`` to add namespace.
         """
-
         # create
 
         data: dict[str, NestedMapVal] = {}
 
         def _update_data(x: DocFiller | NestedMap | dict[str, NestedMap]) -> None:
             if isinstance(x, DocFiller):
-                # x = x.params
                 x = x.data
             data.update(**x)
 
@@ -665,13 +655,12 @@ class DocFiller:
 
     def levels_to_top(self, *names: str) -> DocFiller:
         """Make a level top level accessible"""
-
         new = self.new_like()
         for name in names:
             d = self.data[name]
             if isinstance(d, str):
                 msg = f"level {name} is not a dict"
-                raise ValueError(msg)
+                raise TypeError(msg)
 
             for k, v in d.items():
                 new.data[k] = v
@@ -690,31 +679,9 @@ class DocFiller:
         """An AttributeDict view of parameters."""
         return AttributeDict.from_dict(self.data, max_level=1)
 
-    # @cached.prop
-    # def atest(self) -> int:
-    #     """
-    #     A thing that does stuff
-
-    #     Returns
-    #     -------
-    #     int
-    #     """
-    #     return 1
-
-    # @property
-    # def btest(self) -> int:
-    #     """
-    #     B thing that does stuff
-
-    #     Returns
-    #     -------
-    #     int
-    #     """
-    #     return 2
-
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
-        return doc_decorate(**self.params)
+        return doc_decorate(**self.params)  # pylint: disable=not-a-mapping)
 
     def update(self, *args: Any, **kwargs: Any) -> DocFiller:
         """Update parameters"""
@@ -740,7 +707,7 @@ class DocFiller:
 
 
         """
-        return self._default_decorator(func)
+        return self._default_decorator(func)  # pylint: disable=too-many-function-args
 
     def __call__(
         self,
@@ -803,16 +770,14 @@ class DocFiller:
         >>> print(indent_docstring(func2))
         +  A function with  x=new_x and y=there
         """
-        ntemplates, nparams = len(templates), len(params)
-
-        if ntemplates == nparams == 0 and not _prepend:
+        if not templates and not params and not _prepend:
             return self.decorate
-        if nparams == 0:
-            return doc_decorate(*templates, _prepend=_prepend, **self.params)
+        if not params:
+            return doc_decorate(*templates, _prepend=_prepend, **self.params)  # pylint: disable=not-a-mapping
 
         return self.update(params)(*templates, _prepend=_prepend)
 
-    def inherit(
+    def inherit(  # pylint: disable=useless-param-doc
         self,
         template: Callable[..., Any],
         _prepend: bool = False,
@@ -898,7 +863,7 @@ class DocFiller:
         return docinherit.factory_docfiller_inherit_from_parent(cls, self)
 
     @classmethod
-    def from_dict(
+    def from_dict(  # noqa: C901
         cls,
         params: Mapping[str, Any],
         namespace: str | None = None,
@@ -936,21 +901,15 @@ class DocFiller:
         elif isinstance(keep_keys, str):
             keep_keys = [keep_keys]
 
-        assert isinstance(keep_keys, Iterable)
+        if not isinstance(keep_keys, Iterable):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
+            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"
+            raise TypeError(msg)
 
         if combine_keys:
             if isinstance(combine_keys, str):
                 combine_keys = [combine_keys]
 
             updated_params = {k: params[k] for k in keep_keys}
-
-            # if isinstance(combine_keys, (list, tuple)):
-            #     combine_keys = {'': combine_keys}
-
-            # for k, v in combine_keys.items():
-
-            #     if k in updated_params:
-            #         updated_params =
 
             for k in combine_keys:
                 updated_params.update(**params[k])
@@ -963,7 +922,6 @@ class DocFiller:
         elif callable(key_map):
             updated_params = {key_map(k): v for k, v in updated_params.items()}
         else:
-            assert isinstance(key_map, Mapping)
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 
         if namespace:

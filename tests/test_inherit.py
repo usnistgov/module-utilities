@@ -1,5 +1,5 @@
 # pyright: strict
-# pylint: disable=missing-class-docstring,cell-var-from-loop
+# pylint: disable=missing-class-docstring,cell-var-from-loop,no-self-use,differing-param-doc,differing-type-doc
 from __future__ import annotations
 
 from textwrap import dedent
@@ -540,10 +540,10 @@ def test_inherit_3(
     """
     )
 
-    for d in [
+    for d in (
         docinherit.factory_docfiller_from_parent(example_class, docfiller_float),
         docfiller_float.factory_from_parent(example_class),
-    ]:
+    ):
 
         @d(example_class)
         class Ex3(example_class):  # type: ignore[misc]
@@ -702,12 +702,12 @@ def test_inherit_5(example_class: Any, docfiller_str: DocFiller) -> None:
     {notes}
     """
 
-    for d in [
+    for d in (
         docinherit.factory_docfiller_inherit_from_parent(
             example_class, docfiller=docfiller_str
         ),
         docfiller_str.factory_inherit_from_parent(example_class),
-    ]:
+    ):
 
         @d(example_class)
         class Ex5(example_class):  # type: ignore[misc]

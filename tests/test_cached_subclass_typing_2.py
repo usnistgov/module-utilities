@@ -1,4 +1,4 @@
-# pylint: disable=missing-class-docstring
+# pylint: disable=missing-class-docstring,no-self-use
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast, overload

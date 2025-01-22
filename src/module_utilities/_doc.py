@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .typing import F
 
 
-def doc(
+def doc(  # pylint: disable=useless-param-doc
     *docstrings: str | Callable[..., Any] | None, _prepend: bool = False, **params: str
 ) -> Callable[[F], F]:  # pyre-ignore
     """

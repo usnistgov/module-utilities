@@ -502,7 +502,7 @@ def clear(
         @wraps(func)
         def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if hasattr(self, "_cache"):
-                if len(keys_inner) == 0:
+                if not keys_inner:
                     self._cache = {}  # pyright: ignore [reportPrivateUsage]
                 else:
                     for name in keys_inner:

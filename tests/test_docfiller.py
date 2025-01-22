@@ -62,7 +62,7 @@ def test_doc_decorate_simple() -> None:
     """
     ).strip()
 
-    for f in [other, other2, other3, there, another]:
+    for f in (other, other2, other3, there, another):
         assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]
 
     with pytest.raises(ValueError):  # noqa: PT011
@@ -146,7 +146,7 @@ def test_params_to_string() -> None:
 
 
 def test_func_or_doc() -> None:
-    def template() -> None:
+    def template() -> None:  # pylint: disable=differing-param-doc,differing-type-doc
         """
         Parameters
         ----------
@@ -567,7 +567,7 @@ def test_docfiller_namespace() -> None:
         """
     )
 
-    for dd in [dd0, dd1]:
+    for dd in (dd0, dd1):
 
         @dd.decorate  # pylint: disable=cell-var-from-loop
         def func() -> None:

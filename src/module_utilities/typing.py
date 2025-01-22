@@ -2,6 +2,7 @@
 Typing definitions (:mod:`~module_utilities.typing`)
 =====================================================
 """
+# pylint: disable=deprecated-typing-alias
 
 from __future__ import annotations
 

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .docfiller import DocFiller
     from .typing import F
 
-try:
+try:  # pylint: disable=too-many-try-statements
     import docstring_inheritance
 
     HAS_INHERIT = True
@@ -149,10 +149,11 @@ if HAS_INHERIT:
             **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return docfiller(template, _prepend=_prepend, **params)(method)
 
             return decorated
@@ -166,10 +167,11 @@ if HAS_INHERIT:
             name_or_method: str | Callable[..., Any] | None = None,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return doc_inherit(parent=template)(method)
 
             return decorated
@@ -198,11 +200,11 @@ if HAS_INHERIT:
             **params: str,
         ) -> Callable[[F], F]:
             def decorated(method: F) -> F:
-                if callable(name_or_method):
-                    template = name_or_method
-                else:
-                    template = getattr(cls, name_or_method or method.__name__)
-
+                template = (
+                    name_or_method
+                    if callable(name_or_method)
+                    else getattr(cls, name_or_method or method.__name__)
+                )
                 return docfiller.inherit(template, _prepend=_prepend, **params)(method)
 
             return decorated

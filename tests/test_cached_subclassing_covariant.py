@@ -1,4 +1,4 @@
-# pylint: disable=missing-class-docstring
+# pylint: disable=missing-class-docstring,no-self-use
 from __future__ import annotations
 
 from functools import cached_property

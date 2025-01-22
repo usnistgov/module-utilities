@@ -1,5 +1,5 @@
 # mypy: disable-error-code="no-untyped-def, no-untyped-call"
-# pylint: disable=protected-access,missing-class-docstring,no-member,attribute-defined-outside-init
+# pylint: disable=protected-access,missing-class-docstring,no-member,attribute-defined-outside-init,no-self-use
 
 from __future__ import annotations
 
@@ -91,7 +91,7 @@ def test_meth_bad_hash() -> None:
     x._cache = {}
     v = {"a": 1}
     assert x.thing(v) == v
-    assert len(x._cache["thing"]) == 0
+    assert not x._cache["thing"]
 
 
 class Baseclass:
@@ -157,7 +157,7 @@ def do_prop_test(x, key=None, docstring="A doc string", check_empty=True) -> Non
 
     # nothing here
     if check_empty:
-        assert not hasattr(x, "_cache") or len(x._cache) == 0
+        assert not hasattr(x, "_cache") or not x._cache
     prop_test(x, prop="prop", value=(1, 2), key=key, docstring=docstring)
 
     assert tuple(x._cache.keys()) == (key,)  # pytype: disable=attribute-error
@@ -238,7 +238,7 @@ def do_meth_test(x, key=None, docstring="A doc string", check_empty=True) -> Non
 
     target = (1, 2, 3, 4)
     if check_empty:
-        assert not hasattr(x, "_cache") or len(x._cache) == 0
+        assert not hasattr(x, "_cache") or not x._cache
     meth_test(x, "meth", target, args=(3, 4), key=key_tot, docstring=docstring)
     test_keys(x)
 
@@ -413,7 +413,7 @@ def test_clear() -> None:  # noqa: C901
     assert type(x).clear_all.__doc__ == "A clear string"
 
     x.clear_all()
-    assert len(x._cache) == 0
+    assert not x._cache
 
     _ = x.prop
     x.meth(3, 4)
@@ -480,11 +480,11 @@ def test_use_cache() -> None:
 
     x = Tmp()
 
-    for p in ["prop0", "prop2"]:
+    for p in ("prop0", "prop2"):
         assert getattr(x, p) is not getattr(x, p)
         assert not hasattr(x, "_cache") or p not in x._cache
 
-    for p in ["prop1", "prop3"]:
+    for p in ("prop1", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
@@ -551,7 +551,7 @@ def test_use_cache2() -> None:  # noqa: C901
 
     x = Tmp()
 
-    for p in ["prop0", "prop1", "prop2", "prop3"]:
+    for p in ("prop0", "prop1", "prop2", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 
@@ -580,11 +580,11 @@ def test_use_cache3() -> None:
 
     x = Tmp()
 
-    for p in ["prop0", "prop2"]:
+    for p in ("prop0", "prop2"):
         assert getattr(x, p) is not getattr(x, p)
         assert not hasattr(x, "_cache") or p not in x._cache
 
-    for p in ["prop1", "prop3"]:
+    for p in ("prop1", "prop3"):
         assert getattr(x, p) is getattr(x, p)
         assert p in x._cache
 

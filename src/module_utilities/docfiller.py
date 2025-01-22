@@ -43,7 +43,7 @@ def indent_docstring(
 
 
 # Factory method to create doc_decorate
-def doc_decorate(
+def doc_decorate(  # pylint: disable=useless-param-doc
     *docstrings: str | Callable[..., Any] | None,
     _prepend: bool = False,
     **params: str,
@@ -170,8 +170,8 @@ def _build_param_docstring(
         desc = []
 
     if len(desc) > 0:
-        desc = "\n    ".join(desc)
-        s += f"\n    {desc}"
+        desc_ = "\n    ".join(desc)
+        s += f"\n    {desc_}"
     return s
 
 
@@ -199,7 +199,7 @@ def _params_to_string(
     a : int
         A parameter
     """
-    if len(params) == 0:
+    if not params:
         return ""
 
     if isinstance(params, Parameter):
@@ -289,10 +289,10 @@ def _parse_docstring(
         NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]  # pylint: disable=protected-access
     )
 
-    if expand:
-        parsed_out = {
+    return (
+        {
             k.replace(" ", "_").lower(): _params_to_string(parsed[k], key_char=key_char)
-            for k in [
+            for k in (
                 "Summary",
                 "Extended Summary",
                 "Parameters",
@@ -305,11 +305,11 @@ def _parse_docstring(
                 "Methods",
                 "References",
                 "Examples",
-            ]
+            )
         }
-    else:
-        parsed_out = cast("dict[str, str | dict[str, str]]", parsed)
-    return parsed_out
+        if expand
+        else cast("dict[str, str | dict[str, str]]", parsed)
+    )
 
 
 def dedent_recursive(data: NestedMap) -> NestedMap:
@@ -770,16 +770,14 @@ class DocFiller:
         >>> print(indent_docstring(func2))
         +  A function with  x=new_x and y=there
         """
-        ntemplates, nparams = len(templates), len(params)
-
-        if ntemplates == nparams == 0 and not _prepend:
+        if not templates and not params and not _prepend:
             return self.decorate
-        if nparams == 0:
+        if not params:
             return doc_decorate(*templates, _prepend=_prepend, **self.params)  # pylint: disable=not-a-mapping
 
         return self.update(params)(*templates, _prepend=_prepend)
 
-    def inherit(
+    def inherit(  # pylint: disable=useless-param-doc
         self,
         template: Callable[..., Any],
         _prepend: bool = False,

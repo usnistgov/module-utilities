@@ -1,13 +1,17 @@
 # pyright: strict
+# pylint: disable=missing-class-docstring,cell-var-from-loop,no-self-use,differing-param-doc,differing-type-doc
 from __future__ import annotations
+
+from textwrap import dedent
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
-
-from textwrap import dedent
-from typing import Any, Callable
+from module_utilities import docinherit
 from module_utilities.docfiller import DocFiller
-import module_utilities.docinherit as docinherit
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 pytestmark = [
@@ -74,19 +78,16 @@ def test_basic() -> None:
         """
         return x + y
 
-    assert (
-        (func2.__doc__ or "").strip()
-        == dedent(
-            """
+    assert (func2.__doc__ or "").strip() == dedent(
+        """
     Parameters
     ----------
     x : int
     y : float
     """
-        ).strip()
-    )
+    ).strip()
 
-    docinherit.DOC_SUB = False  # type: ignore
+    docinherit.DOC_SUB = False  # type: ignore[attr-defined]
 
     @docinherit.doc_inherit(func)
     def func3(x: int, y: float) -> float:
@@ -97,8 +98,7 @@ def test_basic() -> None:
         """
         return x + y
 
-    docinherit.DOC_SUB = True  # type: ignore
-    # module_utilities.options.DOC_SUB = True
+    docinherit.DOC_SUB = True  # type: ignore[attr-defined]
     assert (
         dedent(func3.__doc__ or "").strip()
         == dedent(
@@ -154,8 +154,8 @@ def expected_func_template() -> str:
     )
 
 
-def compare_func(__func: Callable[..., Any], __template: str, **kwargs: str) -> None:
-    assert __func.__doc__.strip() == __template.format(**kwargs).strip()  # type: ignore
+def compare_func(func: Callable[..., Any], template: str, /, **kwargs: str) -> None:
+    assert func.__doc__.strip() == template.format(**kwargs).strip()  # type: ignore[union-attr]
 
 
 def test_func_1(example_func: Callable[..., Any], expected_func_template: str) -> None:
@@ -272,7 +272,7 @@ def test_func_4(
     expected_func_template_z: str,
     docfiller_float: DocFiller,
 ) -> None:
-    # Note: theres a bug with custom_inhert.  Need the extra space to make indentation work
+    # Note: there's a bug with custom_inherit.  Need the extra space to make indentation work
     @docfiller_float.inherit(example_func)
     def func(x: float, y: float, z: int) -> float:
         """
@@ -367,27 +367,32 @@ def test_func_5(
 
     d = docfiller_float.assign(type_="float").inherit(example_func)
 
-    @d
-    def func3(x: float, y: float, z: int) -> float:
-        """
-        Testz
+    import warnings
 
-        Returns
-        -------
-        new_output : {type_}
-            New output
-        """
-        return x + y + z
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
 
-    compare_func(func3, expected_template, summary="Testz", type_="float")
+        @d
+        def func3(x: float, y: float, z: int) -> float:
+            """
+            Testz
+
+            Returns
+            -------
+            new_output : {type_}
+                New output
+            """
+            return x + y + z
+
+        compare_func(func3, expected_template, summary="Testz", type_="float")
 
 
 # --- Class filling --------------------------------------------------------------------
 @pytest.fixture(scope="module")
-def Example_class(docfiller_int: DocFiller) -> Any:
+def example_class(docfiller_int: DocFiller) -> Any:
     # @docfiller_int.decorate
 
-    class Example_class:
+    class ExampleClass:
         """
         A class to do a thing
 
@@ -431,7 +436,7 @@ def Example_class(docfiller_int: DocFiller) -> Any:
             """
             return z
 
-    return docfiller_int.decorate(Example_class)
+    return docfiller_int.decorate(ExampleClass)
 
 
 @pytest.fixture(scope="module")
@@ -474,44 +479,38 @@ def compare_docs(doc: str | Callable[..., Any] | None, expected: str | None) -> 
 
     a = doc.strip()
     b = dedent(expected).strip()
-    try:
-        assert a == b
-    except:
-        print("error")
-        print(a)
-        print(b)
-        raise AssertionError
+    assert a == b
 
 
 def test_example_class(
-    Example_class: Any, expected_class: str, expected_meth: str
+    example_class: Any, expected_class: str, expected_meth: str
 ) -> None:
     compare_docs(
-        Example_class.__doc__,
+        example_class.__doc__,
         expected_class.format(type_="int", summary="A class to do a thing"),
     )
     compare_docs(
-        Example_class.meth.__doc__, expected_meth.format(type_="int", summary="A meth")
+        example_class.meth.__doc__, expected_meth.format(type_="int", summary="A meth")
     )
     compare_docs(
-        Example_class.meth2.__doc__,
+        example_class.meth2.__doc__,
         expected_meth.format(type_="int", summary="A meth2"),
     )
 
 
 def test_inherit_2(
-    Example_class: Any,
+    example_class: Any,
     docfiller_float: DocFiller,
     expected_class: str,
     expected_meth: str,
 ) -> None:
-    @docfiller_float(Example_class)
-    class Ex2(Example_class):  # type: ignore
-        @docfiller_float(Example_class.meth)
+    @docfiller_float(example_class)
+    class Ex2(example_class):  # type: ignore[misc]
+        @docfiller_float(example_class.meth)
         def meth(self) -> None:
             pass
 
-        @docfiller_float(Example_class.meth2)
+        @docfiller_float(example_class.meth2)
         def meth2(self) -> None:
             pass
 
@@ -528,7 +527,7 @@ def test_inherit_2(
 
 
 def test_inherit_3(
-    Example_class: Any,
+    example_class: Any,
     docfiller_float: DocFiller,
     expected_class: str,
     expected_meth: str,
@@ -541,13 +540,13 @@ def test_inherit_3(
     """
     )
 
-    for d in [
-        docinherit.factory_docfiller_from_parent(Example_class, docfiller_float),  # type: ignore
-        docfiller_float.factory_from_parent(Example_class),  # type: ignore
-    ]:
+    for d in (
+        docinherit.factory_docfiller_from_parent(example_class, docfiller_float),
+        docfiller_float.factory_from_parent(example_class),
+    ):
 
-        @d(Example_class)
-        class Ex3(Example_class):  # type: ignore
+        @d(example_class)
+        class Ex3(example_class):  # type: ignore[misc]
             @d()
             def meth(self) -> None:
                 pass
@@ -586,11 +585,11 @@ def test_inherit_3(
         )
 
 
-def test_inherit_4(Example_class: Any) -> None:
-    d = docinherit.factory_docinherit_from_parent(Example_class)
+def test_inherit_4(example_class: Any) -> None:
+    d = docinherit.factory_docinherit_from_parent(example_class)
 
-    @d(Example_class)
-    class Ex4(Example_class):  # type: ignore
+    @d(example_class)
+    class Ex4(example_class):  # type: ignore[misc]
         """
         A new class
 
@@ -669,7 +668,7 @@ def test_inherit_4(Example_class: Any) -> None:
     )
 
 
-def test_inherit_5(Example_class: Any, docfiller_str: DocFiller) -> None:
+def test_inherit_5(example_class: Any, docfiller_str: DocFiller) -> None:
     expected_class5 = """
     {summary}
 
@@ -703,13 +702,15 @@ def test_inherit_5(Example_class: Any, docfiller_str: DocFiller) -> None:
     {notes}
     """
 
-    for d in [
-        docinherit.factory_docfiller_inherit_from_parent(Example_class, docfiller=docfiller_str),  # type: ignore
-        docfiller_str.factory_inherit_from_parent(Example_class),  # type: ignore
-    ]:
+    for d in (
+        docinherit.factory_docfiller_inherit_from_parent(
+            example_class, docfiller=docfiller_str
+        ),
+        docfiller_str.factory_inherit_from_parent(example_class),
+    ):
 
-        @d(Example_class)
-        class Ex5(Example_class):  # type: ignore
+        @d(example_class)
+        class Ex5(example_class):  # type: ignore[misc]
             """
             A new class
 
@@ -768,7 +769,7 @@ def test_inherit_5(Example_class: Any, docfiller_str: DocFiller) -> None:
                 """
                 return z
 
-            @d(Example_class.meth, notes="Meth notes")
+            @d(example_class.meth, notes="Meth notes")
             def meth4(self, z: str) -> str:
                 """
                 Parameters

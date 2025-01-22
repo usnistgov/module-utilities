@@ -1,32 +1,32 @@
-# pyre-ignore-all-errors[34]
 """
 Cached class properties/methods (:mod:`~module_utilities.cached`)
 =================================================================
 
 Routines to define cached properties/methods in a class.
 """
+# pylint: disable=protected-access
+
 from __future__ import annotations
 
+import contextlib
 from functools import update_wrapper, wraps
 from inspect import signature
 from typing import TYPE_CHECKING, Generic, cast, overload
 
-if TYPE_CHECKING:
-    from typing import (
-        Any,
-        Callable,
-    )
-
-    from typing_extensions import (
-        Literal,
-        Self,
-    )
-
-    from .typing import C_meth, C_prop, P
-
 from .typing import R, S
 
-__all__ = ["decorate", "prop", "meth", "clear", "CachedProperty"]
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import (
+        Any,
+        Literal,
+    )
+
+    from ._typing_compat import Self
+    from .typing import C_meth, C_prop, P
+
+
+__all__ = ["CachedProperty", "clear", "decorate", "meth", "prop"]
 
 
 class CachedProperty(Generic[S, R]):
@@ -44,7 +44,6 @@ class CachedProperty(Generic[S, R]):
     ...         return 1
     ...
     ...     prop = CachedProperty(prop, key="hello")
-    ...
     >>> x = Example()
     >>> print(x.prop)
     calling prop
@@ -57,13 +56,16 @@ class CachedProperty(Generic[S, R]):
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
         self.__name__: str | None = None
-        update_wrapper(self, prop)  # pyright: ignore
+        update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportGeneralTypeIssues, reportArgumentType]
 
         self._prop = prop
 
         if key is None:
             key = prop.__name__
-        assert isinstance(key, str)
+
+        if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
+            msg = f"key must be a string.  Passed {type(key)=}"
+            raise TypeError(msg)
         self._key = key
         self._check_use_cache = check_use_cache
 
@@ -71,18 +73,17 @@ class CachedProperty(Generic[S, R]):
         if self.__name__ is None:  # pragma: no cover
             self.__name__ = name
         elif name != self.__name__:  # pragma: no cover
-            raise TypeError(
+            msg = (
                 "Cannot assign the same TypedProperty to two different names "
                 f"({self.__name__!r} and {name!r})."
             )
+            raise TypeError(msg)
 
     @overload
-    def __get__(self, instance: None, owner: type[Any] | None = None) -> Self:
-        ...
+    def __get__(self, instance: None, owner: type[Any] | None = None) -> Self: ...
 
     @overload
-    def __get__(self, instance: S, owner: type[Any] | None = None) -> R:
-        ...
+    def __get__(self, instance: S, owner: type[Any] | None = None) -> R: ...
 
     def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:
         if instance is None:
@@ -91,7 +92,7 @@ class CachedProperty(Generic[S, R]):
         if (not self._check_use_cache) or (getattr(instance, "_use_cache", False)):
             try:
                 return cast(
-                    R,
+                    "R",
                     instance._cache[self._key],  # pyright: ignore [reportPrivateUsage]
                 )
             except AttributeError:
@@ -99,16 +100,15 @@ class CachedProperty(Generic[S, R]):
             except KeyError:
                 pass
 
-            # fmt: off
             instance._cache[self._key] = ret = self._prop(instance)  # pyright: ignore [reportPrivateUsage]
-            # fmt: on
 
             return ret
-        else:
-            return self._prop(instance)
+
+        return self._prop(instance)
 
     def __set__(self, instance: S | None, value: R) -> None:
-        raise AttributeError(f"can't set attribute {self._prop.__name__}")
+        msg = f"can't set attribute {self._prop.__name__}"
+        raise AttributeError(msg)
 
 
 @overload
@@ -127,8 +127,7 @@ def decorate(
     key: str | None = ...,
     check_use_cache: bool = ...,
     as_property: Literal[True] = ...,
-) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
-    ...
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]: ...
 
 
 @overload
@@ -140,8 +139,7 @@ def decorate(
 ) -> (
     Callable[[C_meth[S, P, R]], C_meth[S, P, R]]
     | Callable[[C_prop[S, R]], CachedProperty[S, R]]
-):
-    ...
+): ...
 
 
 def decorate(
@@ -160,10 +158,7 @@ def decorate(
     """
     if as_property:
         return prop(key=key, check_use_cache=check_use_cache)
-    else:
-        return meth(
-            key=key, check_use_cache=check_use_cache
-        )  # pyright: ignore[reportGeneralTypeIssues]
+    return meth(key=key, check_use_cache=check_use_cache)  # pyright: ignore[reportGeneralTypeIssues, reportReturnType]
 
 
 @overload
@@ -173,15 +168,13 @@ def prop(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> CachedProperty[S, R]:
-    ...
+) -> CachedProperty[S, R]: ...
 
 
 @overload
 def prop(
     func: None = None, /, *, key: str | None = ..., check_use_cache: bool = ...
-) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]:
-    ...
+) -> Callable[[C_prop[S, R]], CachedProperty[S, R]]: ...
 
 
 def prop(
@@ -219,37 +212,37 @@ def prop(
     Examples
     --------
     >>> class A:
-    ...    def __init__(self):
-    ...        # this isn't strictly needed as it will be created on demand
-    ...        # but should be included if using static typing (mypy, etc)
-    ...        self._cache = {}
+    ...     def __init__(self):
+    ...         # this isn't strictly needed as it will be created on demand
+    ...         # but should be included if using static typing (mypy, etc)
+    ...         self._cache = {}
     ...
-    ...    @prop(key='keyname')
-    ...    def size(self):
-    ...        '''
-    ...        This code gets ran only if the lookup of keyname fails
-    ...        After this code has been ran once, the result is stored in
-    ...        _cache with the key: 'keyname'
-    ...        '''
-    ...        print('set size')
-    ...        return [10]
+    ...     @prop(key="keyname")
+    ...     def size(self):
+    ...         '''
+    ...         This code gets ran only if the lookup of keyname fails
+    ...         After this code has been ran once, the result is stored in
+    ...         _cache with the key: 'keyname'
+    ...         '''
+    ...         print("set size")
+    ...         return [10]
     ...
-    ...    #no arguments implies give cache function name
-    ...    @prop
-    ...    def myprop(self):
-    ...        print('set myprop')
-    ...        return [1.0]
+    ...     # no arguments implies give cache function name
+    ...     @prop
+    ...     def myprop(self):
+    ...         print("set myprop")
+    ...         return [1.0]
     ...
-    ...    @prop(check_use_cache=True)
-    ...    def checker(self):
-    ...        print('set checker')
-    ...        return [2.0]
+    ...     @prop(check_use_cache=True)
+    ...     def checker(self):
+    ...         print("set checker")
+    ...         return [2.0]
 
     >>> x = A()
     >>> x.size
     set size
     [10]
-    >>> x._cache['keyname'] is x.size
+    >>> x._cache["keyname"] is x.size
     True
 
     >>> x.size
@@ -258,13 +251,13 @@ def prop(
     >>> x.myprop
     set myprop
     [1.0]
-    >>> x._cache['myprop'] is x.myprop
+    >>> x._cache["myprop"] is x.myprop
     True
     >>> x.myprop
     [1.0]
 
     If you pass ``check_use_cache=True`` and
-    either `_use_cache=False` or the instance doens't have
+    either `_use_cache=False` or the instance doesn't have
     That property, then caching will NOT be done.
 
     >>> x.checker
@@ -288,8 +281,7 @@ def prop(
 
     if func:
         return cached_lookup(func)
-    else:
-        return cached_lookup
+    return cached_lookup
 
 
 @overload
@@ -299,8 +291,7 @@ def meth(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> C_meth[S, P, R]:
-    ...
+) -> C_meth[S, P, R]: ...
 
 
 @overload
@@ -310,11 +301,10 @@ def meth(
     *,
     key: str | None = ...,
     check_use_cache: bool = ...,
-) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]: ...
 
 
-def meth(
+def meth(  # noqa: C901
     func: C_meth[S, P, R] | None = None,
     /,
     *,
@@ -329,16 +319,14 @@ def meth(
     Examples
     --------
     >>> class A(object):
-    ...    @meth(key='key')
-    ...    def method(self, x, y=2):
-    ...        # This code gets ran only if the lookup of keyname fails
-    ...        # After this code has been ran once, the result is stored in
-    ...        # _cache with the key: 'keyname'
-    ...        # a long calculation....
-    ...        print('calling method')
-    ...        return [x, y]
-    ...
-    ...
+    ...     @meth(key="key")
+    ...     def method(self, x, y=2):
+    ...         # This code gets ran only if the lookup of keyname fails
+    ...         # After this code has been ran once, the result is stored in
+    ...         # _cache with the key: 'keyname'
+    ...         # a long calculation....
+    ...         print("calling method")
+    ...         return [x, y]
 
     >>> x = A()
     >>> x.method(1, 2)
@@ -363,11 +351,8 @@ def meth(
     prop : decorator for properties
     """
 
-    def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:
-        if key is None:
-            key_func = _func.__name__
-        else:
-            key_func = key
+    def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # noqa: C901
+        key_func = _func.__name__ if key is None else key
 
         # use signature
         sig = signature(_func)
@@ -375,91 +360,77 @@ def meth(
         if len(sig.parameters) == 1:
             # special case of single (self) parameter.
             @wraps(_func)
-            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+            def wrapper_no_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
                 if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                     try:
                         return cast(
-                            R,
-                            self._cache[
-                                key_func
-                            ],  # pyright: ignore [reportPrivateUsage]
+                            "R",
+                            self._cache[key_func],  # pyright: ignore [reportPrivateUsage]
                         )
                     except AttributeError:
                         self._cache = {}  # pyright: ignore [reportPrivateUsage]
                     except KeyError:
                         pass
 
-                    # fmt: off
                     self._cache[key_func] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
-                    # fmt: on
 
                     return ret
-                else:
+
+                return _func(self, *args, **kwargs)
+
+            return wrapper_no_args
+
+        # Full method
+        bind = sig.bind
+
+        @wraps(_func)
+        def wrapper_with_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
+            if (not check_use_cache) or (getattr(self, "_use_cache", False)):
+                if not hasattr(self, "_cache"):
+                    self._cache = {}  # pyright: ignore [reportPrivateUsage]
+
+                if key_func not in self._cache:  # pyright: ignore [reportPrivateUsage]
+                    self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
+
+                params = bind(self, *args, **kwargs)
+                params.apply_defaults()
+                key_params = (
+                    params.args[1:],
+                    frozenset(params.kwargs.items()),
+                )
+
+                try:
+                    return cast("R", self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
+                except TypeError:
+                    # this means that key_lookup is bad hash
                     return _func(self, *args, **kwargs)
+                except KeyError:
+                    pass
+                except Exception as e:  # pragma: no cover
+                    print(f"unknown exception {e} in meth call")  # noqa: T201
+                    raise
 
-        else:
-            # Full method
-            bind = sig.bind
+                self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
+                return ret
 
-            @wraps(_func)
-            def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
-                if (not check_use_cache) or (getattr(self, "_use_cache", False)):
-                    if not hasattr(self, "_cache"):
-                        self._cache = (
-                            {}
-                        )  # pyright: ignore [reportPrivateUsage] # fmt: skip
+            return _func(self, *args, **kwargs)
 
-                    # fmt: off
-                    if (key_func not in self._cache):  # pyright: ignore [reportPrivateUsage]
-                        self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
-                    # fmt: on
-
-                    params = bind(self, *args, **kwargs)
-                    params.apply_defaults()
-                    key_params = (
-                        params.args[1:],
-                        frozenset(params.kwargs.items()),
-                    )
-
-                    try:
-                        # fmt: off
-                        return cast(R, self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
-                        # fmt: on
-                    except TypeError:
-                        # this means that key_lookup is bad hash
-                        return _func(self, *args, **kwargs)
-                    # except AttributeError:
-                    #     self._cache = {}  # type: ignore
-                    except KeyError:
-                        pass
-                    except Exception as e:  # pragma: no cover
-                        print(f"unknown exception {e} in meth call")
-                        raise
-
-                    # fmt: off
-                    self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs) # pyright: ignore [reportPrivateUsage]
-                    # fmt: on
-                    return ret
-
-                else:
-                    return _func(self, *args, **kwargs)
-
-        return wrapper
+        return wrapper_with_args
 
     if func:
         return cached_lookup(func)
-    else:
-        return cached_lookup
+
+    return cached_lookup
 
 
 @overload
-def clear(key_or_func: C_meth[S, P, R], *keys: str) -> C_meth[S, P, R]:
-    ...
+def clear(key_or_func: C_meth[S, P, R], *keys: str) -> C_meth[S, P, R]: ...
 
 
 @overload
-def clear(key_or_func: str, *keys: str) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-    ...
+def clear(
+    key_or_func: str, *keys: str
+) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]: ...
 
 
 def clear(
@@ -477,23 +448,23 @@ def clear(
     Examples
     --------
     >>> class Example:
-    ...    @prop
-    ...    def a(self):
-    ...        print('calling a')
-    ...        return 'a'
+    ...     @prop
+    ...     def a(self):
+    ...         print("calling a")
+    ...         return "a"
     ...
-    ...    @prop
-    ...    def b(self):
-    ...        print('calling b')
-    ...        return 'b'
+    ...     @prop
+    ...     def b(self):
+    ...         print("calling b")
+    ...         return "b"
     ...
-    ...    @clear
-    ...    def method_that_clears_all(self):
-    ...        pass
+    ...     @clear
+    ...     def method_that_clears_all(self):
+    ...         pass
     ...
-    ...    @clear('a')
-    ...    def method_that_clears_a(self):
-    ...        pass
+    ...     @clear("a")
+    ...     def method_that_clears_a(self):
+    ...         pass
 
     >>> x = Example()
     >>> x.a, x.b
@@ -520,30 +491,23 @@ def clear(
     prop : corresponding decorator for cache creation of property
     meth : decorator for cache creation of function
     """
-
     if callable(key_or_func):
         function = key_or_func
         keys_inner = keys
     else:
         function = None
-        keys_inner = (key_or_func,) + keys
+        keys_inner = (key_or_func, *keys)
 
     def decorator(func: C_meth[S, P, R]) -> C_meth[S, P, R]:
         @wraps(func)
         def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
-            # self._clear_caches(*keys_inner)
-            # clear out keys_inner
             if hasattr(self, "_cache"):
-                if len(keys_inner) == 0:
+                if not keys_inner:
                     self._cache = {}  # pyright: ignore [reportPrivateUsage]
                 else:
                     for name in keys_inner:
-                        try:
-                            # fmt: off
-                            del self._cache[name]  # pyright: ignore [reportPrivateUsage]
-                            # fmt: on
-                        except KeyError:
-                            pass
+                        with contextlib.suppress(KeyError):
+                            del self._cache[name]  # pyright: ignore[reportPrivateUsage]
 
             return func(self, *args, **kwargs)
 
@@ -551,143 +515,4 @@ def clear(
 
     if function:
         return decorator(function)
-    else:
-        return decorator
-
-
-# def decorate2(
-#     *,
-#     key: str | None = None
-#     check_use_cache: bool = False,
-# ) ->  Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-#     """
-#     General purpose cached decorator.
-
-#     Must always be called.
-#     """
-#     # return cast(Callable[[C_meth[S, P, R]], C_meth[S, P, R]], meth(key=key, check_use_cache=check_use_cache))
-#     return meth(key=key, check_use_cache=check_use_cache)
-
-
-# reveal_type(meth(key='hello', check_use_cache=True))
-# reveal_type(decorate(key='hello', check_use_cache=True, as_property=False))
-# reveal_type(decorate2(key='hello'))
-
-
-# class tmp:
-#     _cache: dict[str, Any] = {}
-
-#     @meth()
-#     def hello(self, x: int, y: float) -> Callable[[float], float]:
-#         def func(z: float) -> float:
-#             return x + y + z
-
-#         return func
-
-#     @prop()
-#     def there(self) -> Callable[[int], int]:
-#         def func(x: int) -> int:
-#             return x
-
-#         return func
-
-#     @property
-#     @meth
-#     def there2(self) -> Callable[[int], int]:
-#         def func(x: int) -> int:
-#             return x
-
-#         return func
-
-
-# x = tmp()
-
-# if TYPE_CHECKING:
-#     # reveal_type(x.hello)
-#     # reveal_type(x.hello(1, 2))
-#     # reveal_type(x.there)
-#     # reveal_type(x.there(1))
-#     # reveal_type(x.there2)
-#     # reveal_type(x.there2(1))
-
-#     # f: Callable[[S,int], float]
-
-#     # reveal_type(meth(f))
-#     # reveal_type(meth(key='hello')(f))
-#     # reveal_type(meth(f, key='hello'))
-
-#     # from typing_extensions import get_overloads
-
-#     # get_overloads(prop)
-
-#     def fprop(self: S) -> str:
-#         return "hello"
-
-#     def fmeth(self: S, x: str) -> str:
-#         return x + "there"
-
-#     # reveal_type(prop(fprop))
-#     # reveal_type(prop(fprop, key='hello'))
-#     # reveal_type(prop(fprop, check_use_cache=True))
-#     # reveal_type(prop(fprop, key='hello', check_use_cache=False))
-
-#     # reveal_type(prop(key='hello'))
-#     # reveal_type(prop(check_use_cache=True))
-#     # reveal_type(prop(check_use_cache=False, key='some'))
-
-#     # reveal_type(prop(key='hello')(fprop))
-#     # reveal_type(prop(check_use_cache=True)(fprop))
-#     # reveal_type(prop(check_use_cache=False, key='some')(fprop))
-
-#     def decorate_meth(
-#         *,
-#         key: str | None = None,
-#         check_use_cache: bool = False,
-#         as_property: bool = True,
-#     ) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]:
-#         """
-#         General purpose cached decorator.
-
-#         Must always be called.
-#         """
-#         return meth(key=key, check_use_cache=check_use_cache)
-
-#     reveal_type(decorate())
-#     reveal_type(decorate(key="hello"))
-#     reveal_type(decorate(check_use_cache=True))
-#     reveal_type(decorate(as_property=True))
-
-#     reveal_type(decorate(as_property=False))
-#     reveal_type(meth())
-#     reveal_type(decorate(key="there", as_property=False))
-#     reveal_type(decorate(key="something", check_use_cache=True, as_property=False))
-
-#     reveal_type(decorate_meth(as_property=False))
-#     reveal_type(meth())
-#     reveal_type(decorate_meth(key="there", as_property=False))
-#     reveal_type(decorate_meth(key="something", check_use_cache=True, as_property=False))
-
-#     # reveal_type(decorate(key='hello')(fprop))
-#     # reveal_type(prop(fprop, check_use_cache=True))
-#     # reveal_type(prop(fprop, key='hello', check_use_cache=False))
-
-#     # reveal_type(prop(key='hello'))
-#     # reveal_type(prop(check_use_cache=True))
-#     # reveal_type(prop(check_use_cache=False, key='some'))
-
-#     # reveal_type(prop(key='hello')(fprop))
-#     # reveal_type(prop(check_use_cache=True)(fprop))
-#     # reveal_type(prop(check_use_cache=False, key='some')(fprop))
-
-#     # reveal_type(meth(fmeth))
-#     # reveal_type(meth(fmeth, key='hello'))
-#     # reveal_type(meth(fmeth, check_use_cache=True))
-#     # reveal_type(meth(fmeth, key='hello', check_use_cache=False))
-
-#     # reveal_type(meth(key='hello'))
-#     # reveal_type(meth(check_use_cache=True))
-#     # reveal_type(meth(check_use_cache=False, key='some'))
-
-#     # reveal_type(meth(key='hello')(fmeth))
-#     # reveal_type(meth(check_use_cache=True)(fmeth))
-#     # reveal_type(meth(check_use_cache=False, key='some')(fmeth))
+    return decorator

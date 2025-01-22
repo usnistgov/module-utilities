@@ -1,13 +1,19 @@
 <!-- markdownlint-disable MD024 -->
-
+<!-- markdownlint-disable MD013 -->
+<!-- prettier-ignore-start -->
 # Changelog
 
 Changelog for `module-utilities`
 
 ## Unreleased
 
-See the fragment files in
-[changelog.d](https://github.com/usnistgov/module-utilities)
+[changelog.d]: https://github.com/usnistgov/module-utilities/tree/main/changelog.d
+
+See the fragment files in [changelog.d]
+
+<!-- prettier-ignore-end -->
+
+<!-- markdownlint-enable MD013 -->
 
 <!-- scriv-insert-here -->
 
@@ -47,8 +53,13 @@ See the fragment files in
 
 ### Added
 
+See the fragment files in [changelog.d]
+
+<!-- prettier-ignore-end -->
+
 - Add `_prepend` option to docfiller. Default behavior is now to append current
-  docstring to templates.
+docstring to templates.
+<!-- markdownlint-enable MD013 -->
 
 ## v0.4.0 — 2023-06-14
 

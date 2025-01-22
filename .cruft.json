@@ -1,37 +1,25 @@
 {
-  "template": "https://github.com/wpk-nist-gov/cookiecutter-pypackage.git",
-  "commit": "0032e73ea32bc12947d0ee71210fea5e6be2b5fa",
-  "checkout": "feature/nox",
+  "template": "https://github.com/usnistgov/cookiecutter-nist-python.git",
+  "commit": "4ccec1ff95bc974fa9b3d89af39aa03dfbf0e444",
+  "checkout": "develop",
   "context": {
     "cookiecutter": {
+      "project_name": "module-utilities",
+      "project_slug": "module_utilities",
+      "project_short_description": "Collection of utilities to aid working with python modules.",
       "full_name": "William P. Krekelberg",
       "email": "wpk@nist.gov",
       "github_username": "usnistgov",
       "pypi_username": "wpk-nist",
       "conda_channel": "conda-forge",
-      "project_name": "module-utilities",
-      "project_slug": "module_utilities",
-      "_copy_without_render": [
-        "*.html",
-        "docs/_templates/*.rst",
-        "docs/_templates/autosummary/*.rst",
-        "docs/_templates/autodocsumm/*.rst",
-        "docs/_static/css/*",
-        "docs/_static/js/*",
-        "changelog.d/templates/*.j2",
-        "changelog.d/templates/auto-changelog/*.jinja2"
-      ],
-      "project_short_description": "Collection of utilities to aid working with python modules.",
-      "version": "0.0.1",
-      "use_pytest": "y",
-      "use_pypi_deployment_with_travis": "n",
-      "command_line_interface": "No command-line interface",
-      "create_author_file": "y",
-      "open_source_license": "NIST license",
-      "sphinx_auto": "automodule",
-      "sphinx_use_autodocsumm": "y",
+      "command_line_interface": "none",
+      "sphinx_use_autodocsumm": true,
       "sphinx_theme": "sphinx_book_theme",
-      "_template": "https://github.com/wpk-nist-gov/cookiecutter-pypackage.git"
+      "year": "2023",
+      "__answers": "",
+      "_copy_without_render": [],
+      "_template": "https://github.com/usnistgov/cookiecutter-nist-python.git",
+      "_commit": "4ccec1ff95bc974fa9b3d89af39aa03dfbf0e444"
     }
   },
   "directory": null

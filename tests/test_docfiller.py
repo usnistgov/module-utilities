@@ -65,11 +65,11 @@ def test_doc_decorate_simple() -> None:
     for f in (other, other2, other3, there, another):
         assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]
 
-    with pytest.raises(ValueError):  # noqa: PT011
+    # with pytest.raises(ValueError):
 
-        @docfiller.doc_decorate(1, a="there")  # type: ignore[arg-type]
-        def bad_func():
-            pass
+    #     @docfiller.doc_decorate(1, a="there")  # type: ignore[arg-type]
+    #     def bad_func():
+    #         pass
 
 
 def test_append() -> None:

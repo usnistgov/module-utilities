@@ -815,3 +815,57 @@ def test_inherit_5(example_class: Any, docfiller_str: DocFiller) -> None:
         )
         compare_docs(Ex5.meth3.__doc__, Ex5.meth.__doc__)
         compare_docs(Ex5.meth4.__doc__, Ex5.meth.__doc__)
+
+
+def test_property_inherit() -> None:
+    def _dummy_docstrings() -> None:
+        """
+        Parameters
+        ----------
+        mom : int or tuple of int
+            Order or moments.  If integer or length one tuple, then moments are for
+            a single variable.  If length 2 tuple, then comoments of two variables
+        data : DataArray or ndarray
+            Moment collection array
+
+        """
+
+    docfiller = DocFiller.from_docstring(_dummy_docstrings, combine_keys="parameters")
+
+    @docfiller.decorate
+    class CentralMomentsABC:
+        r"""
+        Wrapper to calculate central moments.
+
+        Parameters
+        ----------
+        {mom}
+        fastpath : bool
+            For internal use.
+        """
+
+        @property
+        def dtype(self) -> str:
+            """DType of wrapped object."""
+            return "hello"
+
+    docfiller_abc = docfiller.factory_from_parent(CentralMomentsABC)
+
+    @docfiller.inherit(CentralMomentsABC)
+    class CentralMomentsArray(
+        CentralMomentsABC,
+    ):
+        r"""
+        Central moments wrapper of arrays.
+
+        Parameters
+        ----------
+        {data}
+        """
+
+        @property
+        @docfiller_abc()
+        def dtype(self) -> str:
+            return "there"
+
+    assert CentralMomentsArray.dtype.__doc__ == CentralMomentsABC.dtype.__doc__

@@ -55,11 +55,8 @@ def doc(  # pylint: disable=useless-param-doc
                 docstring_components.extend(
                     docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
                 )
-            elif callable(docstring) and hasattr(docstring, "__doc__"):
+            elif docstring.__doc__:  # pragma: no cover
                 docstring_components.append(dedent(docstring.__doc__ or ""))
-            else:
-                msg = f"Unknown docstring caught {type(docstring)=}"
-                raise ValueError(msg)
 
         # make default to append
         if decorated.__doc__:

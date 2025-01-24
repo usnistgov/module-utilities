@@ -85,7 +85,7 @@ docs-live = [
 ]
 mypy = [ "mypy>=1.14.0" ]
 nbval = [ "nbval" ]
-optional = [ "docstring-inheritance" ]
+optional = [ "module-utilities[all]" ]
 test-extras = [
     { include-group = "optional" },
     { include-group = "test-noopt" },

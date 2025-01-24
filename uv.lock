@@ -1378,12 +1378,11 @@ cog = [
     { name = "cogapp" },
 ]
 dev = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "ipykernel" },
     { name = "ipython", version = "8.12.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "ipython", version = "8.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
     { name = "ipython", version = "8.31.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "mypy" },
     { name = "nbclient", version = "0.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "nbclient", version = "0.10.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
@@ -1413,8 +1412,7 @@ dev-extras = [
 ]
 docs = [
     { name = "autodocsumm" },
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "myst-nb", marker = "python_full_version >= '3.9'" },
     { name = "pyenchant" },
     { name = "sphinx", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
@@ -1428,8 +1426,7 @@ docs = [
 ]
 docs-live = [
     { name = "autodocsumm" },
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "myst-nb", marker = "python_full_version >= '3.9'" },
     { name = "pyenchant" },
     { name = "sphinx", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
@@ -1450,12 +1447,10 @@ nbval = [
     { name = "nbval" },
 ]
 optional = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
 ]
 test = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "pytest" },
     { name = "pytest-cov", version = "5.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pytest-cov", version = "6.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
@@ -1463,8 +1458,7 @@ test = [
     { name = "pytest-xdist" },
 ]
 test-extras = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "pytest" },
     { name = "pytest-cov", version = "5.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pytest-cov", version = "6.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
@@ -1479,8 +1473,7 @@ test-noopt = [
     { name = "pytest-xdist" },
 ]
 test-notebook = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "nbval" },
     { name = "pytest" },
     { name = "pytest-cov", version = "5.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
@@ -1489,8 +1482,7 @@ test-notebook = [
     { name = "pytest-xdist" },
 ]
 typing = [
-    { name = "docstring-inheritance", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "docstring-inheritance", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "module-utilities", extra = ["all"] },
     { name = "packaging" },
     { name = "pylint", version = "3.2.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pylint", version = "3.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
@@ -1510,9 +1502,9 @@ requires-dist = [
 [package.metadata.requires-dev]
 cog = [{ name = "cogapp" }]
 dev = [
-    { name = "docstring-inheritance" },
     { name = "ipykernel" },
     { name = "ipython" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "mypy", specifier = ">=1.14.0" },
     { name = "nbclient", specifier = ">=0.10.0" },
     { name = "nbval" },
@@ -1534,7 +1526,7 @@ dev-extras = [
 ]
 docs = [
     { name = "autodocsumm" },
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "myst-nb", marker = "python_full_version >= '3.9'" },
     { name = "pyenchant" },
     { name = "sphinx", specifier = ">=5.3.0" },
@@ -1544,7 +1536,7 @@ docs = [
 ]
 docs-live = [
     { name = "autodocsumm" },
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "myst-nb", marker = "python_full_version >= '3.9'" },
     { name = "pyenchant" },
     { name = "sphinx", specifier = ">=5.3.0" },
@@ -1555,16 +1547,16 @@ docs-live = [
 ]
 mypy = [{ name = "mypy", specifier = ">=1.14.0" }]
 nbval = [{ name = "nbval" }]
-optional = [{ name = "docstring-inheritance" }]
+optional = [{ name = "module-utilities", extras = ["all"] }]
 test = [
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-sugar" },
     { name = "pytest-xdist" },
 ]
 test-extras = [
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-sugar" },
@@ -1577,7 +1569,7 @@ test-noopt = [
     { name = "pytest-xdist" },
 ]
 test-notebook = [
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "nbval" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -1585,7 +1577,7 @@ test-notebook = [
     { name = "pytest-xdist" },
 ]
 typing = [
-    { name = "docstring-inheritance" },
+    { name = "module-utilities", extras = ["all"] },
     { name = "packaging" },
     { name = "pylint" },
     { name = "pytest" },

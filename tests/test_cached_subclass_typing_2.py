@@ -79,7 +79,7 @@ class Derived(Base[int]):
         return 1
 
     @cached.prop
-    def prop_cached(self) -> int:  # type: ignore[override]
+    def prop_cached(self) -> int:
         return self.val
 
     @property

@@ -64,7 +64,7 @@ class CachedProperty(Generic[S, R]):
             key = prop.__name__
 
         if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
-            msg = f"key must be a string.  Passed {type(key)=}"
+            msg = f"key must be a string.  Passed {type(key)=}"  # type: ignore[unreachable]
             raise TypeError(msg)
         self._key = key
         self._check_use_cache = check_use_cache

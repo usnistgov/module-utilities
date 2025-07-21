@@ -17,6 +17,16 @@ See the fragment files in [changelog.d]
 
 <!-- scriv-insert-here -->
 
+## v0.11.0 — 2025-07-21
+
+### Changed
+
+- Changes `HasCache` protocol to support frozen `attrs` and `dataclass` classes.
+
+### Fixed
+
+- Errors when applying property to inherit decorator fixed.
+
 ## v0.9.0 — 2023-08-22
 
 ### Changed

@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fill and share documentation (docfiller) &#8212; module-utilities v0.11.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css" />
+    <link rel="stylesheet" type="text/css" href="https://pages.nist.gov/leaveNotice/css/jquery.leaveNotice.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9feead9d"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/module_utilities.docfiller';</script>
+    <script src="https://code.jquery.com/jquery-3.6.2.min.js"></script>
+    <script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js"></script>
+    <script src="https://pages.nist.gov/leaveNotice/js/jquery.leaveNotice-nist.min.js"></script>
+    <script src="../../_static/js/leave_notice.js?v=133c5535"></script>
+    <script async="async" id="_fed_au_ua_tag" type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NIST&subagency=github&pua=UA-66610693-1&yt=true&exts=ppsx,pps,f90,sch,rtf,wrl,txz,m1v,xlsm,msi,xsd,f,tif,eps,mpg,xml,pl,xlt,c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Routines to interface docfiller with custom_inherit (docinherit)" href="module_utilities.docinherit.html" />
+    <link rel="prev" title="Cached class properties/methods (cached)" href="module_utilities.cached.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2025-07-21"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">module-utilities v0.11.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    module-utilities
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">User guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/usage/cached.html">Cached methods/attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/usage/docfiller.html">docfiller</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="module_utilities.cached.html">Cached class properties/methods (<code class="xref py py-mod docutils literal notranslate"><span class="pre">cached</span></code>)</a></li>
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code>)</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="module_utilities.docinherit.html">Routines to interface docfiller with custom_inherit (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docinherit</span></code>)</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="module_utilities.attributedict.html">Attribute dictionary (<code class="xref py py-mod docutils literal notranslate"><span class="pre">attributedict</span></code>)</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="module_utilities.typing.html">Typing definitions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code>)</a></li>
+
+
+
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../navigation.html">Indices and tables</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/usnistgov/module-utilities" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/usnistgov/module-utilities/issues/new?title=Issue%20on%20page%20%2Freference/generated/module_utilities.docfiller.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/reference/generated/module_utilities.docfiller.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fill and share documentation (docfiller)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.indent_docstring"><code class="docutils literal notranslate"><span class="pre">indent_docstring()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.doc_decorate"><code class="docutils literal notranslate"><span class="pre">doc_decorate()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter"><code class="docutils literal notranslate"><span class="pre">TParameter</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.name"><code class="docutils literal notranslate"><span class="pre">TParameter.name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.type"><code class="docutils literal notranslate"><span class="pre">TParameter.type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.desc"><code class="docutils literal notranslate"><span class="pre">TParameter.desc</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.dedent_recursive"><code class="docutils literal notranslate"><span class="pre">dedent_recursive()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller"><code class="docutils literal notranslate"><span class="pre">DocFiller</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.new_like"><code class="docutils literal notranslate"><span class="pre">DocFiller.new_like()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.dedent"><code class="docutils literal notranslate"><span class="pre">DocFiller.dedent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.keys"><code class="docutils literal notranslate"><span class="pre">DocFiller.keys()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_combined_key"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_combined_key()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_keys"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_keys()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_param"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_param()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.concat"><code class="docutils literal notranslate"><span class="pre">DocFiller.concat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.append"><code class="docutils literal notranslate"><span class="pre">DocFiller.append()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.insert_level"><code class="docutils literal notranslate"><span class="pre">DocFiller.insert_level()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.levels_to_top"><code class="docutils literal notranslate"><span class="pre">DocFiller.levels_to_top()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.rename_levels"><code class="docutils literal notranslate"><span class="pre">DocFiller.rename_levels()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.update"><code class="docutils literal notranslate"><span class="pre">DocFiller.update()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.decorate"><code class="docutils literal notranslate"><span class="pre">DocFiller.decorate()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.__call__"><code class="docutils literal notranslate"><span class="pre">DocFiller.__call__()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.inherit"><code class="docutils literal notranslate"><span class="pre">DocFiller.inherit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.factory_from_parent"><code class="docutils literal notranslate"><span class="pre">DocFiller.factory_from_parent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent"><code class="docutils literal notranslate"><span class="pre">DocFiller.factory_inherit_from_parent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.from_dict"><code class="docutils literal notranslate"><span class="pre">DocFiller.from_dict()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.from_docstring"><code class="docutils literal notranslate"><span class="pre">DocFiller.from_docstring()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fill-and-share-documentation-docfiller">
+<span id="module-module_utilities.docfiller"></span><h1>Fill and share documentation (<a class="reference internal" href="#module-module_utilities.docfiller" title="module_utilities.docfiller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code></a>)<a class="headerlink" href="#fill-and-share-documentation-docfiller" title="Link to this heading">#</a></h1>
+</section>
+<p><strong>Functions:</strong></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.indent_docstring" title="module_utilities.docfiller.indent_docstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">indent_docstring</span></code></a>(docstring[, prefix])</p></td>
+<td><p>Create indented docstring</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.doc_decorate" title="module_utilities.docfiller.doc_decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doc_decorate</span></code></a>(*docstrings[, _prepend])</p></td>
+<td><p>A decorator take docstring templates, concatenate them and perform string substitution on it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.dedent_recursive" title="module_utilities.docfiller.dedent_recursive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dedent_recursive</span></code></a>(data)</p></td>
+<td><p>Dedent nested mapping of strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Classes:</strong></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.TParameter" title="module_utilities.docfiller.TParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TParameter</span></code></a>(name, type, desc)</p></td>
+<td><p>Interface to Parameters namedtuple in docscrape</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocFiller</span></code></a>([params])</p></td>
+<td><p>Class to handle doc filling.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="module_utilities.docfiller.indent_docstring">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.docfiller.</span></span><span class="sig-name descname"><span class="pre">indent_docstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docstring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+</span>&#160; <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L32-L42"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.indent_docstring" title="Link to this definition">#</a></dt>
+<dd><p>Create indented docstring</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="module_utilities.docfiller.doc_decorate">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.docfiller.</span></span><span class="sig-name descname"><span class="pre">doc_decorate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">docstrings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_prepend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L46-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.doc_decorate" title="Link to this definition">#</a></dt>
+<dd><p>A decorator take docstring templates, concatenate them and perform string
+substitution on it.</p>
+<p>This decorator will add a variable “_docstring_components” to the wrapped
+callable to keep track the original docstring template for potential usage.
+If it should be consider as a template, it will be saved as a string.
+Otherwise, it will be saved as callable, and later user __doc__ and dedent
+to get docstring</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*docstrings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – The string / docstring / docstring template to be appended in order
+after default docstring under callable.</p></li>
+<li><p><strong>_prepend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>default</em> <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>) – If True, prepend decorated function docstring.  Otherwise, append to end.</p></li>
+<li><p><strong>**params</strong> – The string which would be used to format docstring template.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Doc filling can be turned off by setting the environment variable
+<code class="docutils literal notranslate"><span class="pre">DOCFILLER_SUB</span></code> to one of <code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">f,</span> <span class="pre">false</span></code>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@doc_decorate</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func0</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">    Parameters</span>
+<span class="gp">... </span><span class="sd">    ----------</span>
+<span class="gp">... </span><span class="sd">    x : {type_}</span>
+<span class="gp">... </span><span class="sd">        x parameter.</span>
+<span class="gp">... </span><span class="sd">    y : {type_}</span>
+<span class="gp">... </span><span class="sd">        y parameter.</span>
+<span class="gp">... </span><span class="sd">    Returns</span>
+<span class="gp">... </span><span class="sd">    -------</span>
+<span class="gp">... </span><span class="sd">    output : {type_}</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func0</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : int</span>
+<span class="go">+      x parameter.</span>
+<span class="go">+  y : int</span>
+<span class="go">+      y parameter.</span>
+<span class="go">+  Returns</span>
+<span class="go">+  -------</span>
+<span class="go">+  output : int</span>
+</pre></div>
+</div>
+<p>To inherit from a function/docstring, pass it:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@doc_decorate</span><span class="p">(</span><span class="n">func0</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func1</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : float</span>
+<span class="go">+      x parameter.</span>
+<span class="go">+  y : float</span>
+<span class="go">+      y parameter.</span>
+<span class="go">+  Returns</span>
+<span class="go">+  -------</span>
+<span class="go">+  output : float</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="module_utilities.docfiller.TParameter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities.docfiller.</span></span><span class="sig-name descname"><span class="pre">TParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L178-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.TParameter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>Interface to Parameters namedtuple in docscrape</p>
+<p><strong>Attributes:</strong></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.TParameter.name" title="module_utilities.docfiller.TParameter.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Alias for field number 0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.TParameter.type" title="module_utilities.docfiller.TParameter.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code></a></p></td>
+<td><p>Alias for field number 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.TParameter.desc" title="module_utilities.docfiller.TParameter.desc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">desc</span></code></a></p></td>
+<td><p>Alias for field number 2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="module_utilities.docfiller.TParameter.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#module_utilities.docfiller.TParameter.name" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="module_utilities.docfiller.TParameter.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#module_utilities.docfiller.TParameter.type" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="module_utilities.docfiller.TParameter.desc">
+<span class="sig-name descname"><span class="pre">desc</span></span><a class="headerlink" href="#module_utilities.docfiller.TParameter.desc" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="module_utilities.docfiller.dedent_recursive">
+<span class="sig-prename descclassname"><span class="pre">module_utilities.docfiller.</span></span><span class="sig-name descname"><span class="pre">dedent_recursive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L315-L353"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.dedent_recursive" title="Link to this definition">#</a></dt>
+<dd><p>Dedent nested mapping of strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>) – Same type of <code class="docutils literal notranslate"><span class="pre">data</span></code>, with dedented values</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">     a : int</span>
+<span class="gp">... </span><span class="s1">         A thing</span>
+<span class="gp">... </span><span class="s1">     &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+
+<span class="go">     a : int</span>
+<span class="go">         A thing</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">dedent_recursive</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+<span class="go">a : int</span>
+<span class="go">    A thing</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">module_utilities.docfiller.</span></span><span class="sig-name descname"><span class="pre">DocFiller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L385-L980"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to handle doc filling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_or_doc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Docstring to parse.  If callable, extract from function signature.</p></li>
+<li><p><strong>key_char</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>default</em> <code class="docutils literal notranslate"><span class="pre">'|'</span></code>) – Optional string to split name into key/name pair.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docstring</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    Parameters</span>
+<span class="gp">... </span><span class="s1">    ----------</span>
+<span class="gp">... </span><span class="s1">    x : int</span>
+<span class="gp">... </span><span class="s1">        x param</span>
+<span class="gp">... </span><span class="s1">    y : int</span>
+<span class="gp">... </span><span class="s1">        y param</span>
+<span class="gp">... </span><span class="s1">    z0 | z : int</span>
+<span class="gp">... </span><span class="s1">        z int param</span>
+<span class="gp">... </span><span class="s1">    z1 | z : float</span>
+<span class="gp">... </span><span class="s1">        z float param</span>
+<span class="gp">...</span>
+<span class="gp">... </span><span class="s1">    Returns</span>
+<span class="gp">... </span><span class="s1">    -------</span>
+<span class="gp">... </span><span class="s1">    output0 | output : int</span>
+<span class="gp">... </span><span class="s1">        Integer output.</span>
+<span class="gp">... </span><span class="s1">    output1 | output : float</span>
+<span class="gp">... </span><span class="s1">        Float output</span>
+<span class="gp">... </span><span class="s1">    &#39;&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="o">.</span><span class="n">from_docstring</span><span class="p">(</span><span class="n">docstring</span><span class="p">,</span> <span class="n">combine_keys</span><span class="o">=</span><span class="s2">&quot;parameters&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
+<span class="go">[&#39;x&#39;, &#39;y&#39;, &#39;z0&#39;, &#39;z1&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">decorate</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">    Parameters</span>
+<span class="gp">... </span><span class="sd">    ----------</span>
+<span class="gp">... </span><span class="sd">    {x}</span>
+<span class="gp">... </span><span class="sd">    {y}</span>
+<span class="gp">... </span><span class="sd">    {z0}</span>
+<span class="gp">... </span><span class="sd">    Returns</span>
+<span class="gp">... </span><span class="sd">    --------</span>
+<span class="gp">... </span><span class="sd">    {returns.output0}</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
+<span class="go">+  Parameters</span>
+<span class="go">+  ----------</span>
+<span class="go">+  x : int</span>
+<span class="go">+      x param</span>
+<span class="go">+  y : int</span>
+<span class="go">+      y param</span>
+<span class="go">+  z : int</span>
+<span class="go">+      z int param</span>
+<span class="go">+  Returns</span>
+<span class="go">+  --------</span>
+<span class="go">+  output : int</span>
+<span class="go">+      Integer output.</span>
+</pre></div>
+</div>
+<p><strong>Methods:</strong></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.new_like" title="module_utilities.docfiller.DocFiller.new_like"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_like</span></code></a>([data])</p></td>
+<td><p>Create new object with optional data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.dedent" title="module_utilities.docfiller.DocFiller.dedent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dedent</span></code></a>()</p></td>
+<td><p>Recursively dedent params</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.keys" title="module_utilities.docfiller.DocFiller.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p>List of keys</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign_combined_key" title="module_utilities.docfiller.DocFiller.assign_combined_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign_combined_key</span></code></a>(new_key, keys)</p></td>
+<td><p>Combine multiple keys into single key</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign_keys" title="module_utilities.docfiller.DocFiller.assign_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign_keys</span></code></a>(**kwargs)</p></td>
+<td><p>Create new key from other keys.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign_param" title="module_utilities.docfiller.DocFiller.assign_param"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign_param</span></code></a>(name[, ptype, desc, key])</p></td>
+<td><p>Add in a new parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.concat" title="module_utilities.docfiller.DocFiller.concat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concat</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Create new object from multiple DocFiller or dict objects.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.append" title="module_utilities.docfiller.DocFiller.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Calls <code class="docutils literal notranslate"><span class="pre">concat</span></code> method with <code class="docutils literal notranslate"><span class="pre">self</span></code> as first argument.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.insert_level" title="module_utilities.docfiller.DocFiller.insert_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_level</span></code></a>(name)</p></td>
+<td><p>Insert a level/namespace.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.levels_to_top" title="module_utilities.docfiller.DocFiller.levels_to_top"><code class="xref py py-obj docutils literal notranslate"><span class="pre">levels_to_top</span></code></a>(*names)</p></td>
+<td><p>Make a level top level accessible</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.rename_levels" title="module_utilities.docfiller.DocFiller.rename_levels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rename_levels</span></code></a>(**kws)</p></td>
+<td><p>Rename a keys at top level.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.update" title="module_utilities.docfiller.DocFiller.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Update parameters</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.assign" title="module_utilities.docfiller.DocFiller.assign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign</span></code></a>(**kwargs)</p></td>
+<td><p>Assign new key/value pairs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.decorate" title="module_utilities.docfiller.DocFiller.decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate</span></code></a>(func)</p></td>
+<td><p>Default decorator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.__call__" title="module_utilities.docfiller.DocFiller.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(*templates[, _prepend])</p></td>
+<td><p>Factory function to create docfiller decorator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.inherit" title="module_utilities.docfiller.DocFiller.inherit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inherit</span></code></a>(template[, _prepend])</p></td>
+<td><p>Factor function to create decorator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_from_parent" title="module_utilities.docfiller.DocFiller.factory_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_from_parent</span></code></a>(cls)</p></td>
+<td><p>Interface to docinherit.factory_docfiller_from_parent.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent" title="module_utilities.docfiller.DocFiller.factory_inherit_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_inherit_from_parent</span></code></a>(cls)</p></td>
+<td><p>Interface to docinherit.factory_docfiller_inherit_from_parent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_dict" title="module_utilities.docfiller.DocFiller.from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dict</span></code></a>(params[, namespace, combine_keys, ...])</p></td>
+<td><p>Create a Docfiller instance from a dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.from_docstring" title="module_utilities.docfiller.DocFiller.from_docstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_docstring</span></code></a>(func_or_doc[, namespace, ...])</p></td>
+<td><p>Create a Docfiller instance from a function or docstring.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Attributes:</strong></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.params" title="module_utilities.docfiller.DocFiller.params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">params</span></code></a></p></td>
+<td><p>An AttributeDict view of parameters.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.new_like">
+<span class="sig-name descname"><span class="pre">new_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L463-L467"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.new_like" title="Link to this definition">#</a></dt>
+<dd><p>Create new object with optional data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.dedent">
+<span class="sig-name descname"><span class="pre">dedent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L476-L478"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.dedent" title="Link to this definition">#</a></dt>
+<dd><p>Recursively dedent params</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L480-L483"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.keys" title="Link to this definition">#</a></dt>
+<dd><p>List of keys</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.assign_combined_key">
+<span class="sig-name descname"><span class="pre">assign_combined_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L485-L499"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.assign_combined_key" title="Link to this definition">#</a></dt>
+<dd><p>Combine multiple keys into single key</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.assign_keys">
+<span class="sig-name descname"><span class="pre">assign_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L507-L537"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.assign_keys" title="Link to this definition">#</a></dt>
+<dd><p>Create new key from other keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – new_key=old_key or new_key=[old_key0, old_key1, …]
+Note that dot notation is accepted.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="p">({</span><span class="s2">&quot;a0&quot;</span><span class="p">:</span> <span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="s2">&quot;a1&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">assign_keys</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dn</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">])</span>
+<span class="go">a0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dn</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">])</span>
+<span class="go">a0</span>
+<span class="go">b</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.assign_param">
+<span class="sig-name descname"><span class="pre">assign_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L539-L593"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.assign_param" title="Link to this definition">#</a></dt>
+<dd><p>Add in a new parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Parameters name</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>optional</em>) – Optional key for placement in <cite>self</cite>.  This is like using <cite>key | name</cite>.</p></li>
+<li><p><strong>ptype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>default</em> <code class="docutils literal notranslate"><span class="pre">''</span></code>) – Optional type.</p></li>
+<li><p><strong>desc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>default</em> <code class="docutils literal notranslate"><span class="pre">''</span></code>) – Parameter description.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>output</strong> (<a class="reference internal" href="#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code></a>) – New DocFiller instance.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">assign_param</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">ptype</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    A parameter</span>
+<span class="gp">... </span><span class="s1">    with multiple levels</span>
+<span class="gp">... </span><span class="s1">    &#39;&#39;&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dn</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+<span class="go">x : float</span>
+<span class="go">    A parameter</span>
+<span class="go">    with multiple levels</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.concat">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L595-L642"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.concat" title="Link to this definition">#</a></dt>
+<dd><p>Create new object from multiple DocFiller or dict objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – dict or Docfiller</p></li>
+<li><p><strong>**kwargs</strong> – dict or Docfiller objects
+The passed name will be used as the top level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code></a> – combined DocFiller object.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Use unnamed <cite>args</cite> to pass in underlying data.
+Use names <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> to add namespace.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L644-L650"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.append" title="Link to this definition">#</a></dt>
+<dd><p>Calls <code class="docutils literal notranslate"><span class="pre">concat</span></code> method with <code class="docutils literal notranslate"><span class="pre">self</span></code> as first argument.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.insert_level">
+<span class="sig-name descname"><span class="pre">insert_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L652-L654"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.insert_level" title="Link to this definition">#</a></dt>
+<dd><p>Insert a level/namespace.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.levels_to_top">
+<span class="sig-name descname"><span class="pre">levels_to_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">names</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L656-L667"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.levels_to_top" title="Link to this definition">#</a></dt>
+<dd><p>Make a level top level accessible</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.rename_levels">
+<span class="sig-name descname"><span class="pre">rename_levels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L669-L675"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.rename_levels" title="Link to this definition">#</a></dt>
+<dd><p>Rename a keys at top level.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L677-L680"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.params" title="Link to this definition">#</a></dt>
+<dd><p>An AttributeDict view of parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L686-L690"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.update" title="Link to this definition">#</a></dt>
+<dd><p>Update parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.assign">
+<span class="sig-name descname"><span class="pre">assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L692-L694"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.assign" title="Link to this definition">#</a></dt>
+<dd><p>Assign new key/value pairs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.decorate">
+<span class="sig-name descname"><span class="pre">decorate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L696-L710"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.decorate" title="Link to this definition">#</a></dt>
+<dd><p>Default decorator.</p>
+<p>This uses <cite>self.params</cite> and the decorated function docstring as a template.
+If need to pass parameters, use self.__call__</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#module_utilities.docfiller.DocFiller.__call__" title="module_utilities.docfiller.DocFiller.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">templates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_prepend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L712-L778"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Factory function to create docfiller decorator.</p>
+<p>This should always be used in a callable manner.</p>
+<p>If want to call without any parameter use decorate()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*templates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – docstrings to be used as templates.</p></li>
+<li><p><strong>_prepend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>default</em> <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>) – If <cite>True</cite>, then prepend <cite>templates</cite> with docstring of decorated function.
+Otherwise, append to end.</p></li>
+<li><p><strong>**params</strong> – Extra parameters to be substituted.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Using the default decorator</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocFiller</span><span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;there&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="o">.</span><span class="n">decorate</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">():</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">    A function with  x={x} and y={y}</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
+<span class="go">+  A function with  x=hello and y=there</span>
+</pre></div>
+</div>
+<p>Using call without args</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="p">()</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func1</span><span class="p">():</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">    A new function with x={x} and y={y}</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func1</span><span class="p">))</span>
+<span class="go">+  A new function with x=hello and y=there</span>
+</pre></div>
+</div>
+<p>Using call with args. This inherits from passed template</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@d</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;new_x&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func2</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indent_docstring</span><span class="p">(</span><span class="n">func2</span><span class="p">))</span>
+<span class="go">+  A function with  x=new_x and y=there</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.inherit">
+<span class="sig-name descname"><span class="pre">inherit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_prepend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L780-L823"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.inherit" title="Link to this definition">#</a></dt>
+<dd><p>Factor function to create decorator.</p>
+<p>Use combination of docstring_inheritance.inherit_numpy_docstring and
+DocFiller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – Template method to inherit from.</p></li>
+<li><p><strong>_prepend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>default</em> <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>) – Prepend parameter.</p></li>
+<li><p><strong>**params</strong> – Extra parameter specifications.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>decorator</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – Decorator</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="module_utilities.docinherit.html#module_utilities.docinherit.doc_inherit" title="module_utilities.docinherit.doc_inherit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doc_inherit</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.factory_from_parent">
+<span class="sig-name descname"><span class="pre">factory_from_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L825-L843"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.factory_from_parent" title="Link to this definition">#</a></dt>
+<dd><p>Interface to docinherit.factory_docfiller_from_parent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – Class to inherit from.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="module_utilities.docinherit.html#module_utilities.docinherit.factory_docfiller_from_parent" title="module_utilities.docinherit.factory_docfiller_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_docfiller_from_parent</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.factory_inherit_from_parent">
+<span class="sig-name descname"><span class="pre">factory_inherit_from_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L845-L863"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent" title="Link to this definition">#</a></dt>
+<dd><p>Interface to docinherit.factory_docfiller_inherit_from_parent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – Class to inherit from</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="module_utilities.docinherit.html#module_utilities.docinherit.factory_docfiller_inherit_from_parent" title="module_utilities.docinherit.factory_docfiller_inherit_from_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factory_docfiller_inherit_from_parent</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L865-L930"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.from_dict" title="Link to this definition">#</a></dt>
+<dd><p>Create a Docfiller instance from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<a class="reference external" href="https://docs.python.org/3/glossary.html#term-mapping" title="(in Python v3.13)"><span class="xref std std-term">mapping</span></a>)</p></li>
+<li><p><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>optional</em>) – Top level namespace for DocFiller.</p></li>
+<li><p><strong>combine_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-sequence" title="(in Python v3.13)"><span class="xref std std-term">sequence</span></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-mapping" title="(in Python v3.13)"><span class="xref std std-term">mapping</span></a>, <em>optional</em>) – If str or sequence of str, Keys of <code class="docutils literal notranslate"><span class="pre">params</span></code> to at the top level.
+If mapping, should be of form {namespace: key(s)}</p></li>
+<li><p><strong>keep_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-sequence" title="(in Python v3.13)"><span class="xref std std-term">sequence</span></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If False, then don’t keep any keys at top level.  This is useful with the <code class="docutils literal notranslate"><span class="pre">combine_keys</span></code> parameter.
+If True, keep all keys, regardless of combine_keys.
+If str or sequence of str, keep these keys in output.</p></li>
+<li><p><strong>key_map</strong> (<a class="reference external" href="https://docs.python.org/3/glossary.html#term-mapping" title="(in Python v3.13)"><span class="xref std std-term">mapping</span></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – Function or mapping to new keys in resulting dict.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_utilities.docfiller.DocFiller.from_docstring">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_docstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_or_doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_char</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'|'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/usnistgov/module-utilities/blob/main/src/module_utilities/docfiller.py#L932-L980"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_utilities.docfiller.DocFiller.from_docstring" title="Link to this definition">#</a></dt>
+<dd><p>Create a Docfiller instance from a function or docstring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_or_doc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – Docstring to parse to get parameters.</p></li>
+<li><p><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>optional</em>) – Top level namespace for DocFiller.</p></li>
+<li><p><strong>combine_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-sequence" title="(in Python v3.13)"><span class="xref std std-term">sequence</span></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-mapping" title="(in Python v3.13)"><span class="xref std std-term">mapping</span></a>, <em>optional</em>) – If str or sequence of str, Keys of <code class="docutils literal notranslate"><span class="pre">params</span></code> to at the top level.
+If mapping, should be of form {namespace: key(s)}</p></li>
+<li><p><strong>key_char</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>default</em> <code class="docutils literal notranslate"><span class="pre">&quot;|&quot;</span></code>) – Character to split names.  By default, for parameters, the key will be parsed from
+The docstring. If you want to override this, you can use
+<cite>key | name : ….</cite> in the definition (where <cite>‘|’</cite> is the value of <cite>key_char</cite>).</p></li>
+<li><p><strong>keep_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/glossary.html#term-sequence" title="(in Python v3.13)"><span class="xref std std-term">sequence</span></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If False, then don’t keep any keys at top level.  This is useful with the
+<code class="docutils literal notranslate"><span class="pre">combine_keys</span></code> parameter.
+If True, keep all keys, regardless of combine_keys.
+If str or sequence of str, keep these keys in output.</p></li>
+<li><p><strong>key_map</strong> (<a class="reference external" href="https://docs.python.org/3/glossary.html#term-mapping" title="(in Python v3.13)"><span class="xref std std-term">mapping</span></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#callable" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">callable()</span></code></a>) – Function or mapping to new keys in resulting dict.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#module_utilities.docfiller.DocFiller" title="module_utilities.docfiller.DocFiller"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocFiller</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="module_utilities.cached.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Cached class properties/methods (<code class="xref py py-mod docutils literal notranslate"><span class="pre">cached</span></code>)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module_utilities.docinherit.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Routines to interface docfiller with custom_inherit (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docinherit</span></code>)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fill and share documentation (<code class="xref py py-mod docutils literal notranslate"><span class="pre">docfiller</span></code>)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.indent_docstring"><code class="docutils literal notranslate"><span class="pre">indent_docstring()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.doc_decorate"><code class="docutils literal notranslate"><span class="pre">doc_decorate()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter"><code class="docutils literal notranslate"><span class="pre">TParameter</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.name"><code class="docutils literal notranslate"><span class="pre">TParameter.name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.type"><code class="docutils literal notranslate"><span class="pre">TParameter.type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.TParameter.desc"><code class="docutils literal notranslate"><span class="pre">TParameter.desc</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.dedent_recursive"><code class="docutils literal notranslate"><span class="pre">dedent_recursive()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller"><code class="docutils literal notranslate"><span class="pre">DocFiller</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.new_like"><code class="docutils literal notranslate"><span class="pre">DocFiller.new_like()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.dedent"><code class="docutils literal notranslate"><span class="pre">DocFiller.dedent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.keys"><code class="docutils literal notranslate"><span class="pre">DocFiller.keys()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_combined_key"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_combined_key()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_keys"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_keys()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign_param"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign_param()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.concat"><code class="docutils literal notranslate"><span class="pre">DocFiller.concat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.append"><code class="docutils literal notranslate"><span class="pre">DocFiller.append()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.insert_level"><code class="docutils literal notranslate"><span class="pre">DocFiller.insert_level()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.levels_to_top"><code class="docutils literal notranslate"><span class="pre">DocFiller.levels_to_top()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.rename_levels"><code class="docutils literal notranslate"><span class="pre">DocFiller.rename_levels()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.params"><code class="docutils literal notranslate"><span class="pre">DocFiller.params</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.update"><code class="docutils literal notranslate"><span class="pre">DocFiller.update()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.assign"><code class="docutils literal notranslate"><span class="pre">DocFiller.assign()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.decorate"><code class="docutils literal notranslate"><span class="pre">DocFiller.decorate()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.__call__"><code class="docutils literal notranslate"><span class="pre">DocFiller.__call__()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.inherit"><code class="docutils literal notranslate"><span class="pre">DocFiller.inherit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.factory_from_parent"><code class="docutils literal notranslate"><span class="pre">DocFiller.factory_from_parent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.factory_inherit_from_parent"><code class="docutils literal notranslate"><span class="pre">DocFiller.factory_inherit_from_parent()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.from_dict"><code class="docutils literal notranslate"><span class="pre">DocFiller.from_dict()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module_utilities.docfiller.DocFiller.from_docstring"><code class="docutils literal notranslate"><span class="pre">DocFiller.from_docstring()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By William P. Krekelberg
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, William P. Krekelberg.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2025-07-21.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

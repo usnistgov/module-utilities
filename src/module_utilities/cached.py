@@ -11,6 +11,7 @@ from __future__ import annotations
 import contextlib
 from functools import update_wrapper, wraps
 from inspect import signature
+from operator import delitem
 from typing import TYPE_CHECKING, Generic, cast, overload
 
 from .typing import R, S
@@ -96,11 +97,11 @@ class CachedProperty(Generic[S, R]):
                     instance._cache[self._key],  # pyright: ignore [reportPrivateUsage]
                 )
             except AttributeError:
-                instance._cache = {}  # pyright: ignore [reportPrivateUsage]
+                object.__setattr__(instance, "_cache", {})
             except KeyError:
                 pass
 
-            instance._cache[self._key] = ret = self._prop(instance)  # pyright: ignore [reportPrivateUsage]
+            instance._cache[self._key] = ret = self._prop(instance)  # pyright: ignore[reportPrivateUsage]
 
             return ret
 
@@ -368,7 +369,7 @@ def meth(  # noqa: C901
                             self._cache[key_func],  # pyright: ignore [reportPrivateUsage]
                         )
                     except AttributeError:
-                        self._cache = {}  # pyright: ignore [reportPrivateUsage]
+                        object.__setattr__(self, "_cache", {})  # noqa: PLC2801
                     except KeyError:
                         pass
 
@@ -387,7 +388,7 @@ def meth(  # noqa: C901
         def wrapper_with_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 if not hasattr(self, "_cache"):
-                    self._cache = {}  # pyright: ignore [reportPrivateUsage]
+                    object.__setattr__(self, "_cache", {})  # pyright: ignore [reportPrivateUsage]  # noqa: PLC2801
 
                 if key_func not in self._cache:  # pyright: ignore [reportPrivateUsage]
                     self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
@@ -503,11 +504,11 @@ def clear(
         def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if hasattr(self, "_cache"):
                 if not keys_inner:
-                    self._cache = {}  # pyright: ignore [reportPrivateUsage]
+                    self._cache.clear()  # pyright: ignore[reportPrivateUsage]
                 else:
                     for name in keys_inner:
                         with contextlib.suppress(KeyError):
-                            del self._cache[name]  # pyright: ignore[reportPrivateUsage]
+                            delitem(self._cache, name)  # pyright: ignore[reportPrivateUsage]
 
             return func(self, *args, **kwargs)
 

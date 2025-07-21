@@ -93,6 +93,7 @@ test-extras = [
     { include-group = "test" },
 ]
 test-noopt = [
+    "attrs",
     "pytest",
     "pytest-cov",
     "pytest-sugar",
@@ -104,6 +105,7 @@ test-notebook = [
     { include-group = "test" },
 ]
 typecheck = [
+    "attrs",
     { include-group = "optional" },
     { include-group = "pylint" },
     { include-group = "pytest" },
@@ -249,6 +251,7 @@ strict = [
     "src",
     "noxfile.py",
     "tools",
+    "tests/test_cached_attrs_dataclass.py",
 ]
 typeCheckingMode = "basic"
 # enable subset of "strict"

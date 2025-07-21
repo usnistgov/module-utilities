@@ -2,20 +2,10 @@
 
 ## Stable release
 
-To install `module-utilities`, run this command in your terminal:
-
-```bash
-pip install module-utilities
+```{include} ../README.md
+:start-after: <!-- start-installation -->
+:end-before: <!-- end-installation -->
 ```
-
-or
-
-```bash
-conda install -c conda-forge module-utilities
-```
-
-This is the preferred method to install `module-utilities`, as it will always
-install the most recent stable release.
 
 ## From sources
 

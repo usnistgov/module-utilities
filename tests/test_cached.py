@@ -66,7 +66,7 @@ def test_cachedproperty_without_cache() -> None:
     assert Tmp.there.__doc__ == "B test"
 
     with pytest.raises(AttributeError):
-        x.thing = 2  # type: ignore[call-overload]
+        x.thing = 2
 
     x.clear()
     assert x._cache == {}  # type: ignore[attr-defined]

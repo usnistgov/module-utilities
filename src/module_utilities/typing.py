@@ -6,7 +6,8 @@ Typing definitions (:mod:`~module_utilities.typing`)
 
 from __future__ import annotations
 
-from typing import Any, Callable, Mapping, Protocol, TypeVar
+from collections.abc import Mapping, MutableMapping
+from typing import Any, Callable, Protocol, TypeVar
 
 from ._typing_compat import Concatenate, ParamSpec, TypeAlias
 
@@ -38,10 +39,27 @@ R = TypeVar("R")
 """Return Type"""
 
 
-class HasCache(Protocol):
-    """Class protocol to mark that classes should have property _cache."""
+class HasCacheAttribute(Protocol):
+    """Class protocol to mark class should have _cache attribute"""
 
-    _cache: dict[str, Any]
+    _cache: MutableMapping[str, Any]
+
+
+class HasCacheProperty(Protocol):
+    """
+    Class protocol to mark that classes should have property _cache.
+
+    NOTE: strictly speaking, this should be read/writeable
+    but for attrs, frozen to work, need to pretend its read only.
+    Use some tricks to make it work from there...
+    """
+
+    @property
+    def _cache(self) -> MutableMapping[str, Any]: ...  # pragma: no cover
+
+
+HasCache: TypeAlias = "HasCacheAttribute | HasCacheProperty"
+"""Protocol to mark that class should have ``_cache`` attribute"""
 
 
 S = TypeVar("S", bound="HasCache")

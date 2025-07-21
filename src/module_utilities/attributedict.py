@@ -6,8 +6,8 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 # pylint: disable=deprecated-typing-alias
 from __future__ import annotations
 
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, MutableMapping, overload
+from collections.abc import Mapping, MutableMapping
+from typing import TYPE_CHECKING, overload
 
 from .typing import NestedMap, NestedMapVal
 
@@ -147,7 +147,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             # set to False by -O (it is True for normal execution).
             # But we only want to see an error when building the docs;
             # not something users should see, so this slight inconsistency is fine.
-            if __debug__:  # pragma: no cover
+            if __debug__:  # pragma: no cover  # ty: ignore[unresolved-reference]
                 raise
 
     def __repr__(self) -> str:

@@ -37,9 +37,9 @@ def indent_docstring(
         docstring = (docstring.__doc__ or "").strip()
 
     if prefix is not None:
-        return indent(docstring, prefix)
+        return indent(docstring, prefix)  # ty: ignore[invalid-argument-type]
 
-    return docstring
+    return docstring  # ty: ignore[invalid-return-type]
 
 
 # Factory method to create doc_decorate
@@ -374,7 +374,7 @@ def _recursive_keys(data: NestedMap) -> list[str]:
         elif isinstance(v, str):  # pyright: ignore[reportUnnecessaryIsInstance]
             key_list = [k]
         else:
-            msg = f"unknown type {type(v)}"
+            msg = f"unknown type {type(v)}"  # type: ignore[unreachable]
             raise TypeError(msg)
 
         keys.extend(key_list)
@@ -681,7 +681,7 @@ class DocFiller:
 
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
-        return doc_decorate(**self.params)  # pylint: disable=not-a-mapping)
+        return doc_decorate(**self.params)  # type: ignore[arg-type] # pylint: disable=not-a-mapping)
 
     def update(self, *args: Any, **kwargs: Any) -> DocFiller:
         """Update parameters"""
@@ -773,7 +773,7 @@ class DocFiller:
         if not templates and not params and not _prepend:
             return self.decorate
         if not params:
-            return doc_decorate(*templates, _prepend=_prepend, **self.params)  # pylint: disable=not-a-mapping
+            return doc_decorate(*templates, _prepend=_prepend, **self.params)  # type: ignore[arg-type] # pylint: disable=not-a-mapping
 
         return self.update(params)(*templates, _prepend=_prepend)
 
@@ -902,7 +902,7 @@ class DocFiller:
             keep_keys = [keep_keys]
 
         if not isinstance(keep_keys, Iterable):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
-            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"
+            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"  # type: ignore[unreachable]
             raise TypeError(msg)
 
         if combine_keys:

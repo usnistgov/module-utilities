@@ -3,7 +3,6 @@ Attribute dictionary (:mod:`~module_utilities.attributedict`)
 =============================================================
 """
 
-# pylint: disable=deprecated-typing-alias
 from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping

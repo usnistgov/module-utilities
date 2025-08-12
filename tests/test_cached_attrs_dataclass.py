@@ -1,4 +1,5 @@
 # pyright: reportPrivateUsage=false
+# pylint: disable=missing-class-docstring,no-self-use,protected-access,comparison-with-callable,use-implicit-booleaness-not-comparison
 
 from __future__ import annotations
 
@@ -38,7 +39,7 @@ def test_attrs_class() -> None:
     assert x.meth_0() == 1
     assert x.meth_1(2.0) == 4.0
 
-    for key in ["prop", "meth_0", "meth_1"]:
+    for key in ("prop", "meth_0", "meth_1"):
         assert key in x._cache
 
     x.clear()
@@ -46,8 +47,6 @@ def test_attrs_class() -> None:
 
 
 def test_attrs_class_frozen() -> None:
-    import attrs
-
     @attrs.frozen
     class Example:
         _cache: dict[str, Any] = attrs.field(factory=dict, init=False)  # pyright: ignore[reportUnknownVariableType]
@@ -75,7 +74,7 @@ def test_attrs_class_frozen() -> None:
     assert x.meth_0() == 1
     assert x.meth_1(2.0) == 4.0
 
-    for key in ["prop", "meth_0", "meth_1"]:
+    for key in ("prop", "meth_0", "meth_1"):
         assert key in x._cache
 
     x.clear()
@@ -110,7 +109,7 @@ def test_dataclass_class() -> None:
     assert x.meth_0() == 1
     assert x.meth_1(2.0) == 4.0
 
-    for key in ["prop", "meth_0", "meth_1"]:
+    for key in ("prop", "meth_0", "meth_1"):
         assert key in x._cache
 
     x.clear()
@@ -145,7 +144,7 @@ def test_dataclass_class_frozen() -> None:
     assert x.meth_0() == 1
     assert x.meth_1(2.0) == 4.0
 
-    for key in ["prop", "meth_0", "meth_1"]:
+    for key in ("prop", "meth_0", "meth_1"):
         assert key in x._cache
 
     x.clear()

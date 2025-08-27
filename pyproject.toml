@@ -246,13 +246,13 @@ exclude = [
     "**/.numba_cache",
     "src/module_utilities/vendored",
 ]
+pythonVersion = "3.11"
+typeCheckingMode = "standard"
 strict = [
     "src",
     "noxfile.py",
     "tools/*.py",
 ]
-pythonVersion = "3.11"
-typeCheckingMode = "standard"
 reportDuplicateImport = true
 reportInvalidStubStatement = true
 reportOverlappingOverload = true
@@ -261,6 +261,7 @@ reportUntypedClassDecorator = true
 reportUntypedFunctionDecorator = true
 reportUntypedNamedTuple = true
 reportUnusedImport = true
+# Extra flags
 enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 reportUnreachable = "warning"

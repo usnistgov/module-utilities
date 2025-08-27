@@ -53,7 +53,7 @@ def doc(  # pylint: disable=useless-param-doc
                 docstring_components.append(docstring)
             elif hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
-                    docstring._docstring_components  # pyright: ignore[reportGeneralTypeIssues, reportFunctionMemberAccess, reportUnknownMemberType, reportUnknownArgumentType]
+                    docstring._docstring_components  # pyright: ignore[reportFunctionMemberAccess]
                 )
             elif docstring.__doc__:  # pragma: no cover
                 docstring_components.append(dedent(docstring.__doc__ or ""))
@@ -82,7 +82,7 @@ def doc(  # pylint: disable=useless-param-doc
         )
 
         # error: "F" has no attribute "_docstring_components"
-        decorated._docstring_components = (  # type: ignore[attr-defined]
+        decorated._docstring_components = (  # type: ignore[attr-defined]  # pyright: ignore[reportFunctionMemberAccess]
             docstring_components
         )
         return decorated

@@ -40,17 +40,17 @@ def test_cachedproperty() -> None:
 # so need ignores
 def test_cachedproperty_without_cache() -> None:
     class Tmp:
-        @cached.CachedProperty  # type: ignore[type-var]
+        @cached.CachedProperty  # type: ignore[type-var]  # pyright: ignore[reportArgumentType]
         def thing(self) -> int:
             """A test"""
             return 1
 
-        @cached.prop  # type: ignore[type-var]
+        @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def there(self) -> int:
             """B test"""
             return 2
 
-        @cached.clear  # type: ignore[type-var]
+        @cached.clear  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def clear(self) -> None:
             pass
 
@@ -61,7 +61,7 @@ def test_cachedproperty_without_cache() -> None:
 
     assert x.thing == 1  # type: ignore[call-overload]
 
-    assert x._cache == {"thing": 1}  # type: ignore[attr-defined]
+    assert x._cache == {"thing": 1}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
     assert Tmp.there.__name__ == "there"
     assert Tmp.there.__doc__ == "B test"
 
@@ -69,7 +69,7 @@ def test_cachedproperty_without_cache() -> None:
         x.thing = 2
 
     x.clear()
-    assert x._cache == {}  # type: ignore[attr-defined]
+    assert x._cache == {}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def test_meth_bad_hash() -> None:
@@ -599,7 +599,7 @@ def test_error_with_slots() -> None:
             self.a = a
             self.b = b
 
-        @cached.prop  # type: ignore[type-var]
+        @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def prop(self):
             return self.a, self.b
 

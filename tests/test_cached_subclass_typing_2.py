@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from module_utilities._typing_compat import Self
 
 R = TypeVar("R")
-T = TypeVar("T", bound="Base[R]")  # type: ignore[valid-type]
+T = TypeVar("T", bound="Base[Any]")
 
 
 class Athing(Generic[T, R]):
@@ -24,13 +24,13 @@ class Athing(Generic[T, R]):
 
     def __getitem__(self, index: int | slice) -> R | T:
         if isinstance(index, int):
-            return self.parent.val  # pyright: ignore[reportReturnType]
+            return self.parent.val  # type: ignore[no-any-return]
 
         return self.parent
 
     @property
     def output(self) -> R:
-        return self.parent.val  # pyright: ignore[reportReturnType]
+        return self.parent.val  # type: ignore[no-any-return]
 
     @property
     def other(self) -> T:
@@ -79,7 +79,7 @@ class Derived(Base[int]):
         return 1
 
     @cached.prop
-    def prop_cached(self) -> int:
+    def prop_cached(self) -> int:  # pyright: ignore[reportIncompatibleVariableOverride]
         return self.val
 
     @property

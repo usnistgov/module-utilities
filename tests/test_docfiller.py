@@ -63,7 +63,7 @@ def test_doc_decorate_simple() -> None:
     ).strip()
 
     for f in (other, other2, other3, there, another):
-        assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]
+        assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
 
     # with pytest.raises(ValueError):
 
@@ -80,7 +80,7 @@ def test_append() -> None:
     def func1() -> None:
         """{x}"""
 
-    assert func1.__doc__.strip() == "Hellothere"  # type: ignore[union-attr]
+    assert func1.__doc__.strip() == "Hellothere"  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
 
     @docfiller.doc_decorate(func, x="some", _prepend=True)
     def func2() -> None:
@@ -163,7 +163,7 @@ def test_func_or_doc() -> None:
 
 
 def test_docfiller_creation() -> None:
-    d = DocFiller([("x", "hello")])  # type: ignore[arg-type]
+    d = DocFiller([("x", "hello")])  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
 
     @d.decorate
     def func() -> None:
@@ -206,7 +206,7 @@ def test_docfiller_getitem() -> None:
     def func2() -> None:
         """{z}"""
 
-    assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]
+    assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
 
     with pytest.raises(TypeError):
         ddd = d.assign_combined_key("zz", ["parameters"])
@@ -549,7 +549,7 @@ def test_docfiller_namespace() -> None:
 
     dd1 = docfiller.DocFiller.concat(a=d0, b=d1, c={"type_": "int"})
 
-    assert dd1["c"]["type_"] == "int"  # type: ignore[index]
+    assert dd1["c"]["type_"] == "int"  # type: ignore[index]  # pyright: ignore[reportArgumentType]
 
     expected = dedent(
         """

@@ -14,7 +14,7 @@ from module_utilities import cached
 def test_attrs_class() -> None:
     @attrs.define
     class Example:
-        _cache: dict[str, Any] = attrs.field(factory=dict, init=False)  # pyright: ignore[reportUnknownVariableType]
+        _cache: dict[str, Any] = attrs.field(factory=dict, init=False)
 
         @cached.prop
         def prop(self) -> int:
@@ -49,7 +49,7 @@ def test_attrs_class() -> None:
 def test_attrs_class_frozen() -> None:
     @attrs.frozen
     class Example:
-        _cache: dict[str, Any] = attrs.field(factory=dict, init=False)  # pyright: ignore[reportUnknownVariableType]
+        _cache: dict[str, Any] = attrs.field(factory=dict, init=False)
 
         @cached.prop
         def prop(self) -> int:
@@ -84,7 +84,7 @@ def test_attrs_class_frozen() -> None:
 def test_dataclass_class() -> None:
     @dataclasses.dataclass
     class Example:
-        _cache: dict[str, Any] = dataclasses.field(default_factory=dict, init=False)  # pyright: ignore[reportUnknownVariableType]
+        _cache: dict[str, Any] = dataclasses.field(default_factory=dict, init=False)
 
         @cached.prop
         def prop(self) -> int:
@@ -119,7 +119,7 @@ def test_dataclass_class() -> None:
 def test_dataclass_class_frozen() -> None:
     @dataclasses.dataclass(frozen=True)
     class Example:
-        _cache: dict[str, Any] = dataclasses.field(default_factory=dict, init=False)  # pyright: ignore[reportUnknownVariableType]
+        _cache: dict[str, Any] = dataclasses.field(default_factory=dict, init=False)
 
         @cached.prop
         def prop(self) -> int:

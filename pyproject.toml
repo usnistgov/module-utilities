@@ -246,15 +246,13 @@ exclude = [
     "**/.numba_cache",
     "src/module_utilities/vendored",
 ]
-pythonVersion = "3.11"
 strict = [
     "src",
     "noxfile.py",
-    "tools",
-    "tests/test_cached_attrs_dataclass.py",
+    "tools/*.py",
 ]
-typeCheckingMode = "basic"
-# enable subset of "strict"
+pythonVersion = "3.11"
+typeCheckingMode = "standard"
 reportDuplicateImport = true
 reportInvalidStubStatement = true
 reportOverlappingOverload = true
@@ -263,16 +261,9 @@ reportUntypedClassDecorator = true
 reportUntypedFunctionDecorator = true
 reportUntypedNamedTuple = true
 reportUnusedImport = true
-# disable subset of "basic"
-reportGeneralTypeIssues = false
-reportMissingModuleSource = false
-reportOptionalCall = false
-reportOptionalIterable = false
-reportOptionalMemberAccess = false
-reportOptionalOperand = false
-reportOptionalSubscript = false
-reportPrivateImportUsage = false
-reportUnboundVariable = false
+enableTypeIgnoreComments = false
+reportUnnecessaryTypeIgnoreComment = true
+reportUnreachable = "warning"
 
 [tool.pytype]
 inputs = [
@@ -318,6 +309,7 @@ reqs = [
     "pre-commit-uv",
     "pyrefly",
     "pyright>=1.1.392",
+    "basedpyright>=1.31.3",
     "scriv",
     "twine>=5.0.0",
     "ty",

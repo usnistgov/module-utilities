@@ -286,7 +286,7 @@ def _parse_docstring(
 
     parsed = cast(
         "dict[str, str | list[str] | list[Parameter]]",
-        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportUnknownMemberType, reportPrivateUsage]  # pylint: disable=protected-access
+        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportPrivateUsage]  # pylint: disable=protected-access
     )
 
     return (
@@ -902,7 +902,7 @@ class DocFiller:
             keep_keys = [keep_keys]
 
         if not isinstance(keep_keys, Iterable):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
-            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"  # type: ignore[unreachable]
+            msg = f"keep_keys must be iterable, not {type(keep_keys)=}"  # type: ignore[unreachable]  # pyright: ignore[reportUnreachable]
             raise TypeError(msg)
 
         if combine_keys:

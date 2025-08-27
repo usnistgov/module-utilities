@@ -57,7 +57,7 @@ class CachedProperty(Generic[S, R]):
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
         self.__name__: str | None = None
-        update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportGeneralTypeIssues, reportArgumentType]
+        update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 
         self._prop = prop
 
@@ -65,7 +65,7 @@ class CachedProperty(Generic[S, R]):
             key = prop.__name__
 
         if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
-            msg = f"key must be a string.  Passed {type(key)=}"  # type: ignore[unreachable]
+            msg = f"key must be a string.  Passed {type(key)=}"  # type: ignore[unreachable]  # pyright: ignore[reportUnreachable]
             raise TypeError(msg)
         self._key = key
         self._check_use_cache = check_use_cache
@@ -159,7 +159,7 @@ def decorate(
     """
     if as_property:
         return prop(key=key, check_use_cache=check_use_cache)
-    return meth(key=key, check_use_cache=check_use_cache)  # pyright: ignore[reportGeneralTypeIssues, reportReturnType]
+    return meth(key=key, check_use_cache=check_use_cache)
 
 
 @overload
@@ -388,7 +388,7 @@ def meth(  # noqa: C901
         def wrapper_with_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 if not hasattr(self, "_cache"):
-                    object.__setattr__(self, "_cache", {})  # pyright: ignore [reportPrivateUsage]  # noqa: PLC2801
+                    object.__setattr__(self, "_cache", {})  # noqa: PLC2801
 
                 if key_func not in self._cache:  # pyright: ignore [reportPrivateUsage]
                     self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]

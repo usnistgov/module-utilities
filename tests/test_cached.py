@@ -59,7 +59,7 @@ def test_cachedproperty_without_cache() -> None:
     assert not hasattr(x, "_cache")
     x.clear()
 
-    assert x.thing == 1  # type: ignore[call-overload]
+    assert x.thing == 1  # type: ignore[arg-type, comparison-overlap]
 
     assert x._cache == {"thing": 1}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
     assert Tmp.there.__name__ == "there"
@@ -606,7 +606,7 @@ def test_error_with_slots() -> None:
     x = test(1, 2)
 
     with pytest.raises(AttributeError):
-        _ = x.prop  # type: ignore[call-overload]
+        _ = x.prop  # type: ignore[arg-type]
 
     # but this should work fine:
     class test2:

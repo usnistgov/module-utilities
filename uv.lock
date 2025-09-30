@@ -1093,6 +1093,7 @@ wheels = [
 
 [[package]]
 name = "module-utilities"
+version = "0.11.0.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
@@ -1221,8 +1222,8 @@ typecheck = [
 
 [package.metadata]
 requires-dist = [
-    { name = "docstring-inheritance", marker = "extra == 'all'" },
     { name = "docstring-inheritance", marker = "extra == 'inherit'" },
+    { name = "module-utilities", extras = ["inherit"], marker = "extra == 'all'" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 provides-extras = ["all", "inherit"]

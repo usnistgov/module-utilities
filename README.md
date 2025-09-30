@@ -30,6 +30,7 @@
 [conda-link]: https://anaconda.org/conda-forge/module-utilities
 [license-badge]: https://img.shields.io/pypi/l/module-utilities?color=informational
 [license-link]: https://github.com/usnistgov/module-utilities/blob/main/LICENSE
+[changelog-link]: https://github.com/usnistgov/module-utilities/blob/main/CHANGELOG.md
 
 <!-- other links -->
 
@@ -254,6 +255,10 @@ conda install -c conda-forge docstring-inheritance
 ## Documentation
 
 See the [documentation][docs-link] for a look at `module-utilities` in action.
+
+## What's new?
+
+See [changelog][changelog-link].
 
 ## License
 

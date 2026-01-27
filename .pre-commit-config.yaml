@@ -102,7 +102,7 @@ repos:
         exclude: ^README.md
 
   # * Spelling
-  # ** typos (only with manual)
+  # ** typos
   # Revert to crate-ci/typos if https://github.com/crate-ci/typos/issues/390 is fixed.
   # - repo: https://github.com/crate-ci/typos
   - repo: https://github.com/adhtruong/mirrors-typos
@@ -166,7 +166,7 @@ repos:
     rev: 2.16.0
     hooks:
       - id: cruft
-        args: [--checkout, develop]
+        args: [--checkout, main]
         stages: [manual]
 
   # * Cog
@@ -189,10 +189,11 @@ repos:
     rev: 0.9.0
     hooks:
       - id: nbstripout
-        args: [
-            --keep-output, # keep output (needed for nbval testing)
-            --keep-count, # Errors with nbval without this...
-            --extra-keys, # strip out kernelspec.  If use this, always have to reselect kernel when open a notebook...
+        args:
+          [
+            --keep-output,
+            --keep-count,
+            --extra-keys,
             "metadata.kernelspec metadata.kernel_spec",
           ]
 

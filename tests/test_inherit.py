@@ -1,5 +1,6 @@
 # pyright: strict
 # pylint: disable=missing-class-docstring,cell-var-from-loop,no-self-use,differing-param-doc,differing-type-doc
+# ruff: noqa: DOC102
 from __future__ import annotations
 
 from textwrap import dedent

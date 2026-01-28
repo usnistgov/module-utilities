@@ -16,6 +16,7 @@ dependencies:
   - docstring-inheritance
   - pytest
   - pytest-cov
+  - pytest-env
   - pytest-sugar
   - pytest-xdist
   - typing-extensions

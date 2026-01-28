@@ -118,7 +118,7 @@ if HAS_INHERIT:
         if DOC_SUB:
 
             def wrapper_inherit(func: F) -> F:
-                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # pyright: ignore[reportPossiblyUnboundVariable]
+                docstring_inheritance.inherit_numpy_docstring(docstring, func)  # type: ignore[attr-defined] # pyright: ignore[reportPossiblyUnboundVariable, reportPrivateImportUsage]
                 return func
 
             return wrapper_inherit

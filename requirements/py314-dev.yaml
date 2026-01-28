@@ -23,6 +23,7 @@ dependencies:
   - pylint
   - pytest
   - pytest-cov
+  - pytest-env
   - pytest-sugar
   - pytest-xdist
   - pip

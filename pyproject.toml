@@ -93,6 +93,7 @@ test-noopt = [
     "attrs",
     "pytest",
     "pytest-cov",
+    "pytest-env",
     "pytest-sugar",
     "pytest-xdist",
     { include-group = "pytest" },
@@ -177,6 +178,9 @@ minversion = "8"
 log_cli_level = "INFO"
 xfail_strict = true
 filterwarnings = [ "error" ]
+
+[tool.pytest_env]
+DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
 
 [tool.coverage.run]
 branch = true

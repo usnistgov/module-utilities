@@ -117,9 +117,8 @@ default-groups = [ "dev" ]
 fork-strategy = "requires-python"
 required-version = ">=0.7.15"
 
-[tool.uv.pip]
-annotation-style = "line"
-generate-hashes = true
+[tool.uv.build-backend]
+source-include = [ "tests/**" ]
 
 [tool.uv.dependency-groups]
 dev.requires-python = ">=3.14"
@@ -132,8 +131,9 @@ mypy.requires-python = ">=3.14"
 notebook.requires-python = ">=3.14"
 nox.requires-python = ">=3.14"
 
-[tool.uv.build-backend]
-source-include = [ "tests/**" ]
+[tool.uv.pip]
+annotation-style = "line"
+generate-hashes = true
 
 # * Checks ---------------------------------------------------------------------
 
@@ -152,6 +152,7 @@ toplevel = [ "module_utilities" ]
 src_dir = [ "src" ]
 
 [tool.pyproject-fmt]
+
 # max_supported_python = "3.13"
 
 # * Testing --------------------------------------------------------------------
@@ -182,8 +183,11 @@ filterwarnings = [ "error" ]
 [tool.pytest_env]
 DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
 
-[tool.coverage.run]
-branch = true
+[tool.coverage.paths]
+source = [
+    "src/",
+    ".nox/**/site-packages/",
+]
 
 [tool.coverage.report]
 show_missing = true
@@ -199,11 +203,8 @@ include = [
     "src/*",
 ]
 
-[tool.coverage.paths]
-source = [
-    "src/",
-    ".nox/**/site-packages/",
-]
+[tool.coverage.run]
+branch = true
 
 # * typecheck ---------------------------------------------------------------------
 

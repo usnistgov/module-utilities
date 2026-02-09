@@ -67,16 +67,6 @@ docs = [
     "sphinxcontrib-spelling",
     { include-group = "optional" },
 ]
-# other packages/tools
-ipython = [ "ipython" ]
-mypy = [ "mypy>=1.15.0", "orjson" ]
-notebook = [ "ipykernel", "nbclient" ]
-nox = [ "nox>=2025.5.1" ]
-pylint = [ "pylint" ]
-pytest = [ "pytest" ]
-pytest-accept = [ "pytest-accept" ]
-# other environments
-optional = [ "module-utilities[all]" ]
 docs-live = [
     "sphinx-autobuild",
     { include-group = "docs" },
@@ -86,6 +76,16 @@ docs-spelling = [
     "sphinxcontrib-spelling",
     { include-group = "docs" },
 ]
+# other packages/tools
+ipython = [ "ipython" ]
+mypy = [ "mypy>=1.15.0", "orjson" ]
+notebook = [ "ipykernel", "nbclient" ]
+nox = [ "nox>=2025.5.1" ]
+# other environments
+optional = [ "module-utilities[all]" ]
+pylint = [ "pylint" ]
+pytest = [ "pytest" ]
+pytest-accept = [ "pytest-accept" ]
 test-extras = [
     { include-group = "test" },
 ]
@@ -112,28 +112,22 @@ typecheck = [
 # * uv -------------------------------------------------------------------------
 
 [tool.uv]
-managed = true
-default-groups = [ "dev" ]
-fork-strategy = "requires-python"
 required-version = ">=0.7.15"
-
-[tool.uv.pip]
-annotation-style = "line"
-generate-hashes = true
-
-[tool.uv.dependency-groups]
-dev.requires-python = ">=3.14"
-docs.requires-python = ">=3.14"
-docs-live.requires-python = ">=3.14"
-docs-spelling.requires-python = ">=3.14"
+default-groups = [ "dev" ]
+dependency-groups.dev.requires-python = ">=3.14"
+dependency-groups.docs-live.requires-python = ">=3.14"
+dependency-groups.docs-spelling.requires-python = ">=3.14"
+dependency-groups.docs.requires-python = ">=3.14"
 # other tools
-ipython.requires-python = ">=3.14"
-mypy.requires-python = ">=3.14"
-notebook.requires-python = ">=3.14"
-nox.requires-python = ">=3.14"
-
-[tool.uv.build-backend]
-source-include = [ "tests/**" ]
+dependency-groups.ipython.requires-python = ">=3.14"
+dependency-groups.mypy.requires-python = ">=3.14"
+dependency-groups.notebook.requires-python = ">=3.14"
+dependency-groups.nox.requires-python = ">=3.14"
+fork-strategy = "requires-python"
+managed = true
+build-backend.source-include = [ "tests/**" ]
+pip.annotation-style = "line"
+pip.generate-hashes = true
 
 # * Checks ---------------------------------------------------------------------
 
@@ -152,12 +146,13 @@ toplevel = [ "module_utilities" ]
 src_dir = [ "src" ]
 
 [tool.pyproject-fmt]
+
+[tool.pytest]
 # max_supported_python = "3.13"
 
 # * Testing --------------------------------------------------------------------
 
-[tool.pytest.ini_options]
-addopts = [
+ini_options.addopts = [
     "-ra",
     "--strict-config",
     "--strict-markers",
@@ -166,44 +161,40 @@ addopts = [
     "--pyargs",
     "--cov-config=pyproject.toml",
 ]
-testpaths = [
+ini_options.testpaths = [
     "README.md",
     "module_utilities",
     "tests",
 ]
-markers = [
+ini_options.markers = [
     "inherit: docstring_inheritance dependent code",
 ]
-minversion = "8"
-log_cli_level = "INFO"
-xfail_strict = true
-filterwarnings = [ "error" ]
+ini_options.minversion = "8"
+ini_options.log_cli_level = "INFO"
+ini_options.xfail_strict = true
+ini_options.filterwarnings = [ "error" ]
 
 [tool.pytest_env]
 DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
 
-[tool.coverage.run]
-branch = true
-
-[tool.coverage.report]
-show_missing = true
-exclude_also = [
-    "if TYPE_CHECKING:",
-    "@overload",
-]
-omit = [
-    "*/vendored/*",
-    "*/_typing.py",
-]
-include = [
-    "src/*",
-]
-
-[tool.coverage.paths]
-source = [
+[tool.coverage]
+run.branch = true
+paths.source = [
     "src/",
     ".nox/**/site-packages/",
 ]
+report.exclude_also = [
+    "@overload",
+    "if TYPE_CHECKING:",
+]
+report.include = [
+    "src/*",
+]
+report.omit = [
+    "*/_typing.py",
+    "*/vendored/*",
+]
+report.show_missing = true
 
 # * typecheck ---------------------------------------------------------------------
 
@@ -231,15 +222,13 @@ enable_error_code = [
     "redundant-expr",
     "truthy-bool",
 ]
-
-# [[tool.mypy.overrides]]
-# ignore_missing_imports = true
-# module = [  ]
-
-[[tool.mypy.overrides]]
-ignore_errors = true
-module = [
-    "module_utilities.vendored.docscrape",
+overrides = [
+    # [[tool.mypy.overrides]]
+    # ignore_missing_imports = true
+    # module = [  ]
+    { ignore_errors = true, module = [
+        "module_utilities.vendored.docscrape",
+    ] },
 ]
 
 [tool.pyright]
@@ -293,24 +282,14 @@ python = "default"
 channels = "conda-forge"
 style = "yaml"
 deps = "pip"
-
-[tool.pyproject2conda.dependencies]
-pytest-accept = { pip = true }
-
-[tool.pyproject2conda.envs.dev]
-groups = "dev"
-
-[tool.pyproject2conda.envs.test]
-groups = "test"
-python = "all"
-
-[tool.pyproject2conda.envs.test-extras]
-groups = "test-extras"
-python = "all"
-skip-package = true
-
-[tool.pyproject2conda.envs.uvx-tools]
-reqs = [
+dependencies.pytest-accept = { pip = true }
+envs.dev.groups = "dev"
+envs.test.groups = "test"
+envs.test.python = "all"
+envs.test-extras.groups = "test-extras"
+envs.test-extras.python = "all"
+envs.test-extras.skip-package = true
+envs.uvx-tools.reqs = [
     # these used solely for specking tools to be used with uvx ...
     "conda-lock>=2.5.5",
     "cruft",
@@ -326,12 +305,12 @@ reqs = [
     "twine>=5.0.0",
     "ty",
 ]
-groups = [
+envs.uvx-tools.groups = [
     "mypy",
     "nox",
 ]
-skip-package = true
-style = "requirements"
+envs.uvx-tools.skip-package = true
+envs.uvx-tools.style = "requirements"
 
 # * Other tools ----------------------------------------------------------------
 

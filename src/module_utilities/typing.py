@@ -6,10 +6,8 @@ Typing definitions (:mod:`~module_utilities.typing`)
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping
-from typing import Any, Callable, Protocol, TypeVar
-
-from ._typing_compat import Concatenate, ParamSpec, TypeAlias
+from collections.abc import Callable, Mapping, MutableMapping
+from typing import Any, Concatenate, ParamSpec, Protocol, TypeAlias, TypeVar
 
 __all__ = [
     "C_meth",
@@ -58,7 +56,7 @@ class HasCacheProperty(Protocol):
     def _cache(self) -> MutableMapping[str, Any]: ...  # pragma: no cover
 
 
-HasCache: TypeAlias = "HasCacheAttribute | HasCacheProperty"
+HasCache: TypeAlias = HasCacheAttribute | HasCacheProperty
 """Protocol to mark that class should have ``_cache`` attribute"""
 
 

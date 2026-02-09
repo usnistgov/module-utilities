@@ -29,7 +29,7 @@ class Base:
 
 class Derived(Base):
     @property
-    def prop_property(self) -> int:
+    def prop_property(self) -> int:  # pyright: ignore[reportImplicitOverride]
         return 1
 
     @property

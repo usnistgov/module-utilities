@@ -75,7 +75,7 @@ class Base(Generic[R]):
 
 class Derived(Base[int]):
     @property
-    def prop_property(self) -> int:
+    def prop_property(self) -> int:  # pyright: ignore[reportImplicitOverride]
         return 1
 
     @cached.prop

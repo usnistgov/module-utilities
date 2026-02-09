@@ -866,7 +866,7 @@ def test_property_inherit() -> None:
 
         @property
         @docfiller_abc()
-        def dtype(self) -> str:
+        def dtype(self) -> str:  # pyright: ignore[reportImplicitOverride]
             return "there"
 
     assert CentralMomentsArray.dtype.__doc__ == CentralMomentsABC.dtype.__doc__

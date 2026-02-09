@@ -8,6 +8,7 @@ from __future__ import annotations
 from collections.abc import Mapping, MutableMapping
 from typing import TYPE_CHECKING, overload
 
+from ._typing_compat import override
 from .typing import NestedMap, NestedMapVal
 
 if TYPE_CHECKING:
@@ -79,6 +80,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         self._recursive = recursive
         self._allow_missing = allow_missing
 
+    @override
     def __getitem__(self, key: str | slice) -> Any:
         if isinstance(key, slice):
             return _get_nested_values(self._getslice(key), join_string="\n")
@@ -110,21 +112,26 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         subset = {k: self._entries[k] for k in keys[slc]}
         return type(self)(subset)
 
+    @override
     def __setitem__(self, key: str, value: NestedMapVal) -> None:
         self._entries[key] = value
 
+    @override
     def __iter__(self) -> Iterator[str]:
         return iter(self._entries)
 
+    @override
     def __len__(self) -> int:
         return len(self._entries)
 
+    @override
     def __delitem__(self, key: str) -> None:
         del self._entries[key]
 
     def _items(self) -> Iterator[tuple[str, NestedMapVal]]:
         yield from self._entries.items()
 
+    @override
     def __dir__(self) -> list[str]:  # pragma: no cover
         return list(self.keys()) + list(super().__dir__())
 
@@ -149,6 +156,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             if __debug__:  # pragma: no cover  # ty: ignore[unresolved-reference]
                 raise
 
+    @override
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._entries!r})"
 

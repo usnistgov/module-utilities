@@ -8,6 +8,7 @@ from typing import Any
 import pytest
 
 from module_utilities import cached
+from module_utilities._typing_compat import override  # noqa: PLC2701
 
 
 def test_cachedproperty() -> None:
@@ -187,7 +188,7 @@ def test_prop2() -> None:
         @cached.prop()
         def prop(self):
             """A doc string"""
-            self._hello = 1
+            self._hello = 1  # pyright: ignore[reportUninitializedInstanceVariable]
             return self.get_value()
 
     do_prop_test(test(1, 2))
@@ -208,7 +209,7 @@ def test_prop4() -> None:
         @cached.decorate()
         def prop(self):
             """A doc string"""
-            self._hello = 1
+            self._hello = 1  # pyright: ignore[reportUninitializedInstanceVariable]
             return self.get_value()
 
     do_prop_test(test(1, 2))
@@ -320,6 +321,7 @@ def test_clear() -> None:  # noqa: C901
             self._cache = {}
 
         @property
+        @override
         def a(self):
             return self._a
 
@@ -329,6 +331,7 @@ def test_clear() -> None:  # noqa: C901
             self._a = val
 
         @property
+        @override
         def b(self):
             return self._b
 
@@ -351,7 +354,7 @@ def test_clear() -> None:  # noqa: C901
         @aprop.setter
         @cached.clear("prop", "test_prop")
         def aprop(self, val) -> None:
-            self._aprop = val
+            self._aprop = val  # pyright: ignore[reportUninitializedInstanceVariable]
 
         @cached.prop
         def test_prop(self):

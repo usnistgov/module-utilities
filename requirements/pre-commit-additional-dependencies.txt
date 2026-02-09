@@ -7,16 +7,4 @@
 # You should not manually edit this file.
 # Instead edit the corresponding pyproject.toml file.
 #
-name: py314-test-extras
-channels:
-  - conda-forge
-dependencies:
-  - python=3.14
-  - attrs
-  - docstring-inheritance
-  - pytest
-  - pytest-cov
-  - pytest-env
-  - pytest-sugar
-  - pytest-xdist
-  - pip
+rust-just

@@ -2,6 +2,8 @@
 Fill and share documentation (:mod:`~module_utilities.docfiller`)
 =================================================================
 """
+# TODO(wpk): figure this out
+# pyright: reportImportCycles=false
 
 from __future__ import annotations
 
@@ -16,6 +18,7 @@ from typing import (
 
 from . import cached
 from ._doc import doc as _pd_doc
+from ._typing_compat import override
 from .attributedict import AttributeDict
 from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
@@ -457,6 +460,7 @@ class DocFiller:
             self.data = dict(params)
         self._cache: dict[str, Any] = {}
 
+    @override
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.data!r})"
 

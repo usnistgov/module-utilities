@@ -27,9 +27,12 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from typing import (
         Any,
+        TypeVar,
     )
 
-    from .typing import F, NestedMap, NestedMapVal
+    from .typing import NestedMap, NestedMapVal
+
+    F = TypeVar("F", bound=Callable[..., Any])
 
 
 def indent_docstring(

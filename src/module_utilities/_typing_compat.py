@@ -6,15 +6,12 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
-if sys.version_info >= (3, 10):
-    from typing import Concatenate, ParamSpec, TypeAlias
+if sys.version_info >= (3, 12):
+    from typing import override
 else:
-    from typing_extensions import Concatenate, ParamSpec, TypeAlias
-
+    from typing_extensions import override
 
 __all__ = [
-    "Concatenate",
-    "ParamSpec",
     "Self",
-    "TypeAlias",
+    "override",
 ]

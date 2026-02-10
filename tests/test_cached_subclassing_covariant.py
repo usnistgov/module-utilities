@@ -8,7 +8,7 @@ from module_utilities import cached
 
 
 class Base:
-    _cache: dict[str, Any]
+    _cache: dict[str, Any]  # pyright: ignore[reportUninitializedInstanceVariable]
 
     @property
     def f_property(self) -> float:
@@ -37,7 +37,7 @@ class Derived0(Base):
 
 class Derived1(Base):
     @property
-    def f_property(self) -> int:
+    def f_property(self) -> int:  # pyright: ignore[reportImplicitOverride]
         return 1
 
     @cached_property
@@ -49,7 +49,7 @@ class Derived1(Base):
     def f_prop(self) -> int:
         return 1
 
-    def f_method(self, x: int) -> float:
+    def f_method(self, x: int) -> float:  # pyright: ignore[reportImplicitOverride]
         return x
 
     @cached.meth

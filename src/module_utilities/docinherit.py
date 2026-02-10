@@ -14,9 +14,11 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from typing import TypeVar
 
     from .docfiller import DocFiller
-    from .typing import F
+
+    F = TypeVar("F", bound=Callable[..., Any])
 
 try:  # pylint: disable=too-many-try-statements
     import docstring_inheritance

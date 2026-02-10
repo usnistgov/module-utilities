@@ -57,7 +57,7 @@ class CachedProperty(Generic[S, R]):
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
         self.__name__: str | None = None
-        update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
+        _ = update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType, reportUnknownVariableType]
 
         self._prop = prop
 

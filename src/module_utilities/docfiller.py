@@ -2,6 +2,8 @@
 Fill and share documentation (:mod:`~module_utilities.docfiller`)
 =================================================================
 """
+# TODO(wpk): figure this out
+# pyright: reportImportCycles=false
 
 from __future__ import annotations
 
@@ -16,6 +18,7 @@ from typing import (
 
 from . import cached
 from ._doc import doc as _pd_doc
+from ._typing_compat import override
 from .attributedict import AttributeDict
 from .options import DOC_SUB
 from .vendored.docscrape import NumpyDocString, Parameter
@@ -24,9 +27,12 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from typing import (
         Any,
+        TypeVar,
     )
 
-    from .typing import F, NestedMap, NestedMapVal
+    from .typing import NestedMap, NestedMapVal
+
+    F = TypeVar("F", bound=Callable[..., Any])
 
 
 def indent_docstring(
@@ -457,6 +463,7 @@ class DocFiller:
             self.data = dict(params)
         self._cache: dict[str, Any] = {}
 
+    @override
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.data!r})"
 

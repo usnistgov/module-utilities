@@ -32,8 +32,9 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-    "typing-extensions; python_version<'3.11'",
+    "typing-extensions; python_version<'3.12'",
 ]
+
 [project.optional-dependencies]
 all = [
     "module-utilities[inherit]",
@@ -69,7 +70,7 @@ docs = [
     "sphinxcontrib-spelling",
     { include-group = "optional" },
 ]
-# other packages/tools
+# other envs
 basedpyright = [ "basedpyright>=1.31.3" ]
 cog = [ "cogapp" ]
 docs-live = [
@@ -85,7 +86,6 @@ ipython = [ "ipython" ]
 mypy = [ "mypy[faster-cache]>=1.15.0" ]
 notebook = [ "ipykernel", "nbclient" ]
 nox = [ "nox>=2025.5.1" ]
-# other environments
 optional = [ "module-utilities[all]" ]
 pylint = [ "pylint" ]
 pytest = [ "pytest" ]

@@ -19,4 +19,5 @@ dependencies:
   - pytest-env
   - pytest-sugar
   - pytest-xdist
+  - typing-extensions
   - pip

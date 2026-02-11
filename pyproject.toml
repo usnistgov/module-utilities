@@ -54,11 +54,18 @@ dev = [
     { include-group = "nox" },
     { include-group = "pytest-accept" },
     { include-group = "test-notebook" },
-    { include-group = "typecheck" },
+    { include-group = "type" },
 ]
 test = [
     { include-group = "optional" },
     { include-group = "test-noopt" },
+]
+type = [
+    "attrs",
+    { include-group = "optional" },
+    { include-group = "pylint" },
+    { include-group = "pytest" },
+    { include-group = "typecheck-runner" },
 ]
 docs = [
     "autodocsumm",
@@ -106,13 +113,6 @@ test-notebook = [
     "nbval",
     { include-group = "test" },
 ]
-typecheck = [
-    "attrs",
-    { include-group = "optional" },
-    { include-group = "pylint" },
-    { include-group = "pytest" },
-    { include-group = "typecheck-runner" },
-]
 typecheck-runner = [ "typecheck-runner>=0.1.0; python_version>'3.9'" ]
 
 # * uv -------------------------------------------------------------------------
@@ -149,24 +149,25 @@ ignore = [
 ]
 
 [tool.check-wheel-contents]
-toplevel = [ "module_utilities" ]
 src_dir = [ "src" ]
+toplevel = [ "module_utilities" ]
 
 [tool.pyproject-fmt]
-indent = 4
-# max_supported_python = "3.13"
-keep_full_version = true
 expand_tables = [
     "project.entry-points",
     "project.optional-dependencies",
     "project.scripts",
     "project.urls",
+    "tool.mypy.overrides",
     "tool.pyproject2conda",
     "tool.pyright.executionEnvironments",
     "tool.pytest",
     "tool.typos",
     "tool.uv.dependency-groups",
 ]
+# max_supported_python = "3.13"
+indent = 4
+keep_full_version = true
 
 [tool.typos.default.extend-identifiers]
 CPY = "CPY"
@@ -188,14 +189,16 @@ testpaths = [
     "module_utilities",
     "tests",
 ]
+# markers
 markers = [
     "inherit: docstring_inheritance dependent code",
 ]
-minversion = "8"
+# other options
+filterwarnings = [ "error" ]
 log_cli_level = "INFO"
 log_level = "INFO"
+minversion = "8"
 strict_xfail = "true"
-filterwarnings = [ "error" ]
 
 [tool.pytest_env]
 DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
@@ -223,14 +226,6 @@ report.show_missing = true
 # * typecheck ---------------------------------------------------------------------
 
 [tool.mypy]
-files = [
-    "src/**/*.py",
-    "tests/**/*.py",
-]
-warn_unused_ignores = true
-warn_return_any = true
-warn_unused_configs = true
-warn_unreachable = true
 exclude = [
     ".eggs",
     ".nox",
@@ -239,31 +234,32 @@ exclude = [
     ".venv",
     "docs",
 ]
-check_untyped_defs = true
+files = [
+    "src/**/*.py",
+    "tests/**/*.py",
+]
 strict = true
+# options
+check_untyped_defs = true
 enable_error_code = [
     "ignore-without-code",
     "redundant-expr",
     "truthy-bool",
 ]
-overrides = [
-    # [[tool.mypy.overrides]]
-    # ignore_missing_imports = true
-    # module = [  ]
-    { ignore_errors = true, module = [
-        "module_utilities.vendored.docscrape",
-    ] },
-]
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [ "module_utilities.vendored.docscrape" ]
+ignore_errors = true
 
 [tool.pyrefly]
-project-includes = [ "src", "tests" ]
 enabled-ignores = [ "pyrefly" ]
+project-includes = [ "src", "tests" ]
 
 [tool.pyright]
-include = [
-    "src",
-    "tests",
-]
 exclude = [
     "**/.mypy_cache",
     "**/.numba_cache",
@@ -271,12 +267,17 @@ exclude = [
     ".nox/**",
     "src/module_utilities/vendored",
 ]
-typeCheckingMode = "standard"
+include = [
+    "src",
+    "tests",
+]
 strict = [
     "noxfile.py",
     "src",
     "tools/*.py",
 ]
+typeCheckingMode = "standard"
+# options
 reportOverlappingOverload = true
 reportPropertyTypeMismatch = true
 reportUntypedClassDecorator = true
@@ -295,8 +296,8 @@ reportUnreachable = "warning"
 reportUnusedCallResult = true
 # type-checkers should type-check; linters should lint
 reportImplicitStringConcatenation = false
-reportPrivateUsage = false
 reportPrivateImportUsage = false
+reportPrivateUsage = false
 reportUnusedImport = false
 reportUnusedVariable = false
 

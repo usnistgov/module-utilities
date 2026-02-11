@@ -1280,7 +1280,7 @@ test-notebook = [
     { name = "pytest-sugar" },
     { name = "pytest-xdist" },
 ]
-typecheck = [
+type = [
     { name = "attrs" },
     { name = "module-utilities", extra = ["all"] },
     { name = "pylint" },
@@ -1395,7 +1395,7 @@ test-notebook = [
     { name = "pytest-sugar" },
     { name = "pytest-xdist" },
 ]
-typecheck = [
+type = [
     { name = "attrs" },
     { name = "module-utilities", extras = ["all"] },
     { name = "pylint" },

@@ -41,16 +41,19 @@ def test_cachedproperty() -> None:
 # so need ignores
 def test_cachedproperty_without_cache() -> None:
     class Tmp:
+        # pyrefly: ignore [bad-specialization]
         @cached.CachedProperty  # type: ignore[type-var]  # pyright: ignore[reportArgumentType]
         def thing(self) -> int:
             """A test"""
             return 1
 
+        # pyrefly: ignore [no-matching-overload]
         @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def there(self) -> int:
             """B test"""
             return 2
 
+        # pyrefly: ignore [no-matching-overload]
         @cached.clear  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def clear(self) -> None:
             pass
@@ -62,6 +65,7 @@ def test_cachedproperty_without_cache() -> None:
 
     assert x.thing == 1  # type: ignore[arg-type, comparison-overlap]
 
+    # pyrefly: ignore [missing-attribute]
     assert x._cache == {"thing": 1}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
     assert Tmp.there.__name__ == "there"
     assert Tmp.there.__doc__ == "B test"
@@ -322,6 +326,7 @@ def test_clear() -> None:  # noqa: C901
 
         @property
         @override
+        # pyrefly: ignore [bad-override]
         def a(self):
             return self._a
 
@@ -332,6 +337,7 @@ def test_clear() -> None:  # noqa: C901
 
         @property
         @override
+        # pyrefly: ignore [bad-override]
         def b(self):
             return self._b
 
@@ -602,6 +608,7 @@ def test_error_with_slots() -> None:
             self.a = a
             self.b = b
 
+        # pyrefly: ignore [no-matching-overload]
         @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def prop(self):
             return self.a, self.b

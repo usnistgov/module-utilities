@@ -38,6 +38,7 @@ def test_get_nested(data: NestedMap, ref_values: list[str]) -> None:
 
 def test_creating() -> None:
     a = attributedict.AttributeDict({"a": "1"})
+    # pyrefly: ignore [bad-argument-type]
     b = attributedict.AttributeDict([("a", "1")])  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
 
     assert a == b

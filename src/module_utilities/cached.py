@@ -57,6 +57,7 @@ class CachedProperty(Generic[S, R]):
         self, prop: C_prop[S, R], key: str | None = None, check_use_cache: bool = False
     ) -> None:
         self.__name__: str | None = None
+        # pyrefly: ignore [bad-argument-type]
         _ = update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType, reportUnknownVariableType]
 
         self._prop = prop
@@ -84,6 +85,7 @@ class CachedProperty(Generic[S, R]):
     def __get__(self, instance: None, owner: type[Any] | None = None) -> Self: ...
 
     @overload
+    # pyrefly: ignore [inconsistent-overload]
     def __get__(self, instance: S, owner: type[Any] | None = None) -> R: ...
 
     def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:

@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "uv_build"
 requires = [
-    "uv-build>=0.8.22,<0.10.0",
+    "uv-build>=0.10.4,<0.11.0",
 ]
 
 [project]
@@ -257,6 +257,7 @@ ignore_errors = true
 
 [tool.pyrefly]
 enabled-ignores = [ "pyrefly" ]
+project-excludes = [ "src/module_utilities/vendored/*.py" ]
 project-includes = [ "src", "tests" ]
 
 [tool.pyright]
@@ -312,6 +313,7 @@ reportUnusedCallResult = false
 [tool.ty]
 # Disable support for `type: ignore` comments
 analysis.respect-type-ignore-comments = false
+src.exclude = [ "**/vendored/**" ]
 src.include = [ "src", "tests" ]
 
 [tool.pytype]

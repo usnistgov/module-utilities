@@ -354,6 +354,7 @@ def dedent_recursive(data: NestedMap) -> NestedMap:
     out: dict[str, NestedMapVal] = {}
     for k in data:
         v = data[k]
+        # pyrefly: ignore [bad-argument-type]
         v = dedent(v).strip() if isinstance(v, str) else dedent_recursive(v)
         out[k] = v
     return out
@@ -688,6 +689,7 @@ class DocFiller:
 
     @cached.prop
     def _default_decorator(self) -> Callable[[F], F]:
+        # pyrefly: ignore [bad-argument-type]
         return doc_decorate(**self.params)  # type: ignore[arg-type] # pylint: disable=not-a-mapping)
 
     def update(self, *args: Any, **kwargs: Any) -> DocFiller:
@@ -780,6 +782,7 @@ class DocFiller:
         if not templates and not params and not _prepend:
             return self.decorate
         if not params:
+            # pyrefly: ignore [bad-argument-type]
             return doc_decorate(*templates, _prepend=_prepend, **self.params)  # type: ignore[arg-type] # pylint: disable=not-a-mapping
 
         return self.update(params)(*templates, _prepend=_prepend)

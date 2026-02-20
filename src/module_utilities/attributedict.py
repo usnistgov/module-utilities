@@ -31,6 +31,7 @@ def _get_nested_values(d: NestedMap, join_string: str | None = "\n") -> str | li
         if isinstance(v, str):
             out.append(v)
         else:
+            # pyrefly: ignore [no-matching-overload]
             out.extend(_get_nested_values(v, join_string=None))
 
     if join_string is not None:

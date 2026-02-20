@@ -106,5 +106,6 @@ strictly-empty-init-modules = false
     "N801",
     "PLR2004",
     "PLR6301",
+    "RUF069",
     "SLF001",
 ]

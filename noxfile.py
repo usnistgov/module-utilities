@@ -158,6 +158,10 @@ class SessionParams(DataclassParser):
         list[Literal["erase", "combine", "report", "html", "open", "markdown"]] | None
     ) = None
 
+    coverage_options: OPT_TYPE = add_option(
+        "--coverage-options", help="Options to coverage commands"
+    )
+
     # docs
     docs: (
         list[
@@ -470,7 +474,7 @@ def pre_commit_run(
 def test_all(session: Session) -> None:
     """Run all tests and coverage."""
     session.notify("coverage-erase")
-    for py in PYTHON_TEST_VERSIONS:
+    for py in (PYTHON_TEST_VERSIONS[i] for i in (0, -1)):
         session.notify(f"test-{py}")
     session.notify("test-notebook")
     session.notify("test-noopt")
@@ -533,7 +537,7 @@ nox.session(python=PYTHON_TEST_VERSIONS)(test)
 nox.session(name="test-conda", **CONDA_ALL_KWS)(test)
 
 
-@nox.session(name="test-noopt", **DEFAULT_KWS)
+@nox.session(name="test-noopt", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_noopt(
     session: Session,
@@ -552,7 +556,7 @@ def test_noopt(
     )
 
 
-@nox.session(name="test-notebook", **DEFAULT_KWS)
+@nox.session(name="test-notebook", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     """Run pytest --nbval."""
@@ -602,6 +606,8 @@ def coverage(
                 session.log(f"removing {path}")
                 path.unlink()
 
+    coverage_options = combine_list_str(opts.coverage_options or [])
+
     for c in cmd:
         if c == "combine":
             uvx_run(
@@ -622,6 +628,7 @@ def coverage(
                     "coverage",
                     "report",
                     "--format=markdown",
+                    *coverage_options,
                     stdout=f,
                 )
         else:
@@ -629,6 +636,7 @@ def coverage(
                 session,
                 "coverage",
                 c,
+                *coverage_options,
             )
 
 

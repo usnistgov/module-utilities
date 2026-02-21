@@ -129,10 +129,22 @@ jobs:
           - ubuntu-latest
         python-version:
           ${{ fromJson(needs.build-package.outputs.matrix-test-python) }}
+        style:
+          - test
         include:
+          - os: ubuntu-latest
+            python-version:
+              ${{ needs.build-package.outputs.default-python-version }}
+            style: test-notebook
+          - os: ubuntu-latest
+            python-version:
+              ${{ needs.build-package.outputs.default-python-version }}
+            style: test-noopt
           - os: windows-latest
             python-version:
               ${{ needs.build-package.outputs.default-python-version }}
+            style: test
+
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -149,14 +161,18 @@ jobs:
       - name: Test with nox
         env:
           python_version: ${{ matrix.python-version }}
+          style: ${{ matrix.style }}
         run: >-
-          $UVX_COMMAND nox -s test-"$python_version" -- ++installpkg dist/*.whl
+          $UVX_COMMAND nox -s "${style}-${python_version}" -- ++installpkg
+          dist/*.whl
         shell: bash
 
       - name: Upload coverage data
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: coverage-data-${{ matrix.os }}-${{ matrix.python-version }}
+          name:
+            coverage-data-${{ matrix.os }}-${{ matrix.python-version }}-${{
+            matrix.style }}
           path: .nox/test-*/tmp/.coverage*
           include-hidden-files: true
           if-no-files-found: ignore
@@ -185,9 +201,12 @@ jobs:
           cache-dependency-path: requirements/lock/uvx-tools.txt
       - name: Run coverage
         run: |
-          $UVX_COMMAND nox -s coverage -- ++coverage combine html report markdown
+          $UVX_COMMAND nox -s coverage -- ++coverage combine html markdown
           cat coverage.md
           cat coverage.md >> "$GITHUB_STEP_SUMMARY"
+
+          # fail if under 100%
+          $UVX_COMMAND nox -s coverage -- ++coverage report ++coverage-options --fail-under=100
         shell: bash
       - name: Upload HTML report if check failed.
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

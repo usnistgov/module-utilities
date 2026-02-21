@@ -161,6 +161,7 @@ jobs:
       - name: Test with nox
         env:
           python_version: ${{ matrix.python-version }}
+          style: ${{ matrix.style }}
         run: >-
           $UVX_COMMAND nox -s "${style}-${python_version}" -- ++installpkg
           dist/*.whl

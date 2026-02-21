@@ -474,7 +474,7 @@ def pre_commit_run(
 def test_all(session: Session) -> None:
     """Run all tests and coverage."""
     session.notify("coverage-erase")
-    for py in PYTHON_TEST_VERSIONS:
+    for py in (PYTHON_TEST_VERSIONS[i] for i in (0, -1)):
         session.notify(f"test-{py}")
     session.notify("test-notebook")
     session.notify("test-noopt")
@@ -537,7 +537,7 @@ nox.session(python=PYTHON_TEST_VERSIONS)(test)
 nox.session(name="test-conda", **CONDA_ALL_KWS)(test)
 
 
-@nox.session(name="test-noopt", **DEFAULT_KWS)
+@nox.session(name="test-noopt", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_noopt(
     session: Session,
@@ -556,7 +556,7 @@ def test_noopt(
     )
 
 
-@nox.session(name="test-notebook", **DEFAULT_KWS)
+@nox.session(name="test-notebook", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_notebook(session: nox.Session, opts: SessionParams) -> None:
     """Run pytest --nbval."""

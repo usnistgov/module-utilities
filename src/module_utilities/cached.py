@@ -207,10 +207,14 @@ def prop(
         If `False`, then always apply caching.
         Keyword only.
 
+    See Also
+    --------
+    clear : corresponding decorator to clear cache
+    meth : decorator for cache creation of function
+
     Notes
     -----
     To set `key` or `check_use_cache`, must pass with keyword.
-
 
     Examples
     --------
@@ -269,12 +273,6 @@ def prop(
     >>> x.checker
     set checker
     [2.0]
-
-
-    See Also
-    --------
-    clear : corresponding decorator to clear cache
-    meth : decorator for cache creation of function
     """
 
     def cached_lookup(_func: C_prop[S, R]) -> CachedProperty[S, R]:
@@ -319,6 +317,11 @@ def meth(  # noqa: C901
 
     Requires the Class to have a cache dict called ``_cache``.
 
+    See Also
+    --------
+    clear : corresponding decorator to remove cache
+    prop : decorator for properties
+
     Examples
     --------
     >>> class A(object):
@@ -347,11 +350,6 @@ def meth(  # noqa: C901
     [1, 2]
     >>> print(x._cache)
     {'key': {((1, 2), frozenset()): [1, 2]}}
-
-    See Also
-    --------
-    clear : corresponding decorator to remove cache
-    prop : decorator for properties
     """
 
     def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # noqa: C901
@@ -447,6 +445,10 @@ def clear(
     *keys :
         Remove these keys from cache.  if len(keys)==0, remove all keys.
 
+    See Also
+    --------
+    prop : corresponding decorator for cache creation of property
+    meth : decorator for cache creation of function
 
     Examples
     --------
@@ -487,12 +489,6 @@ def clear(
     >>> x.a, x.b
     calling a
     ('a', 'b')
-
-
-    See Also
-    --------
-    prop : corresponding decorator for cache creation of property
-    meth : decorator for cache creation of function
     """
     if callable(key_or_func):
         function = key_or_func

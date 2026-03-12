@@ -13,7 +13,7 @@ env:
   FORCE_COLOR: "3"
   UVX_CONSTRAINT: requirements/lock/uvx-tools.txt
   UVX_COMMAND: uvx -crequirements/lock/uvx-tools.txt
-  # EXTRA_PYTHON_VERSIONS: "pypy-3.11"
+  EXTRA_PYTHON_VERSIONS: "pypy-3.11"
 
 permissions: {}
 
@@ -184,15 +184,11 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-<<<<<<< before updating
-          ${{ fromJson(needs.build-package.outputs.matrix-test-python) }}
-        style:
-          - test
-=======
           ${{
           fromJson(needs.build-package.outputs.minmax-default-python-versions)
           }}
->>>>>>> after updating
+        style:
+          - test
         include:
           - os: ubuntu-latest
             python-version:

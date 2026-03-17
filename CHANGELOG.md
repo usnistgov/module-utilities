@@ -2,15 +2,7 @@
 
 <!-- markdownlint-disable-file -->
 
-
-<<<<<<< before updating
-See the fragment files in [changelog.d]
-
-<!-- prettier-ignore-end -->
-
-<!-- markdownlint-enable MD013 -->
-
-<!-- scriv-insert-here -->
+Changelog for `module-utilities`
 
 ## v0.11.0 — 2025-07-21
 
@@ -93,8 +85,3 @@ docstring to templates.
 ### Added
 
 - Add typing support. Passing mypy, pyright, pytype.
-=======
-Changelog for `module-utilities`
-
-## Initial release
->>>>>>> after updating

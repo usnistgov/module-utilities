@@ -179,64 +179,6 @@ CPY = "CPY"
 # only check file name for notebooks.  Use nbaq for contents.
 check-file = false
 
-<<<<<<< before updating
-# * Testing --------------------------------------------------------------------
-[tool.pytest.ini_options]
-addopts = [
-    "--cov-config=pyproject.toml",
-    "--doctest-glob=*.md",
-    "--doctest-modules",
-    "--pyargs",
-    "--strict-config",
-    "--strict-markers",
-    "-ra",
-]
-testpaths = [
-    "README.md",
-    "module_utilities",
-    "tests",
-]
-# markers
-markers = [
-    "inherit: docstring_inheritance dependent code",
-]
-# options
-filterwarnings = [ "error" ]
-log_cli_level = "INFO"
-log_level = "INFO"
-minversion = "8"
-strict_xfail = "true"
-
-[tool.pytest_env]
-DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
-
-[tool.coverage]
-run.branch = true
-run.source = [
-    "module_utilities",
-]
-paths.source = [
-    "src/",
-    # needed for testing source if not editable install
-    ".nox/**/site-packages/",
-    "*/.nox/**/site-packages",
-    "*/src",
-]
-report.exclude_also = [
-    "@overload",
-    "if TYPE_CHECKING:",
-]
-report.include = [
-    "src/*",
-]
-report.omit = [
-    "*/_typing.py",
-    "*/vendored/*",
-]
-report.show_missing = true
-
-=======
->>>>>>> after updating
 # * typecheck ---------------------------------------------------------------------
 [tool.mypy]
 exclude = [
@@ -329,13 +271,6 @@ analysis.respect-type-ignore-comments = false
 src.exclude = [ "**/vendored/**" ]
 src.include = [ "src", "tests" ]
 
-<<<<<<< before updating
-[tool.pytype]
-inputs = [
-    "src",
-    "tests",
-]
-=======
 # * Testing --------------------------------------------------------------------
 [tool.pytest.ini_options]
 addopts = [
@@ -352,12 +287,19 @@ testpaths = [
     "module_utilities",
     "tests",
 ]
+# markers
+markers = [
+    "inherit: docstring_inheritance dependent code",
+]
 # options
 filterwarnings = [ "error" ]
 log_cli_level = "INFO"
 log_level = "INFO"
 minversion = "8"
 strict_xfail = "true"
+
+[tool.pytest_env]
+DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
 
 [tool.coverage]
 run.branch = true
@@ -383,7 +325,6 @@ report.omit = [
     "*/vendored/*",
 ]
 report.show_missing = true
->>>>>>> after updating
 
 # * Dependency creation --------------------------------------------------------
 [tool.pyproject2conda]

@@ -1,14 +1,9 @@
-<!-- markdownlint-disable MD024 -->
-<!-- markdownlint-disable MD013 -->
-<!-- prettier-ignore-start -->
 # Changelog
 
-Changelog for `module-utilities`
+<!-- markdownlint-disable-file -->
 
-## Unreleased
 
-[changelog.d]: https://github.com/usnistgov/module-utilities/tree/main/changelog.d
-
+<<<<<<< before updating
 See the fragment files in [changelog.d]
 
 <!-- prettier-ignore-end -->
@@ -98,3 +93,8 @@ docstring to templates.
 ### Added
 
 - Add typing support. Passing mypy, pyright, pytype.
+=======
+Changelog for `module-utilities`
+
+## Initial release
+>>>>>>> after updating

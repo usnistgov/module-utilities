@@ -9,7 +9,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-03-10T21:02:51.901547Z"
+exclude-newer = "2026-03-10T21:13:28.842906Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -1192,7 +1192,7 @@ wheels = [
 
 [[package]]
 name = "module-utilities"
-version = "0.11.1.dev0"
+version = "0.11.0"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },

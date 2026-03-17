@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "module-utilities"
-version = "0.11.1.dev0"
+version = "0.11.0"
 description = "Collection of utilities to aid working with python modules."
 readme = "README.md"
 keywords = [

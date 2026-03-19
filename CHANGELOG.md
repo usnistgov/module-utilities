@@ -1,21 +1,8 @@
-<!-- markdownlint-disable MD024 -->
-<!-- markdownlint-disable MD013 -->
-<!-- prettier-ignore-start -->
 # Changelog
 
+<!-- markdownlint-disable-file -->
+
 Changelog for `module-utilities`
-
-## Unreleased
-
-[changelog.d]: https://github.com/usnistgov/module-utilities/tree/main/changelog.d
-
-See the fragment files in [changelog.d]
-
-<!-- prettier-ignore-end -->
-
-<!-- markdownlint-enable MD013 -->
-
-<!-- scriv-insert-here -->
 
 ## v0.11.0 — 2025-07-21
 

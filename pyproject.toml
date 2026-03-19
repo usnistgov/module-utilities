@@ -1,12 +1,12 @@
 [build-system]
 build-backend = "uv_build"
 requires = [
-    "uv-build>=0.10.4,<0.11.0",
+    "uv-build>=0.10.11,<0.11.0",
 ]
 
 [project]
 name = "module-utilities"
-version = "0.11.1.dev0"
+version = "0.11.0"
 description = "Collection of utilities to aid working with python modules."
 readme = "README.md"
 keywords = [
@@ -116,11 +116,11 @@ test-notebook = [
 typecheck-runner = [ "typecheck-runner>=0.1.0; python_version>'3.9'" ]
 
 # * uv -------------------------------------------------------------------------
-
 [tool.uv]
 required-version = ">=0.7.15"
 default-groups = [ "dev" ]
 fork-strategy = "requires-python"
+exclude-newer = "7 days"
 managed = true
 build-backend.source-include = [ "tests/**" ]
 pip.annotation-style = "line"
@@ -138,7 +138,6 @@ notebook.requires-python = ">=3.14"
 nox.requires-python = ">=3.14"
 
 # * Checks ---------------------------------------------------------------------
-
 [tool.repo-review]
 ignore = [
     "NOX103", # I prefer using "nox.options.sessions"
@@ -169,62 +168,18 @@ expand_tables = [
 indent = 4
 keep_full_version = true
 
+[tool.typos.default]
+# nbqa generated
+extend-ignore-re = [ "# %%NBQA-.*" ]
+
 [tool.typos.default.extend-identifiers]
 CPY = "CPY"
 
-# * Testing --------------------------------------------------------------------
-
-[tool.pytest.ini_options]
-addopts = [
-    "--cov-config=pyproject.toml",
-    "--doctest-glob=*.md",
-    "--doctest-modules",
-    "--pyargs",
-    "--strict-config",
-    "--strict-markers",
-    "-ra",
-]
-testpaths = [
-    "README.md",
-    "module_utilities",
-    "tests",
-]
-# markers
-markers = [
-    "inherit: docstring_inheritance dependent code",
-]
-# options
-filterwarnings = [ "error" ]
-log_cli_level = "INFO"
-log_level = "INFO"
-minversion = "8"
-strict_xfail = "true"
-
-[tool.pytest_env]
-DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
-
-[tool.coverage]
-run.branch = true
-paths.source = [
-    "src/",
-    # needed for testing source if not editable install
-    ".nox/**/site-packages/",
-]
-report.exclude_also = [
-    "@overload",
-    "if TYPE_CHECKING:",
-]
-report.include = [
-    "src/*",
-]
-report.omit = [
-    "*/_typing.py",
-    "*/vendored/*",
-]
-report.show_missing = true
+[tool.typos.type.jupyter]
+# only check file name for notebooks.  Use nbaq for contents.
+check-file = false
 
 # * typecheck ---------------------------------------------------------------------
-
 [tool.mypy]
 exclude = [
     ".eggs",
@@ -316,14 +271,62 @@ analysis.respect-type-ignore-comments = false
 src.exclude = [ "**/vendored/**" ]
 src.include = [ "src", "tests" ]
 
-[tool.pytype]
-inputs = [
-    "src",
+# * Testing --------------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts = [
+    "--cov-config=pyproject.toml",
+    "--doctest-glob=*.md",
+    "--doctest-modules",
+    "--pyargs",
+    "--strict-config",
+    "--strict-markers",
+    "-ra",
+]
+testpaths = [
+    "README.md",
+    "module_utilities",
     "tests",
 ]
+# markers
+markers = [
+    "inherit: docstring_inheritance dependent code",
+]
+# options
+filterwarnings = [ "error" ]
+log_cli_level = "INFO"
+log_level = "INFO"
+minversion = "8"
+strict_xfail = "true"
+
+[tool.pytest_env]
+DOCSTRING_INHERITANCE_ENABLE = { value = "1", skip_if_set = true }
+
+[tool.coverage]
+run.branch = true
+run.source = [
+    "module_utilities",
+]
+paths.source = [
+    "src/",
+    # needed for testing source if not editable install
+    ".nox/**/site-packages/",
+    "*/.nox/**/site-packages",
+    "*/src",
+]
+report.exclude_also = [
+    "@overload",
+    "if TYPE_CHECKING:",
+]
+report.include = [
+    "src/*",
+]
+report.omit = [
+    "*/_typing.py",
+    "*/vendored/*",
+]
+report.show_missing = true
 
 # * Dependency creation --------------------------------------------------------
-
 [tool.pyproject2conda]
 user-config = "config/userconfig.toml"
 template-python = "requirements/py{py}-{env}"
@@ -367,6 +370,7 @@ reqs = [
     "prek",
     "pyrefly>=0.37.0",
     "pyright>=1.1.396",
+    "rooster>=0.1.1",
     "scriv",
     "twine>=5.0.0",
     "ty>=0.0.14",
@@ -381,7 +385,6 @@ skip-package = true
 style = "requirements"
 
 # * Other tools ----------------------------------------------------------------
-
 [tool.scriv]
 format = "md"
 md_header_level = "2"
@@ -389,3 +392,22 @@ new_fragment_template = "file: changelog.d/templates/new_fragment.md.j2"
 
 [tool.commitizen]
 use_shortcuts = true
+
+[tool.rooster]
+changelog_contributors = true
+major-labels = [ "breaking" ]
+minor_labels = [ "enhancement" ]
+patch-labels = [ "bug", "documentation" ]
+# options
+ignore-labels = [ "internal", "testing" ]
+require-labels = [ "breaking", "bug", "documentation", "enhancement" ]
+version_files = [
+    "pyproject.toml",
+]
+# sections
+section-labels."Breaking changes" = [ "breaking" ]
+section-labels."Bug fixes" = [ "bug" ]
+section-labels.Documentation = [ "documentation" ]
+section-labels.Enhancements = [ "enhancement" ]
+section-labels.Internal = [ "internal" ]
+section-labels."Other changes" = [ "__unknown__" ]

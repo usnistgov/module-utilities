@@ -43,9 +43,9 @@ def indent_docstring(
         docstring = (docstring.__doc__ or "").strip()
 
     if prefix is not None:
-        return indent(docstring, prefix)  # ty: ignore[invalid-argument-type]
+        return indent(docstring, prefix)
 
-    return docstring  # ty: ignore[invalid-return-type]
+    return docstring
 
 
 # Factory method to create doc_decorate
@@ -459,7 +459,7 @@ class DocFiller:
         if params is None:
             self.data = {}
         elif isinstance(params, dict):
-            self.data = params
+            self.data = params  # ty: ignore[invalid-assignment]
         else:
             self.data = dict(params)
         self._cache: dict[str, Any] = {}
@@ -477,7 +477,7 @@ class DocFiller:
     def __getitem__(self, key: str) -> DocFiller | str:
         val = self.data[key]
         if isinstance(val, Mapping):
-            return self.new_like(val)
+            return self.new_like(val)  # ty: ignore[invalid-argument-type]
 
         return val
 
@@ -930,7 +930,7 @@ class DocFiller:
         if key_map is None:
             pass
         elif callable(key_map):
-            updated_params = {key_map(k): v for k, v in updated_params.items()}
+            updated_params = {key_map(k): v for k, v in updated_params.items()}  # ty: ignore[call-top-callable]
         else:
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 

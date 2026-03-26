@@ -53,7 +53,7 @@ def doc(  # pylint: disable=useless-param-doc
                 docstring_components.append(docstring)
             elif hasattr(docstring, "_docstring_components"):
                 docstring_components.extend(
-                    docstring._docstring_components  # pyright: ignore[reportFunctionMemberAccess]
+                    docstring._docstring_components  # pyright: ignore[reportFunctionMemberAccess]  # ty: ignore[invalid-argument-type]
                 )
             elif docstring.__doc__:  # pragma: no cover
                 docstring_components.append(dedent(docstring.__doc__ or ""))

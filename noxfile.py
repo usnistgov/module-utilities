@@ -806,7 +806,7 @@ def typecheck(
 
     cmd = opts.typecheck or []
     if not opts.typecheck_run and not cmd:
-        cmd = ["mypy", "basedpyright"]
+        cmd = ["all"]
 
     if "all" in cmd:
         cmd = ["mypy", "basedpyright", "pyrefly", "ty", "pylint"]

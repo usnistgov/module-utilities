@@ -71,7 +71,7 @@ def test_cachedproperty_without_cache() -> None:
     assert Tmp.there.__doc__ == "B test"
 
     with pytest.raises(AttributeError):
-        x.thing = 2
+        x.thing = 2  # ty: ignore[invalid-assignment]
 
     x.clear()
     assert x._cache == {}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
@@ -327,7 +327,7 @@ def test_clear() -> None:  # noqa: C901
         @property
         @override
         # pyrefly: ignore [bad-override]
-        def a(self):
+        def a(self):  # ty: ignore[invalid-explicit-override]
             return self._a
 
         @a.setter
@@ -338,7 +338,7 @@ def test_clear() -> None:  # noqa: C901
         @property
         @override
         # pyrefly: ignore [bad-override]
-        def b(self):
+        def b(self):  # ty: ignore[invalid-explicit-override]
             return self._b
 
         @b.setter

@@ -58,12 +58,12 @@ class CachedProperty(Generic[S, R]):
     ) -> None:
         self.__name__: str | None = None
         # pyrefly: ignore [bad-argument-type]
-        _ = update_wrapper(self, prop)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType, reportUnknownVariableType]
+        _ = update_wrapper(self, prop)  # type: ignore[arg-type] # ty: ignore[invalid-argument-type] # pyright: ignore[reportArgumentType, reportUnknownVariableType]
 
         self._prop = prop
 
         if key is None:
-            key = prop.__name__
+            key = prop.__name__  # ty: ignore[unresolved-attribute]
 
         if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
             msg = f"key must be a string.  Passed {type(key)=}"  # type: ignore[unreachable]  # pyright: ignore[reportUnreachable]
@@ -110,7 +110,7 @@ class CachedProperty(Generic[S, R]):
         return self._prop(instance)
 
     def __set__(self, instance: S | None, value: R) -> None:
-        msg = f"can't set attribute {self._prop.__name__}"
+        msg = f"can't set attribute {self._prop.__name__}"  # ty: ignore[unresolved-attribute]
         raise AttributeError(msg)
 
 

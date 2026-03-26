@@ -162,6 +162,7 @@ expand_tables = [
     "tool.pyproject2conda",
     "tool.pyright.executionEnvironments",
     "tool.pytest",
+    "tool.ty.overrides",
     "tool.typos",
     "tool.uv.dependency-groups",
 ]
@@ -270,6 +271,13 @@ reportUnusedCallResult = false
 analysis.respect-type-ignore-comments = false
 src.exclude = [ "**/vendored/**" ]
 src.include = [ "src", "tests" ]
+
+[[tool.ty.overrides]]
+include = [ "tests/**" ]
+
+[tool.ty.overrides.rules]
+invalid-argument-type = "ignore"
+unresolved-attribute = "ignore"
 
 # * Testing --------------------------------------------------------------------
 [tool.pytest.ini_options]

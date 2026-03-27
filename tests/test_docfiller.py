@@ -255,22 +255,20 @@ def test_docfiller_getitem() -> None:
 
 @pytest.fixture
 def params():
-    return dedent_recursive(
-        {
-            "summary": "A thing",
-            "a": """
+    return dedent_recursive({
+        "summary": "A thing",
+        "a": """
             a : int
                 A Parameter
         """,
-            "b": """
+        "b": """
         b : float
             B Parameter
         """,
-            "output": """
+        "output": """
         output : float
         """,
-        }
-    )
+    })
 
 
 @pytest.fixture
@@ -593,13 +591,15 @@ def test_docfiller_namespace() -> None:
         d0.assign(x="hello").levels_to_top("x")
 
     dd0 = (
-        d0.rename_levels(parameters="p", returns="r")
+        d0
+        .rename_levels(parameters="p", returns="r")
         .levels_to_top("p", "r")
         .insert_level("a")
     )
 
     dd1 = (
-        d1.rename_levels(parameters="p", returns="r")
+        d1
+        .rename_levels(parameters="p", returns="r")
         .levels_to_top("p", "r")
         .insert_level("b")
     )
@@ -731,7 +731,8 @@ def test_docfiller_assign_param() -> None:
     d = DocFiller()
 
     dd = (
-        d.assign_param(
+        d
+        .assign_param(
             name="x",
             ptype="float",
             desc="""

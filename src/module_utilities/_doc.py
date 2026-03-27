@@ -72,14 +72,10 @@ def doc(  # pylint: disable=useless-param-doc
             for component in docstring_components
         ]
 
-        decorated.__doc__ = "".join(
-            [
-                component
-                if isinstance(component, str)
-                else dedent(component.__doc__ or "")
-                for component in params_applied
-            ]
-        )
+        decorated.__doc__ = "".join([
+            component if isinstance(component, str) else dedent(component.__doc__ or "")
+            for component in params_applied
+        ])
 
         # error: "F" has no attribute "_docstring_components"
         # pyrefly: ignore [missing-attribute]

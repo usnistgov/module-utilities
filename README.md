@@ -80,14 +80,15 @@ Simple example of using `cached` module.
 ...     def aprop(self):
 ...         print("setting prop")
 ...         return ["aprop"]
+...
 ...     @cached.meth
 ...     def ameth(self, x=1):
 ...         print("setting ameth")
 ...         return [x]
+...
 ...     @cached.clear
 ...     def method_that_clears(self):
 ...         pass
-...
 >>> x = Example()
 >>> x.aprop
 setting prop
@@ -152,7 +153,6 @@ Simple example of using `DocFiller`.
 ...     {returns.output0}
 ...     """
 ...     return x + y + z
-...
 >>> print(indent_docstring(func))
 +  Parameters
 +  ----------
@@ -185,7 +185,6 @@ Simple example of using `DocFiller`.
 ...     {out}
 ...     """
 ...     pass
-...
 >>> print(indent_docstring(func1))
 +  Parameters
 +  ----------
@@ -204,7 +203,6 @@ Simple example of using `DocFiller`.
 >>> @dd(func1)
 ... def func2(x, y, z):
 ...     pass
-...
 
 >>> print(indent_docstring(func2))
 +  Parameters

@@ -301,7 +301,8 @@ def test_func_5(
     docfiller_float: DocFiller,
 ) -> None:
     d = (
-        docfiller_float.assign(type_="float")
+        docfiller_float
+        .assign(type_="float")
         .assign_param("z", "float", "z parameter.")
         .inherit(example_func)
     )

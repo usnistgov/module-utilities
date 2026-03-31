@@ -61,8 +61,12 @@ test = [
     { include-group = "test-noopt" },
 ]
 type = [
+<<<<<<< before updating
     "attrs",
     { include-group = "optional" },
+=======
+    { include-group = "nox" },
+>>>>>>> after updating
     { include-group = "pylint" },
     { include-group = "pytest" },
     { include-group = "typecheck-runner" },
@@ -182,17 +186,12 @@ check-file = false
 
 # * typecheck ---------------------------------------------------------------------
 [tool.mypy]
-exclude = [
-    ".eggs",
-    ".nox",
-    ".numba_cache",
-    ".tox",
-    ".venv",
-    "docs",
-]
 files = [
     "src",
     "tests",
+    # tools
+    "noxfile.py",
+    "tools",
 ]
 strict = true
 # options
@@ -213,8 +212,19 @@ ignore_errors = true
 
 [tool.pyrefly]
 enabled-ignores = [ "pyrefly" ]
+<<<<<<< before updating
 project-excludes = [ "src/module_utilities/vendored/*.py" ]
 project-includes = [ "src", "tests" ]
+=======
+project-includes = [
+    "src",
+    "tests",
+    # tools
+    "noxfile.py",
+    "tools",
+]
+search-path = [ "." ]
+>>>>>>> after updating
 
 [tool.pyright]
 exclude = [
@@ -229,6 +239,9 @@ exclude = [
 include = [
     "src",
     "tests",
+    # tools
+    "noxfile.py",
+    "tools",
 ]
 strict = [
     "noxfile.py",
@@ -269,8 +282,18 @@ reportUnusedCallResult = false
 [tool.ty]
 # Disable support for `type: ignore` comments
 analysis.respect-type-ignore-comments = false
+<<<<<<< before updating
 src.exclude = [ "**/vendored/**" ]
 src.include = [ "src", "tests" ]
+=======
+src.include = [
+    "src",
+    "tests",
+    # tools
+    "noxfile.py",
+    "tools",
+]
+>>>>>>> after updating
 
 [[tool.ty.overrides]]
 include = [ "tests/**" ]

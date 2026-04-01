@@ -547,7 +547,6 @@ nox.session(python=PYTHON_TEST_VERSIONS)(test)
 nox.session(name="test-conda", **CONDA_ALL_KWS)(test)
 
 
-<<<<<<< before updating
 @nox.session(name="test-noopt", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_noopt(
@@ -567,8 +566,6 @@ def test_noopt(
     )
 
 
-=======
->>>>>>> after updating
 @nox.session(name="test-notebook", python=[PYTHON_DEFAULT_VERSION])
 @add_opts
 def test_notebook(session: nox.Session, opts: SessionParams) -> None:

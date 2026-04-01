@@ -61,12 +61,9 @@ test = [
     { include-group = "test-noopt" },
 ]
 type = [
-<<<<<<< before updating
     "attrs",
-    { include-group = "optional" },
-=======
     { include-group = "nox" },
->>>>>>> after updating
+    { include-group = "optional" },
     { include-group = "pylint" },
     { include-group = "pytest" },
     { include-group = "typecheck-runner" },
@@ -164,6 +161,7 @@ expand_tables = [
     "project.urls",
     "tool.mypy.overrides",
     "tool.pyproject2conda",
+    "tool.pyrefly.sub-config",
     "tool.pyright.executionEnvironments",
     "tool.pytest",
     "tool.ty.overrides",
@@ -212,10 +210,7 @@ ignore_errors = true
 
 [tool.pyrefly]
 enabled-ignores = [ "pyrefly" ]
-<<<<<<< before updating
 project-excludes = [ "src/module_utilities/vendored/*.py" ]
-project-includes = [ "src", "tests" ]
-=======
 project-includes = [
     "src",
     "tests",
@@ -224,7 +219,10 @@ project-includes = [
     "tools",
 ]
 search-path = [ "." ]
->>>>>>> after updating
+
+[[tool.pyrefly.sub-config]]
+errors.bad-argument-type = "ignore"
+matches = "examples/usage/docfiller*"
 
 [tool.pyright]
 exclude = [
@@ -282,10 +280,7 @@ reportUnusedCallResult = false
 [tool.ty]
 # Disable support for `type: ignore` comments
 analysis.respect-type-ignore-comments = false
-<<<<<<< before updating
 src.exclude = [ "**/vendored/**" ]
-src.include = [ "src", "tests" ]
-=======
 src.include = [
     "src",
     "tests",
@@ -293,14 +288,15 @@ src.include = [
     "noxfile.py",
     "tools",
 ]
->>>>>>> after updating
 
 [[tool.ty.overrides]]
 include = [ "tests/**" ]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-attribute = "ignore"
 
-[tool.ty.overrides.rules]
-invalid-argument-type = "ignore"
-unresolved-attribute = "ignore"
+[[tool.ty.overrides]]
+include = [ "examples/**" ]
+rules.invalid-argument-type = "ignore"
 
 # * Testing --------------------------------------------------------------------
 [tool.pytest.ini_options]

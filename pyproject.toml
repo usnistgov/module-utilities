@@ -62,6 +62,7 @@ test = [
 ]
 type = [
     "attrs",
+    { include-group = "nox" },
     { include-group = "optional" },
     { include-group = "pylint" },
     { include-group = "pytest" },
@@ -160,6 +161,7 @@ expand_tables = [
     "project.urls",
     "tool.mypy.overrides",
     "tool.pyproject2conda",
+    "tool.pyrefly.sub-config",
     "tool.pyright.executionEnvironments",
     "tool.pytest",
     "tool.ty.overrides",
@@ -182,17 +184,12 @@ check-file = false
 
 # * typecheck ---------------------------------------------------------------------
 [tool.mypy]
-exclude = [
-    ".eggs",
-    ".nox",
-    ".numba_cache",
-    ".tox",
-    ".venv",
-    "docs",
-]
 files = [
     "src",
     "tests",
+    # tools
+    "noxfile.py",
+    "tools",
 ]
 strict = true
 # options
@@ -214,7 +211,18 @@ ignore_errors = true
 [tool.pyrefly]
 enabled-ignores = [ "pyrefly" ]
 project-excludes = [ "src/module_utilities/vendored/*.py" ]
-project-includes = [ "src", "tests" ]
+project-includes = [
+    "src",
+    "tests",
+    # tools
+    "noxfile.py",
+    "tools",
+]
+search-path = [ "." ]
+
+[[tool.pyrefly.sub-config]]
+errors.bad-argument-type = "ignore"
+matches = "examples/usage/docfiller*"
 
 [tool.pyright]
 exclude = [
@@ -229,6 +237,9 @@ exclude = [
 include = [
     "src",
     "tests",
+    # tools
+    "noxfile.py",
+    "tools",
 ]
 strict = [
     "noxfile.py",
@@ -270,14 +281,22 @@ reportUnusedCallResult = false
 # Disable support for `type: ignore` comments
 analysis.respect-type-ignore-comments = false
 src.exclude = [ "**/vendored/**" ]
-src.include = [ "src", "tests" ]
+src.include = [
+    "src",
+    "tests",
+    # tools
+    "noxfile.py",
+    "tools",
+]
 
 [[tool.ty.overrides]]
 include = [ "tests/**" ]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-attribute = "ignore"
 
-[tool.ty.overrides.rules]
-invalid-argument-type = "ignore"
-unresolved-attribute = "ignore"
+[[tool.ty.overrides]]
+include = [ "examples/**" ]
+rules.invalid-argument-type = "ignore"
 
 # * Testing --------------------------------------------------------------------
 [tool.pytest.ini_options]

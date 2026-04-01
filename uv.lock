@@ -9,7 +9,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-03-23T15:23:18.768981Z"
+exclude-newer = "2026-03-25T15:21:00.50359Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -35,14 +35,14 @@ wheels = [
 
 [[package]]
 name = "anyio"
-version = "4.12.1"
+version = "4.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "idna", marker = "python_full_version >= '3.14'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/96/f0/5eb65b2bb0d09ac6776f2eb54adee6abe8228ea05b20a5ad0e4945de8aac/anyio-4.12.1.tar.gz", hash = "sha256:41cfcc3a4c85d3f05c932da7c26d0201ac36f72abd4435ba90d0464a3ffed703", size = 228685, upload-time = "2026-01-06T11:45:21.246Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/14/2c5dd9f512b66549ae92767a9c7b330ae88e1932ca57876909410251fe13/anyio-4.13.0.tar.gz", hash = "sha256:334b70e641fd2221c1505b3890c69882fe4a2df910cba14d97019b90b24439dc", size = 231622, upload-time = "2026-03-24T12:59:09.671Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/38/0e/27be9fdef66e72d64c0cdc3cc2823101b80585f8119b5c112c2e8f5f7dab/anyio-4.12.1-py3-none-any.whl", hash = "sha256:d405828884fc140aa80a3c667b8beed277f1dfedec42ba031bd6ac3db606ab6c", size = 113592, upload-time = "2026-01-06T11:45:19.497Z" },
+    { url = "https://files.pythonhosted.org/packages/da/42/e921fccf5015463e32a3cf6ee7f980a6ed0f395ceeaa45060b61d86486c2/anyio-4.13.0-py3-none-any.whl", hash = "sha256:08b310f9e24a9594186fd75b4f73f4a4152069e3853f1ed8bfbf58369f4ad708", size = 114353, upload-time = "2026-03-24T12:59:08.246Z" },
 ]
 
 [[package]]
@@ -125,14 +125,14 @@ wheels = [
 
 [[package]]
 name = "basedpyright"
-version = "1.38.3"
+version = "1.38.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nodejs-wheel-binaries" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0f/58/7abba2c743571a42b2548f07aee556ebc1e4d0bc2b277aeba1ee6c83b0af/basedpyright-1.38.3.tar.gz", hash = "sha256:9725419786afbfad8a9539527f162da02d462afad440b0412fdb3f3cdf179b90", size = 25277430, upload-time = "2026-03-17T13:10:41.526Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/b4/26cb812eaf8ab56909c792c005fe1690706aef6f21d61107639e46e9c54c/basedpyright-1.38.4.tar.gz", hash = "sha256:8e7d4f37ffb6106621e06b9355025009cdf5b48f71c592432dd2dd304bf55e70", size = 25354730, upload-time = "2026-03-25T13:50:44.353Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/e3/3ebb5c23bd3abb5fc2053b8a06a889aa5c1cf8cff738c78cb6c1957e90cd/basedpyright-1.38.3-py3-none-any.whl", hash = "sha256:1f15c2e489c67d6c5e896c24b6a63251195c04223a55e4568b8f8e8ed49ca830", size = 12313363, upload-time = "2026-03-17T13:10:47.344Z" },
+    { url = "https://files.pythonhosted.org/packages/62/0b/3f95fd47def42479e61077523d3752086d5c12009192a7f1c9fd5507e687/basedpyright-1.38.4-py3-none-any.whl", hash = "sha256:90aa067cf3e8a3c17ad5836a72b9e1f046bc72a4ad57d928473d9368c9cd07a2", size = 12352258, upload-time = "2026-03-25T13:50:41.059Z" },
 ]
 
 [[package]]
@@ -1339,6 +1339,7 @@ test-notebook = [
 type = [
     { name = "attrs" },
     { name = "module-utilities", extra = ["all"] },
+    { name = "nox", marker = "python_full_version >= '3.14'" },
     { name = "pylint" },
     { name = "pytest" },
     { name = "typecheck-runner" },
@@ -1454,6 +1455,7 @@ test-notebook = [
 type = [
     { name = "attrs" },
     { name = "module-utilities", extras = ["all"] },
+    { name = "nox", marker = "python_full_version >= '3.14'", specifier = ">=2025.5.1" },
     { name = "pylint" },
     { name = "pytest" },
     { name = "typecheck-runner", marker = "python_full_version >= '3.10'", specifier = ">=0.1.0" },
@@ -2180,7 +2182,7 @@ wheels = [
 
 [[package]]
 name = "requests"
-version = "2.32.5"
+version = "2.33.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi", marker = "python_full_version >= '3.14'" },
@@ -2188,9 +2190,9 @@ dependencies = [
     { name = "idna", marker = "python_full_version >= '3.14'" },
     { name = "urllib3", marker = "python_full_version >= '3.14'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c9/74/b3ff8e6c8446842c3f5c837e9c3dfcfe2018ea6ecef224c710c85ef728f4/requests-2.32.5.tar.gz", hash = "sha256:dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf", size = 134517, upload-time = "2025-08-18T20:46:02.573Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/34/64/8860370b167a9721e8956ae116825caff829224fbca0ca6e7bf8ddef8430/requests-2.33.0.tar.gz", hash = "sha256:c7ebc5e8b0f21837386ad0e1c8fe8b829fa5f544d8df3b2253bff14ef29d7652", size = 134232, upload-time = "2026-03-25T15:10:41.586Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/db/4254e3eabe8020b458f1a747140d32277ec7a271daf1d235b70dc0b4e6e3/requests-2.32.5-py3-none-any.whl", hash = "sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6", size = 64738, upload-time = "2025-08-18T20:46:00.542Z" },
+    { url = "https://files.pythonhosted.org/packages/56/5d/c814546c2333ceea4ba42262d8c4d55763003e767fa169adc693bd524478/requests-2.33.0-py3-none-any.whl", hash = "sha256:3324635456fa185245e24865e810cecec7b4caf933d7eb133dcde67d48cee69b", size = 65017, upload-time = "2026-03-25T15:10:40.382Z" },
 ]
 
 [[package]]

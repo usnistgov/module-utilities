@@ -66,7 +66,7 @@ def test_cachedproperty_without_cache() -> None:
     assert x.thing == 1  # type: ignore[arg-type, comparison-overlap]
 
     # pyrefly: ignore [missing-attribute]
-    assert x._cache == {"thing": 1}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+    assert x._cache == {"thing": 1}  # type: ignore[unreachable] # pyright: ignore[reportAttributeAccessIssue]
     assert Tmp.there.__name__ == "there"
     assert Tmp.there.__doc__ == "B test"
 
@@ -74,7 +74,7 @@ def test_cachedproperty_without_cache() -> None:
         x.thing = 2  # ty: ignore[invalid-assignment]
 
     x.clear()
-    assert x._cache == {}  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+    assert x._cache == {}  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def test_meth_bad_hash() -> None:
@@ -556,7 +556,7 @@ def test_use_cache2() -> None:  # noqa: C901
         def clearer(self) -> list[int]:
             return [1, 2]
 
-        clearer = cached.clear(clearer, "meth2")
+        clearer = cached.clear(clearer, "meth2")  # ty: ignore[invalid-assignment]
 
     x = Tmp()
 

@@ -353,7 +353,7 @@ def meth(  # noqa: C901
     """
 
     def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # noqa: C901
-        key_func = _func.__name__ if key is None else key
+        key_func = _func.__name__ if key is None else key  # ty: ignore[unresolved-attribute]
 
         # use signature
         sig = signature(_func)
@@ -490,7 +490,7 @@ def clear(
     calling a
     ('a', 'b')
     """
-    if callable(key_or_func):
+    if not isinstance(key_or_func, str):
         function = key_or_func
         keys_inner = keys
     else:

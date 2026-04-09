@@ -9,7 +9,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-04-01T17:18:42.521745Z"
+exclude-newer = "2026-04-02T18:43:10.41175Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -1374,7 +1374,7 @@ dev = [
     { name = "pytest-env", marker = "python_full_version >= '3.14'" },
     { name = "pytest-sugar", marker = "python_full_version >= '3.14'" },
     { name = "pytest-xdist", marker = "python_full_version >= '3.14'" },
-    { name = "typecheck-runner", marker = "python_full_version >= '3.14'", specifier = ">=0.1.0" },
+    { name = "typecheck-runner", marker = "python_full_version >= '3.14'", specifier = ">=0.1.6" },
 ]
 docs = [
     { name = "autodocsumm", marker = "python_full_version >= '3.14'" },
@@ -1458,9 +1458,9 @@ type = [
     { name = "nox", marker = "python_full_version >= '3.14'", specifier = ">=2025.5.1" },
     { name = "pylint" },
     { name = "pytest" },
-    { name = "typecheck-runner", marker = "python_full_version >= '3.10'", specifier = ">=0.1.0" },
+    { name = "typecheck-runner", marker = "python_full_version >= '3.10'", specifier = ">=0.1.6" },
 ]
-typecheck-runner = [{ name = "typecheck-runner", marker = "python_full_version >= '3.10'", specifier = ">=0.1.0" }]
+typecheck-runner = [{ name = "typecheck-runner", marker = "python_full_version >= '3.10'", specifier = ">=0.1.6" }]
 
 [[package]]
 name = "mypy"

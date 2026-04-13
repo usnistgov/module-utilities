@@ -15,7 +15,7 @@ dependencies:
   - attrs
   - docstring-inheritance
   - ipykernel
-  - mypy>=1.15.0
+  - mypy>=1.20.0
   - nbclient
   - nbval
   - nox>=2025.5.1

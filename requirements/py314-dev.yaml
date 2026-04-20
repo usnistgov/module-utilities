@@ -15,17 +15,17 @@ dependencies:
   - attrs
   - docstring-inheritance
   - ipykernel
-  - mypy>=1.20.0
+  - mypy>=1.20.1
   - nbclient
   - nbval
-  - nox>=2025.5.1
+  - nox>=2026.4.10
   - pylint
   - pytest
   - pytest-cov
   - pytest-env
   - pytest-sugar
   - pytest-xdist
-  - typecheck-runner>=0.1.6
+  - typecheck-runner>=0.2.0
   - pip
   - pip:
       - pytest-accept

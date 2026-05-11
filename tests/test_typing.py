@@ -1,10 +1,14 @@
 # ruff: noqa: ERA001
+# pylint: disable=no-self-use,missing-class-docstring
 from __future__ import annotations
 
 import sys
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
+import pytest
+
+from module_utilities import docinherit
 from module_utilities.docfiller import DocFiller
 
 if sys.version_info >= (3, 11):
@@ -16,6 +20,14 @@ if TYPE_CHECKING:
     from typing import Any, TypeVar
 
     T = TypeVar("T")
+
+
+pytestmark = [
+    pytest.mark.inherit,
+    pytest.mark.skipif(
+        not docinherit.HAS_INHERIT, reason="docstring_inheritance not installed"
+    ),
+]
 
 
 def check(
@@ -61,23 +73,21 @@ class Template:
         return a
 
 
-docfiller_inherit = docfiller.factory_inherit_from_parent(Template)
-
-
-@docfiller(Template)
-class Other:
-    @docfiller_inherit()  # this fails for ty
-    def func0(self, a: int) -> int:
-        return a
-
-
-class Other2:
-    @docfiller.inherit(Template.func0)
-    def func0(self, a: int) -> int:
-        return a
-
-
 def test_stuff() -> None:
+
+    docfiller_inherit = docfiller.factory_inherit_from_parent(Template)
+
+    @docfiller(Template)
+    class Other:
+        @docfiller_inherit()  # this fails for ty
+        def func0(self, a: int) -> int:
+            return a
+
+    class Other2:
+        @docfiller.inherit(Template.func0)
+        def func0(self, a: int) -> int:
+            return a
+
     expected = "A thing"
     assert Template.__doc__ == expected
     assert Other.__doc__ == expected

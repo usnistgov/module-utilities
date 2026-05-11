@@ -66,12 +66,6 @@ def test_doc_decorate_simple() -> None:
         # pyrefly: ignore [bad-argument-type]
         assert dedent(f.__doc__).strip() == expected  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
 
-    # with pytest.raises(ValueError):
-
-    #     @docfiller.doc_decorate(1, a="there")  # type: ignore[arg-type]
-    #     def bad_func():
-    #         pass
-
 
 def test_append() -> None:
     def func() -> None:
@@ -119,7 +113,7 @@ def test_indent_docstring() -> None:
 
 def test_build_params_docstring() -> None:
     with pytest.raises(ValueError):  # noqa: PT011
-        s = docfiller._build_param_docstring(name="", ptype="", desc=["hello"])
+        _ = docfiller._build_param_docstring(name="", ptype="", desc=["hello"])
 
     s = docfiller._build_param_docstring(name="hello", ptype=None, desc="stuff")
 
@@ -213,7 +207,7 @@ def test_docfiller_getitem() -> None:
     assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
 
     with pytest.raises(TypeError):
-        ddd = d.assign_combined_key("zz", ["parameters"])
+        _ = d.assign_combined_key("zz", ["parameters"])
 
     d = DocFiller.from_docstring(
         """
@@ -527,8 +521,6 @@ def test_docfiller_namespace() -> None:
     out : int
         O param
     """
-
-    d0 = docfiller.DocFiller.from_docstring(s0)
 
     s1 = """
     Parameters

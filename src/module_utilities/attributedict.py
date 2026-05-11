@@ -95,9 +95,6 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         return self._entries[key]
 
     def _getslice(self, s: slice) -> AttributeDict:
-        start = s.start
-        stop = s.stop
-
         keys = list(self._entries.keys())
 
         if isinstance(s.start, int) or (s.start is None and isinstance(s.stop, int)):

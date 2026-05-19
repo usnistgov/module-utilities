@@ -50,9 +50,9 @@ def test_methods(adata: attributedict.AttributeDict, data: NestedMap) -> None:
     # slice
     s = slice("a", "b")
     assert adata[s] == "a_val\nb_val"
-    assert adata["a":"b"] == "a_val\nb_val"  # type: ignore[misc]
+    assert adata["a":"b"] == "a_val\nb_val"
 
-    assert adata[:"b"] == "a_val\nb_val"  # type: ignore[misc]
+    assert adata[:"b"] == "a_val\nb_val"
 
     dnum = attributedict.AttributeDict({key: str(val) for val, key in enumerate("abc")})
 

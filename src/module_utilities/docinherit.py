@@ -154,7 +154,7 @@ if HAS_INHERIT:
                 template = (
                     name_or_method
                     if callable(name_or_method)
-                    else getattr(cls, name_or_method or method.__name__)
+                    else getattr(cls, name_or_method or method.__name__)  # ty: ignore[unresolved-attribute]
                 )
                 return docfiller(template, _prepend=_prepend, **params)(method)
 
@@ -172,7 +172,7 @@ if HAS_INHERIT:
                 template = (
                     name_or_method
                     if callable(name_or_method)
-                    else getattr(cls, name_or_method or method.__name__)
+                    else getattr(cls, name_or_method or method.__name__)  # ty: ignore[unresolved-attribute]
                 )
                 return doc_inherit(parent=template)(method)
 
@@ -205,7 +205,7 @@ if HAS_INHERIT:
                 template = (
                     name_or_method
                     if callable(name_or_method)
-                    else getattr(cls, name_or_method or method.__name__)
+                    else getattr(cls, name_or_method or method.__name__)  # ty: ignore[unresolved-attribute]
                 )
                 return docfiller.inherit(template, _prepend=_prepend, **params)(method)
 

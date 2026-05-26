@@ -79,7 +79,7 @@ def doc(  # pylint: disable=useless-param-doc
 
         # error: "F" has no attribute "_docstring_components"
         # pyrefly: ignore [missing-attribute]
-        decorated._docstring_components = (  # type: ignore[attr-defined]  # pyright: ignore[reportFunctionMemberAccess]
+        decorated._docstring_components = (  # type: ignore[attr-defined]  # pyright: ignore[reportFunctionMemberAccess]  # ty: ignore[unresolved-attribute]
             docstring_components
         )
         return decorated

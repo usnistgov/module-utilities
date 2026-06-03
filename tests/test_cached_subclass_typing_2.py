@@ -45,7 +45,7 @@ class Base(Generic[R]):
     def val(self) -> R:
         return cast("R", 1)
 
-    @cached.prop
+    @cached.prop()
     def athing(self) -> Self:
         return self
 

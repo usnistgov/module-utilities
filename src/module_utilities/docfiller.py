@@ -915,6 +915,7 @@ class DocFiller:
             msg = f"keep_keys must be iterable, not {type(keep_keys)=}"  # type: ignore[unreachable]  # pyright: ignore[reportUnreachable]
             raise TypeError(msg)
 
+        updated_params: dict[str, NestedMapVal]
         if combine_keys:
             if isinstance(combine_keys, str):
                 combine_keys = [combine_keys]
@@ -930,7 +931,7 @@ class DocFiller:
         if key_map is None:
             pass
         elif callable(key_map):
-            updated_params = {key_map(k): v for k, v in updated_params.items()}  # ty: ignore[call-top-callable]
+            updated_params = {key_map(k): v for k, v in updated_params.items()}  # ty: ignore[call-top-callable, invalid-assignment]
         else:
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 

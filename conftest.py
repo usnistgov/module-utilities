@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True)  # noqa: RUF076
 def add_standard_imports(doctest_namespace: dict[str, Any]) -> None:  # noqa: D103
     from module_utilities import cached
 

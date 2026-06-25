@@ -1,4 +1,3 @@
-# pyright: reportPrivateUsage=false
 # pylint: disable=missing-class-docstring,no-self-use,protected-access,comparison-with-callable,use-implicit-booleaness-not-comparison
 
 from __future__ import annotations

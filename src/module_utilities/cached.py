@@ -96,14 +96,14 @@ class CachedProperty(Generic[S, R]):
             try:
                 return cast(
                     "R",
-                    instance._cache[self._key],  # pyright: ignore [reportPrivateUsage]
+                    instance._cache[self._key],
                 )
             except AttributeError:
                 object.__setattr__(instance, "_cache", {})
             except KeyError:
                 pass
 
-            instance._cache[self._key] = ret = self._prop(instance)  # pyright: ignore[reportPrivateUsage]
+            instance._cache[self._key] = ret = self._prop(instance)
 
             return ret
 
@@ -366,14 +366,14 @@ def meth(  # noqa: C901
                     try:
                         return cast(
                             "R",
-                            self._cache[key_func],  # pyright: ignore [reportPrivateUsage]
+                            self._cache[key_func],
                         )
                     except AttributeError:
                         object.__setattr__(self, "_cache", {})  # noqa: PLC2801
                     except KeyError:
                         pass
 
-                    self._cache[key_func] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
+                    self._cache[key_func] = ret = _func(self, *args, **kwargs)
 
                     return ret
 
@@ -390,8 +390,8 @@ def meth(  # noqa: C901
                 if not hasattr(self, "_cache"):
                     object.__setattr__(self, "_cache", {})  # noqa: PLC2801
 
-                if key_func not in self._cache:  # pyright: ignore [reportPrivateUsage]
-                    self._cache[key_func] = {}  # pyright: ignore [reportPrivateUsage]
+                if key_func not in self._cache:
+                    self._cache[key_func] = {}
 
                 params = bind(self, *args, **kwargs)
                 params.apply_defaults()
@@ -401,7 +401,7 @@ def meth(  # noqa: C901
                 )
 
                 try:
-                    return cast("R", self._cache[key_func][key_params])  # pyright: ignore [reportPrivateUsage]
+                    return cast("R", self._cache[key_func][key_params])
                 except TypeError:
                     # this means that key_lookup is bad hash
                     return _func(self, *args, **kwargs)
@@ -411,7 +411,7 @@ def meth(  # noqa: C901
                     print(f"unknown exception {e} in meth call")  # noqa: T201
                     raise
 
-                self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs)  # pyright: ignore [reportPrivateUsage]
+                self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs)
                 return ret
 
             return _func(self, *args, **kwargs)
@@ -502,11 +502,11 @@ def clear(
         def wrapper(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if hasattr(self, "_cache"):
                 if not keys_inner:
-                    self._cache.clear()  # pyright: ignore[reportPrivateUsage]
+                    self._cache.clear()
                 else:
                     for name in keys_inner:
                         with contextlib.suppress(KeyError):
-                            delitem(self._cache, name)  # pyright: ignore[reportPrivateUsage]
+                            delitem(self._cache, name)
 
             return func(self, *args, **kwargs)
 

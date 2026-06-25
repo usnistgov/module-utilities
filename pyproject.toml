@@ -261,20 +261,21 @@ enableReachabilityAnalysis = false
 
 [[tool.pyright.executionEnvironments]]
 root = "tests"
-reportUnusedCallResult = false
 reportMissingParameterType = false
-reportUnknownVariableType = false
-reportUnknownMemberType = false
 reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportUnusedCallResult = false
 
 [[tool.pyright.executionEnvironments]]
 root = "examples/usage"
-reportMissingParameterType = false
-reportUnknownVariableType = false
-reportUnknownParameterType = false
 reportDuplicateImport = false
-reportUnknownMemberType = false
+reportMissingParameterType = false
 reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
 
 [tool.ty]
 src.exclude = [ "**/vendored/**" ]

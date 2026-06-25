@@ -261,13 +261,18 @@ enableReachabilityAnalysis = false
 
 [[tool.pyright.executionEnvironments]]
 root = "tests"
-# reportCallIssue = false
-# reportArgumentType = false
-# reportMissingImports = false
 reportUnusedCallResult = false
 reportMissingParameterType = false
-reportUnknownParameterType = false
 reportUnknownVariableType = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+
+[[tool.pyright.executionEnvironments]]
+root = "examples/usage"
+reportMissingParameterType = false
+reportUnknownVariableType = false
+reportUnknownParameterType = false
+reportDuplicateImport = false
 reportUnknownMemberType = false
 reportUnknownArgumentType = false
 

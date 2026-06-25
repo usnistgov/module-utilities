@@ -222,12 +222,7 @@ errors.bad-argument-type = "ignore"
 matches = "examples/usage/docfiller*"
 
 [tool.pyright]
-typeCheckingMode = "standard"
-strict = [
-    "noxfile.py",
-    "src",
-    "tools/*.py",
-]
+typeCheckingMode = "strict"
 include = [
     "noxfile.py",
     "src",
@@ -244,13 +239,12 @@ exclude = [
     "src/module_utilities/vendored",
 ]
 enableTypeIgnoreComments = false
-# options
-# reportMissingSuperCall = true
 deprecateTypingAliases = true
 reportCallInDefaultInitializer = true
 reportImplicitOverride = true
 reportImplicitStringConcatenation = false
 reportImportCycles = true
+# reportMissingSuperCall = true
 reportOverlappingOverload = true
 reportPrivateImportUsage = false
 reportPrivateUsage = false
@@ -267,10 +261,21 @@ enableReachabilityAnalysis = false
 
 [[tool.pyright.executionEnvironments]]
 root = "tests"
-# reportCallIssue = false
-# reportArgumentType = false
-# reportMissingImports = false
+reportMissingParameterType = false
+reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
 reportUnusedCallResult = false
+
+[[tool.pyright.executionEnvironments]]
+root = "examples/usage"
+reportDuplicateImport = false
+reportMissingParameterType = false
+reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
 
 [tool.ty]
 src.exclude = [ "**/vendored/**" ]
@@ -383,11 +388,11 @@ pip-deps = [
     "grayskull>=3.1.1",
     "nbqa>=1.9.1",
     "prek>=0.4.5",
-    "pyrefly>=1.0.0",
+    "pyrefly>=1.1.0",
     "pyright>=1.1.410",
     "rooster>=0.1.1",
     "twine>=6.2.0",
-    "ty>=0.0.49",
+    "ty>=0.0.50",
 ]
 groups = [
     "basedpyright",

@@ -292,7 +292,7 @@ def _parse_docstring(
 
     parsed = cast(
         "dict[str, str | list[str] | list[Parameter]]",
-        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call] # pyright: ignore[reportPrivateUsage]  # pylint: disable=protected-access
+        NumpyDocString(doc)._parsed_data,  # type: ignore[no-untyped-call]  # pylint: disable=protected-access
     )
 
     return (

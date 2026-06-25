@@ -803,7 +803,7 @@ def test_docfiller_on_class() -> None:
     class hello2(hello):  # pylint: disable=missing-class-docstring,unused-variable
         pass
 
-    assert hello.__doc__ == expected
+    assert hello2.__doc__ == expected
 
 
 def test_prepend() -> None:

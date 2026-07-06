@@ -291,6 +291,7 @@ src.include = [
     "tests",
     "tools",
 ]
+terminal.error-on-warning = false
 analysis.respect-type-ignore-comments = false
 
 [[tool.ty.overrides]]

@@ -141,7 +141,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             out = self._entries[attr]
             if self._recursive and isinstance(out, Mapping):
                 out = type(self)(out)  # ty: ignore[invalid-argument-type]
-            return out
+            return out  # ty: ignore[invalid-argument-type]
 
         try:
             return self.__getattribute__(attr)

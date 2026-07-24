@@ -10,7 +10,7 @@ from importlib.metadata import version as _version
 
 from . import cached, docfiller
 
-try:  # noqa: RUF067
+try:  # ruff:ignore[non-empty-init-module]
     __version__ = _version("module-utilities")
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "999"

@@ -91,4 +91,4 @@ def test_methods(adata: attributedict.AttributeDict, data: NestedMap) -> None:
 
     # missing keys
     with pytest.raises(AttributeError):
-        adata.thing  # noqa: B018  # pylint: disable=pointless-statement
+        adata.thing  # ruff:ignore[useless-expression]  # pylint: disable=pointless-statement

@@ -305,7 +305,7 @@ def meth(
 ) -> Callable[[C_meth[S, P, R]], C_meth[S, P, R]]: ...
 
 
-def meth(  # noqa: C901
+def meth(  # ruff:ignore[complex-structure]
     func: C_meth[S, P, R] | None = None,
     /,
     *,
@@ -352,7 +352,7 @@ def meth(  # noqa: C901
     {'key': {((1, 2), frozenset()): [1, 2]}}
     """
 
-    def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # noqa: C901
+    def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # ruff:ignore[complex-structure]
         key_func = _func.__name__ if key is None else key  # ty: ignore[unresolved-attribute]
 
         # use signature
@@ -369,7 +369,7 @@ def meth(  # noqa: C901
                             self._cache[key_func],
                         )
                     except AttributeError:
-                        object.__setattr__(self, "_cache", {})  # noqa: PLC2801
+                        object.__setattr__(self, "_cache", {})  # ruff:ignore[unnecessary-dunder-call]
                     except KeyError:
                         pass
 
@@ -388,7 +388,7 @@ def meth(  # noqa: C901
         def wrapper_with_args(self: S, /, *args: P.args, **kwargs: P.kwargs) -> R:
             if (not check_use_cache) or (getattr(self, "_use_cache", False)):
                 if not hasattr(self, "_cache"):
-                    object.__setattr__(self, "_cache", {})  # noqa: PLC2801
+                    object.__setattr__(self, "_cache", {})  # ruff:ignore[unnecessary-dunder-call]
 
                 if key_func not in self._cache:
                     self._cache[key_func] = {}
@@ -408,7 +408,7 @@ def meth(  # noqa: C901
                 except KeyError:
                     pass
                 except Exception as e:  # pragma: no cover
-                    print(f"unknown exception {e} in meth call")  # noqa: T201
+                    print(f"unknown exception {e} in meth call")  # ruff:ignore[print]
                     raise
 
                 self._cache[key_func][key_params] = ret = _func(self, *args, **kwargs)

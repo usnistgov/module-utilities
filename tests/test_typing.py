@@ -1,4 +1,4 @@
-# ruff: noqa: ERA001
+# ruff:file-ignore[commented-out-code]
 # pylint: disable=no-self-use,missing-class-docstring
 from __future__ import annotations
 

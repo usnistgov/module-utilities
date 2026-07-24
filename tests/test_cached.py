@@ -8,7 +8,7 @@ from typing import Any
 import pytest
 
 from module_utilities import cached
-from module_utilities._typing_compat import override  # noqa: PLC2701
+from module_utilities._typing_compat import override  # ruff:ignore[import-private-name]
 
 
 def test_cachedproperty() -> None:
@@ -316,7 +316,7 @@ def test_meth4() -> None:
     do_meth_test(test(1, 2), key="there")
 
 
-def test_clear() -> None:  # noqa: C901
+def test_clear() -> None:  # ruff:ignore[complex-structure]
     class test(Baseclass):
         def __init__(self, a, b) -> None:  # pylint: disable=super-init-not-called
             self._a = a
@@ -504,7 +504,7 @@ def test_use_cache() -> None:
     assert "meth1" not in x._cache
 
 
-def test_use_cache2() -> None:  # noqa: C901
+def test_use_cache2() -> None:  # ruff:ignore[complex-structure]
     class Tmp:
         _use_cache = True
 

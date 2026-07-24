@@ -112,7 +112,7 @@ def test_indent_docstring() -> None:
 
 
 def test_build_params_docstring() -> None:
-    with pytest.raises(ValueError):  # noqa: PT011
+    with pytest.raises(ValueError):  # ruff:ignore[pytest-raises-too-broad]
         _ = docfiller._build_param_docstring(name="", ptype="", desc=["hello"])
 
     s = docfiller._build_param_docstring(name="hello", ptype=None, desc="stuff")

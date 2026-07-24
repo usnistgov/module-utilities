@@ -873,7 +873,7 @@ class DocFiller:
         return docinherit.factory_docfiller_inherit_from_parent(cls, self)
 
     @classmethod
-    def from_dict(  # noqa: C901
+    def from_dict(  # ruff:ignore[complex-structure]
         cls,
         params: Mapping[str, Any],
         namespace: str | None = None,

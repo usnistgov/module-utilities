@@ -477,7 +477,7 @@ class DocFiller:
     def __getitem__(self, key: str) -> DocFiller | str:
         val = self.data[key]
         if isinstance(val, Mapping):
-            return self.new_like(val)  # ty: ignore[invalid-argument-type]
+            return self.new_like(val)  # ty:ignore[invalid-argument-type]
 
         return val
 

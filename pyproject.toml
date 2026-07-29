@@ -278,6 +278,7 @@ reportUnusedCallResult = false
 
 [[tool.pyright.executionEnvironments]]
 root = "examples/usage"
+reportArgumentType = false
 reportDuplicateImport = false
 reportMissingParameterType = false
 reportUnknownArgumentType = false

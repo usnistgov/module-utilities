@@ -122,6 +122,7 @@ default-groups = [ "dev" ]
 fork-strategy = "requires-python"
 exclude-newer = "7 days"
 managed = true
+build-backend.source-exclude = [ ".*cache" ]
 build-backend.source-include = [ "tests/**" ]
 pip.annotation-style = "line"
 pip.generate-hashes = true
@@ -186,6 +187,9 @@ ignore = [
     "S603",    # - subprocess-without-shell-equals-true
     "S607",    # - start-process-with-partial-path
     "TID252",  # - Allow relative imports
+    # numpy/pandas
+    "NPY",     # - not using numpy?
+    "PD",      # - not using pandas?
 ]
 isort.known-first-party = [
     "module_utilities",
@@ -197,14 +201,24 @@ pylint.max-public-methods = 30
 ruff.strictly-empty-init-modules = false
 
 # Project specific ignores
-# Note use tests/.ruff.toml or examples/.ruff.toml for specific ignores
 [tool.ruff.lint.per-file-ignores]
+<<<<<<< before updating
 "src/**/*.py" = [
     "FIX002",
     "NPY",    # - not using numpy?
     "PD",     # - not using pandas?
     "SLF001", # - flake8-self (private access sometimes OK)
     "TD003",
+=======
+"**/*.ipynb" = [
+    # "B018",  # - Don't remove useless expressions in notebooks
+    # "D100",  # - undocumented-public-module
+    # "INP001",
+]
+"tests/**/*.py" = [
+    "D",    # - Don't need to document tests
+    "S101", # - Assert is fine with tests
+>>>>>>> after updating
 ]
 
 # * Checks ---------------------------------------------------------------------

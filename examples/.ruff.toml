@@ -1,0 +1,18 @@
+extend = "../pyproject.toml"
+
+[lint]
+
+[lint.extend-per-file-ignores]
+"**/*.ipynb" = [
+    "ANN",
+    "ARG001",
+    "ARG002",
+    "D101",
+    "D102",
+    "D103",
+    "F811",
+    "PLR6301",
+    "S101",
+    "SLF001",
+    "T201",
+]

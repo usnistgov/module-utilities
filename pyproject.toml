@@ -145,6 +145,7 @@ extend-exclude = [
     ".numba_cache",
     ".venv",
     "dist-conda",
+    "src/module_utilities/vendored",
 ]
 fix = true
 # unsafe-fixes = true
@@ -199,22 +200,11 @@ ruff.strictly-empty-init-modules = false
 # Note use tests/.ruff.toml or examples/.ruff.toml for specific ignores
 [tool.ruff.lint.per-file-ignores]
 "src/**/*.py" = [
-    # "ANN",     # - Annotations (just use mypy/pyright)
-    # "D102",    # - Missing docstring in public method
-    # "D103",    # - Missing docstring in public function
-    # "D202",    # - blank line after docstring
-    # "D415",    # - First line should end with a period, question mark, or exclamation point
-    # "D417",    # - Missing argument description in the docstring for {definition}: {name} (bad with docfiller)
-    # "DOC202",  # - Missing return from documentation
-    # "E402",    # - module level import not at top of file
-    # "ERA",     # - eradicate (want to keep some stuff)
-    # "ISC",     # - flake8-implicit-str-concat
-    "NPY", # - not using numpy?
-    # "SLF001",  # - flake8-self (private access sometimes OK)
-    "PD",  # - not using pandas?
-    # "PLR2004", # - numbers in comparison sometimes ok
-    # "PLR0913", # - complexity sometimes ok
-    # "PLR0917", # - complexity sometimes ok
+    "FIX002",
+    "NPY",    # - not using numpy?
+    "PD",     # - not using pandas?
+    "SLF001", # - flake8-self (private access sometimes OK)
+    "TD003",
 ]
 
 # * Checks ---------------------------------------------------------------------
@@ -245,13 +235,10 @@ expand_tables = [
     "tool.pyrefly.sub-config",
     "tool.pyright.executionEnvironments",
     "tool.pytest",
-<<<<<<< before updating
-    "tool.ty.overrides",
-=======
     "tool.ruff.format",
     "tool.ruff.lint",
     "tool.ruff.lint.per-file-ignores",
->>>>>>> after updating
+    "tool.ty.overrides",
     "tool.typos",
     "tool.uv.dependency-groups",
     "tool.uv.exclude-newer-package",

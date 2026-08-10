@@ -1,5 +1,6 @@
 # mypy: disable-error-code="no-untyped-def, no-untyped-call"
 # pylint: disable=protected-access,missing-class-docstring,no-member,attribute-defined-outside-init,no-self-use
+# ruff:file-ignore[invalid-class-name]
 
 from __future__ import annotations
 

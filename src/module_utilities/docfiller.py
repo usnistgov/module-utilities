@@ -2,7 +2,6 @@
 Fill and share documentation (:mod:`~module_utilities.docfiller`)
 =================================================================
 """
-# TODO(wpk): figure this out
 # pyright: reportImportCycles=false
 
 from __future__ import annotations

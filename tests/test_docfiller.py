@@ -1,5 +1,6 @@
 # mypy: disable-error-code="no-untyped-def"
 # pylint: disable=protected-access
+# ruff:file-ignore[invalid-class-name]
 from __future__ import annotations
 
 from textwrap import dedent

@@ -199,15 +199,13 @@ ruff.strictly-empty-init-modules = false
 
 [tool.ruff.lint.per-file-ignores]
 "src/**" = [
-    "FIX002",
-    "TD003",
+    "NPY",
+    "PD",
 ]
 "tests/**" = [
     "D",       # - Don't need to document tests
     "S101",    # - Assert is fine with tests
     "ANN",
-    "FURB118",
-    "N801",
     "PLR2004",
     "PLR6301",
     "RUF069",
@@ -216,12 +214,11 @@ ruff.strictly-empty-init-modules = false
     "ANN",
     "ARG",
     "D",
-    "F811",
     "PLR6301",
     "S101",
     "T201",
 ]
-"**" = [
+"*" = [
     "SLF001",
 ]
 

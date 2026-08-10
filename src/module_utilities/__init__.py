@@ -2,7 +2,6 @@
 Top level API :mod:`module_utilities`
 =====================================
 """
-# TODO(wpk): figure this out
 # pyright: reportImportCycles=false
 
 from importlib.metadata import PackageNotFoundError

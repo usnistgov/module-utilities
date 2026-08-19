@@ -64,7 +64,7 @@ def test_cachedproperty_without_cache() -> None:
     assert not hasattr(x, "_cache")
     x.clear()
 
-    assert x.thing == 1  # type: ignore[arg-type, comparison-overlap]
+    assert x.thing == 1  # type: ignore[arg-type, comparison-overlap]  # ty: ignore[invalid-attribute-access]
 
     # pyrefly: ignore [missing-attribute]
     assert x._cache == {"thing": 1}  # type: ignore[unreachable] # pyright: ignore[reportAttributeAccessIssue]
@@ -617,7 +617,7 @@ def test_error_with_slots() -> None:
     x = test(1, 2)
 
     with pytest.raises(AttributeError):
-        _ = x.prop  # type: ignore[arg-type]
+        _ = x.prop  # type: ignore[arg-type]  # ty: ignore[invalid-attribute-access]
 
     # but this should work fine:
     class test2:

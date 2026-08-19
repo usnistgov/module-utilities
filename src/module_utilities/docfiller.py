@@ -458,7 +458,7 @@ class DocFiller:
         if params is None:
             self.data = {}
         elif isinstance(params, dict):
-            self.data = params  # ty: ignore[invalid-assignment]
+            self.data = params
         else:
             self.data = dict(params)
         self._cache: dict[str, Any] = {}
@@ -476,7 +476,7 @@ class DocFiller:
     def __getitem__(self, key: str) -> DocFiller | str:
         val = self.data[key]
         if isinstance(val, Mapping):
-            return self.new_like(val)  # ty:ignore[invalid-argument-type]
+            return self.new_like(val)
 
         return val
 

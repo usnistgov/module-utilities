@@ -77,7 +77,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
             entries = {}
         if not isinstance(entries, dict):
             entries = dict(entries)
-        self._entries: dict[str, NestedMapVal] = entries  # ty: ignore[invalid-assignment]
+        self._entries: dict[str, NestedMapVal] = entries
         self._recursive = recursive
         self._allow_missing = allow_missing
 
@@ -140,7 +140,7 @@ class AttributeDict(MutableMapping[str, NestedMapVal]):
         if attr in self._entries:
             out = self._entries[attr]
             if self._recursive and isinstance(out, Mapping):
-                return type(self)(out)  # ty:ignore[invalid-argument-type]
+                return type(self)(out)
             return out
 
         try:

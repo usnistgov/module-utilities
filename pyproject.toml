@@ -205,33 +205,23 @@ ruff.strictly-empty-init-modules = false
     "PD",
 ]
 "tests/**" = [
-<<<<<<< before updating
-    "D",       # - Don't need to document tests
-    "S101",    # - Assert is fine with tests
+    "D",                         # - Don't need to document tests
+    "assert",                    # - Assert is fine with tests
     "ANN",
-    "PLR2004",
-    "PLR6301",
-    "RUF069",
+    "magic-value-comparison",
+    "no-self-use",
+    "float-equality-comparison",
 ]
 "examples/**" = [
     "ANN",
     "ARG",
     "D",
-    "PLR6301",
-    "S101",
-    "T201",
+    "no-self-use",
+    "assert",
+    "print",
 ]
 "*" = [
-    "SLF001",
-=======
-    "D",      # - Don't need to document tests
-    "assert", # - Assert is fine with tests
-]
-"examples/**" = [
-    # "useless-expression",         # - Don't remove useless expressions in notebooks
-    # "undocumented-public-module", # - undocumented-public-module
-    # "implicit-namespace-package",
->>>>>>> after updating
+    "private-member-access",
 ]
 
 # * Checks ---------------------------------------------------------------------

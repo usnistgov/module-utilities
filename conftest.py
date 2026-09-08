@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse]
 def add_standard_imports(doctest_namespace: dict[str, Any]) -> None:  # ruff:ignore[undocumented-public-function]
     from module_utilities import cached
 

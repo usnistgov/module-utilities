@@ -1,11 +1,7 @@
 [build-system]
 build-backend = "uv_build"
 requires = [
-<<<<<<< before updating
-    "uv-build>=0.12.6,<0.13.0",
-=======
     "uv-build>=0.12.8,<0.13.0",
->>>>>>> after updating
 ]
 
 [project]
@@ -163,17 +159,27 @@ docstring-code-format = true
 
 [tool.ruff.lint.per-file-ignores]
 "src/**" = [
-    "NPY", # - not using numpy?
-    "PD",  # - not using pandas?
+    "NPY",
+    "PD",
 ]
 "tests/**" = [
-    "assert", # - Assert is fine with tests
-    "D",      # - Don't need to document tests
+    "ANN",
+    "assert",                    # - Assert is fine with tests
+    "D",                         # - Don't need to document tests
+    "float-equality-comparison",
+    "magic-value-comparison",
+    "no-self-use",
 ]
 "examples/**" = [
-    # "useless-expression",         # - Don't remove useless expressions in notebooks
-    # "undocumented-public-module", # - undocumented-public-module
-    # "implicit-namespace-package",
+    "ANN",
+    "ARG",
+    "assert",
+    "D",
+    "no-self-use",
+    "print",
+]
+"*" = [
+    "private-member-access",
 ]
 
 [tool.ruff.lint]
@@ -218,34 +224,6 @@ pylint.max-public-methods = 30
 preview = true
 ruff.strictly-empty-init-modules = false
 
-<<<<<<< before updating
-[tool.ruff.lint.per-file-ignores]
-"src/**" = [
-    "NPY",
-    "PD",
-]
-"tests/**" = [
-    "D",                         # - Don't need to document tests
-    "assert",                    # - Assert is fine with tests
-    "ANN",
-    "magic-value-comparison",
-    "no-self-use",
-    "float-equality-comparison",
-]
-"examples/**" = [
-    "ANN",
-    "ARG",
-    "D",
-    "no-self-use",
-    "assert",
-    "print",
-]
-"*" = [
-    "private-member-access",
-]
-
-=======
->>>>>>> after updating
 # * Checks ---------------------------------------------------------------------
 [tool.repo-review]
 ignore = [
@@ -320,11 +298,6 @@ module = [ "module_utilities.vendored.docscrape" ]
 ignore_errors = true
 
 [tool.pyrefly]
-<<<<<<< before updating
-enabled-ignores = [ "pyrefly" ]
-project-excludes = [ "src/module_utilities/vendored/*.py" ]
-=======
->>>>>>> after updating
 project-includes = [
     "examples/usage/*.ipynb",
     "noxfile.py",
@@ -332,6 +305,7 @@ project-includes = [
     "tests",
     "tools",
 ]
+project-excludes = [ "src/module_utilities/vendored/*.py" ]
 search-path = [ "." ]
 enabled-ignores = [ "pyrefly" ]
 
@@ -404,7 +378,6 @@ reportUnknownParameterType = false
 reportUnknownVariableType = false
 
 [tool.ty]
-src.exclude = [ "**/vendored/**" ]
 src.include = [
     "examples/usage/*.ipynb",
     "noxfile.py",
@@ -412,6 +385,7 @@ src.include = [
     "tests",
     "tools",
 ]
+src.exclude = [ "**/vendored/**" ]
 terminal.error-on-warning = false
 analysis.respect-type-ignore-comments = false
 
@@ -441,18 +415,10 @@ addopts = [
     "--strict-markers",
     "-ra",
 ]
-<<<<<<< before updating
-testpaths = [
-    "README.md",
-    "module_utilities",
-    "tests",
-]
 # markers
 markers = [
     "inherit: docstring_inheritance dependent code",
 ]
-=======
->>>>>>> after updating
 # options
 filterwarnings = [ "error" ]
 log_level = "INFO"
@@ -520,19 +486,15 @@ pip-deps = [
     # these used solely for specking tools to be run via uvx ...
     "conda-lock>=4.0.2",
     "copier-template-extensions>=0.3.3",
-    "copier>=9.18.1",
+    "copier>=9.17.2",
     "grayskull>=3.1.1",
     "nbqa>=1.9.1",
-<<<<<<< before updating
     "prek>=0.5.1",
-=======
-    "prek>=0.5.2",
->>>>>>> after updating
     "pyrefly>=1.2.0",
     "pyright>=1.1.411",
     "rooster>=0.1.1",
     "twine>=7.0.0",
-    "ty>=0.0.77",
+    "ty>=0.0.74",
 ]
 groups = [
     "basedpyright",
@@ -548,11 +510,7 @@ scripts = [
     "noxfile.py",
     "tools/check_dist_version.py",
     "tools/clean_kernelspec.py",
-<<<<<<< before updating
-=======
-    "tools/cog_runner.py",
     "tools/get_version_from_pre_commit_config.py",
->>>>>>> after updating
 ]
 
 [[tool.uv-locker.requirements]]

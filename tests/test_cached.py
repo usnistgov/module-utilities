@@ -131,7 +131,7 @@ def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None) -
     if args is None:
         args = ()
     if kws is None:
-        kws = {}
+        kws: dict[str, Any] = {}
 
     param = None
     if key is None:

@@ -249,13 +249,18 @@ expand_tables = [
     "project.urls",
     "tool.mypy.overrides",
     "tool.pyproject2conda",
+<<<<<<< before updating
     "tool.pyrefly.sub-config",
+=======
+    "tool.pyrefly",
+>>>>>>> after updating
     "tool.pyright.executionEnvironments",
     "tool.pytest",
     "tool.ruff.format",
     "tool.ruff.lint",
     "tool.ruff.lint.per-file-ignores",
     "tool.ty.overrides",
+    "tool.ty.rules",
     "tool.typos",
     "tool.uv.dependency-groups",
     "tool.uv.exclude-newer-package",
@@ -308,6 +313,10 @@ project-includes = [
 project-excludes = [ "src/module_utilities/vendored/*.py" ]
 search-path = [ "." ]
 enabled-ignores = [ "pyrefly" ]
+min-severity = "warn"
+
+[tool.pyrefly.errors]
+unused-ignore = "error"
 
 [[tool.pyrefly.sub-config]]
 errors.bad-argument-type = "ignore"
@@ -389,6 +398,7 @@ src.exclude = [ "**/vendored/**" ]
 terminal.error-on-warning = false
 analysis.respect-type-ignore-comments = false
 
+<<<<<<< before updating
 [[tool.ty.overrides]]
 include = [ "tests/**" ]
 rules.invalid-argument-type = "ignore"
@@ -397,6 +407,10 @@ rules.unresolved-attribute = "ignore"
 [[tool.ty.overrides]]
 include = [ "examples/**" ]
 rules.invalid-argument-type = "ignore"
+=======
+[tool.ty.rules]
+unused-ignore-comment = "error"
+>>>>>>> after updating
 
 # * Testing --------------------------------------------------------------------
 [tool.pytest.ini_options]

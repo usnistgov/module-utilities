@@ -125,13 +125,21 @@ def prop_test(obj, prop, value, key=None, docstring=None) -> None:
         assert getattr(type(obj), prop).__doc__ == docstring
 
 
-def meth_test(obj, meth, value, args=None, kws=None, key=None, docstring=None) -> None:
+def meth_test(
+    obj,
+    meth,
+    value,
+    args=None,
+    kws: dict[str, Any] | None = None,
+    key=None,
+    docstring=None,
+) -> None:
     """Test a single property"""
 
     if args is None:
         args = ()
     if kws is None:
-        kws: dict[str, Any] = {}
+        kws = {}
 
     param = None
     if key is None:

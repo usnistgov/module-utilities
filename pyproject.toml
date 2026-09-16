@@ -310,13 +310,21 @@ project-excludes = [ "src/module_utilities/vendored/*.py" ]
 search-path = [ "." ]
 enabled-ignores = [ "pyrefly" ]
 min-severity = "warn"
+preset = "strict"
 
 [tool.pyrefly.errors]
 unused-ignore = "error"
 
 [[tool.pyrefly.sub-config]]
 errors.bad-argument-type = "ignore"
-matches = "examples/usage/docfiller*"
+errors.implicit-any-parameter = "ignore"
+errors.implicit-any-attribute = "ignore"
+matches = "examples/usage/**"
+
+[[tool.pyrefly.sub-config]]
+matches = "tests/**"
+errors.missing-override-decorator = "ignore"
+errors.implicit-any-parameter = "ignore"
 
 [tool.pyright]
 typeCheckingMode = "strict"

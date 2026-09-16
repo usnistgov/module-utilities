@@ -85,7 +85,6 @@ class CachedProperty(Generic[S, R]):
     def __get__(self, instance: None, owner: type[Any] | None = None) -> Self: ...
 
     @overload
-    # pyrefly: ignore [inconsistent-overload]
     def __get__(self, instance: S, owner: type[Any] | None = None) -> R: ...
 
     def __get__(self, instance: S | None, owner: type[Any] | None = None) -> Self | R:

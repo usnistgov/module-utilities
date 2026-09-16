@@ -42,19 +42,16 @@ def test_cachedproperty() -> None:
 # so need ignores
 def test_cachedproperty_without_cache() -> None:
     class Tmp:
-        # pyrefly: ignore [bad-specialization]
         @cached.CachedProperty  # type: ignore[type-var]  # pyright: ignore[reportArgumentType]
         def thing(self) -> int:
             """A test"""
             return 1
 
-        # pyrefly: ignore [no-matching-overload]
         @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def there(self) -> int:
             """B test"""
             return 2
 
-        # pyrefly: ignore [no-matching-overload]
         @cached.clear  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def clear(self) -> None:
             pass
@@ -609,7 +606,6 @@ def test_error_with_slots() -> None:
             self.a = a
             self.b = b
 
-        # pyrefly: ignore [no-matching-overload]
         @cached.prop  # type: ignore[type-var]  # pyright: ignore[reportCallIssue,reportArgumentType,reportUntypedFunctionDecorator]
         def prop(self):
             return self.a, self.b

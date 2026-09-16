@@ -214,7 +214,7 @@ def _params_to_string(
         params = [params]
 
     if isinstance(params[0], str):
-        return "\n".join(cast("list[str]", params))
+        return "\n".join(cast("list[str]", params))  # pyrefly: ignore [redundant-cast]
 
     out: dict[str, str] = {}
     for p in cast("list[TParameter]", params):
@@ -353,7 +353,6 @@ def dedent_recursive(data: NestedMap) -> NestedMap:
     out: dict[str, NestedMapVal] = {}
     for k in data:
         v = data[k]
-        # pyrefly: ignore [bad-argument-type]
         v = dedent(v).strip() if isinstance(v, str) else dedent_recursive(v)
         out[k] = v
     return out
@@ -930,7 +929,7 @@ class DocFiller:
         if key_map is None:
             pass
         elif callable(key_map):
-            updated_params = {key_map(k): v for k, v in updated_params.items()}  # ty: ignore[call-top-callable, invalid-assignment]
+            updated_params = {key_map(k): v for k, v in updated_params.items()}  # ty: ignore[invalid-assignment]
         else:
             updated_params = {key_map[k]: v for k, v in updated_params.items()}
 

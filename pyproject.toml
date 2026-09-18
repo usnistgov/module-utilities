@@ -330,7 +330,10 @@ unused-ignore = "error"
 variance-mismatch = "error"
 
 [[tool.pyrefly.sub-config]]
-<<<<<<< before updating
+matches = "noxfile.py"
+errors.open-unpacking = "ignore"
+
+[[tool.pyrefly.sub-config]]
 matches = "examples/usage/**"
 errors.bad-argument-type = "ignore"
 errors.implicit-any-attribute = "ignore"
@@ -343,10 +346,6 @@ errors.implicit-any-parameter = "ignore"
 errors.implicitly-defined-attribute = "ignore"
 errors.missing-override-decorator = "ignore"
 errors.unannotated-return = "ignore"
-=======
-matches = "noxfile.py"
-errors.open-unpacking = "ignore"
->>>>>>> after updating
 
 [tool.pyright]
 typeCheckingMode = "strict"

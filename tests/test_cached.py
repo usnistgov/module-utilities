@@ -332,7 +332,6 @@ def test_clear() -> None:  # ruff:ignore[complex-structure]
 
         @property
         @override
-        # pyrefly: ignore [bad-override]
         def a(self):  # ty: ignore[invalid-explicit-override]
             return self._a
 
@@ -343,7 +342,6 @@ def test_clear() -> None:  # ruff:ignore[complex-structure]
 
         @property
         @override
-        # pyrefly: ignore [bad-override]
         def b(self):  # ty: ignore[invalid-explicit-override]
             return self._b
 

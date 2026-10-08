@@ -565,7 +565,7 @@ def test_docfiller_namespace() -> None:
 
     for dd in (dd0, dd1):
 
-        @dd.decorate  # pylint: disable=cell-var-from-loop
+        @dd.decorate
         def func() -> None:
             """
             Parameters
@@ -801,7 +801,7 @@ def test_docfiller_on_class() -> None:
     assert hello.__doc__ == expected
 
     @d(hello)
-    class hello2(hello):  # pylint: disable=missing-class-docstring,unused-variable
+    class hello2(hello):  # pylint: disable=missing-class-docstring
         pass
 
     assert hello2.__doc__ == expected

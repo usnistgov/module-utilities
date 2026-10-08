@@ -48,7 +48,7 @@ def indent_docstring(
 
 
 # Factory method to create doc_decorate
-def doc_decorate(  # pylint: disable=useless-param-doc
+def doc_decorate(  # pylint: disable=useless-param-doc,useless-type-doc
     *docstrings: str | Callable[..., Any] | None,
     _prepend: bool = False,
     **params: str,
@@ -785,7 +785,7 @@ class DocFiller:
 
         return self.update(params)(*templates, _prepend=_prepend)
 
-    def inherit(  # pylint: disable=useless-param-doc
+    def inherit(  # pylint: disable=useless-param-doc,useless-type-doc
         self,
         template: Callable[..., Any],
         _prepend: bool = False,

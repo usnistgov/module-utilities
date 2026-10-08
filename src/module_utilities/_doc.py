@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     F = TypeVar("F", bound=Callable[..., Any])
 
 
-def doc(  # pylint: disable=useless-param-doc
+def doc(  # pylint: disable=useless-param-doc,useless-type-doc
     *docstrings: str | Callable[..., Any] | None, _prepend: bool = False, **params: str
 ) -> Callable[[F], F]:  # pyre-ignore
     """

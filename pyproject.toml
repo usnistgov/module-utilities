@@ -240,6 +240,7 @@ src_dir = [ "src" ]
 toplevel = [ "module_utilities" ]
 
 [tool.deptry]
+extend_exclude = [ "src/module_utilities/vendored/.*" ]
 known_first_party = [ "module_utilities" ]
 # Group: ignores
 per_rule_ignores.DEP001 = [ "pkginfo" ]

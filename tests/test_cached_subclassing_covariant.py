@@ -41,7 +41,7 @@ class Derived1(Base):
         return 1
 
     @cached_property
-    def f_functools(self) -> int:
+    def f_functools(self) -> int:  # ty: ignore[invalid-mutable-override]
         return 1
 
     @property

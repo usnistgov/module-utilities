@@ -332,7 +332,7 @@ def test_clear() -> None:  # ruff:ignore[complex-structure]
 
         @property
         @override
-        def a(self):  # ty: ignore[invalid-explicit-override]
+        def a(self):
             return self._a
 
         @a.setter
@@ -342,7 +342,7 @@ def test_clear() -> None:  # ruff:ignore[complex-structure]
 
         @property
         @override
-        def b(self):  # ty: ignore[invalid-explicit-override]
+        def b(self):
             return self._b
 
         @b.setter

@@ -437,7 +437,7 @@ unused-ignore-comment = "error"
 [[tool.ty.overrides]]
 include = [ "tests/**" ]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = [ "examples/**" ]

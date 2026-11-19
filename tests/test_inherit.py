@@ -157,7 +157,7 @@ def expected_func_template() -> str:
 
 def compare_func(func: Callable[..., Any], template: str, /, **kwargs: str) -> None:
     # pyrefly: ignore [missing-attribute]
-    assert func.__doc__.strip() == template.format(**kwargs).strip()  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
+    assert func.__doc__.strip() == template.format(**kwargs).strip()  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]  # ty: ignore[missing-union-attribute]
 
 
 def test_func_1(example_func: Callable[..., Any], expected_func_template: str) -> None:

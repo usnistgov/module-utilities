@@ -77,7 +77,7 @@ def test_append() -> None:
         """{x}"""
 
     # pyrefly: ignore [missing-attribute]
-    assert func1.__doc__.strip() == "Hellothere"  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
+    assert func1.__doc__.strip() == "Hellothere"  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]  # ty: ignore[missing-union-attribute]
 
     @docfiller.doc_decorate(func, x="some", _prepend=True)
     def func2() -> None:
@@ -205,7 +205,7 @@ def test_docfiller_getitem() -> None:
         """{z}"""
 
     # pyrefly: ignore [missing-attribute]
-    assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
+    assert func1.__doc__.strip() == func2.__doc__  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]  # ty: ignore[missing-union-attribute]
 
     with pytest.raises(TypeError):
         _ = d.assign_combined_key("zz", ["parameters"])

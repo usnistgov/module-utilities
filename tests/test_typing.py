@@ -2,19 +2,16 @@
 # pylint: disable=no-self-use,missing-class-docstring
 from __future__ import annotations
 
-import sys
 from textwrap import dedent
-from typing import TYPE_CHECKING
+from typing import (
+    TYPE_CHECKING,
+    assert_type,
+)
 
 import pytest
 
 from module_utilities import docinherit
 from module_utilities.docfiller import DocFiller
-
-if sys.version_info >= (3, 11):
-    from typing import assert_type
-else:
-    from typing_extensions import assert_type  # pyright: ignore[reportUnreachable]
 
 if TYPE_CHECKING:
     from typing import Any, TypeVar

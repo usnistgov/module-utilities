@@ -63,7 +63,7 @@ class CachedProperty(Generic[S, R]):
         self._prop = prop
 
         if key is None:
-            key = prop.__name__  # ty: ignore[unresolved-attribute]
+            key = prop.__name__  # ty: ignore[missing-attribute]
 
         if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]  # pragma: no cover
             msg = f"key must be a string.  Passed {type(key)=}"  # type: ignore[unreachable]  # pyright: ignore[reportUnreachable]
@@ -109,7 +109,7 @@ class CachedProperty(Generic[S, R]):
         return self._prop(instance)
 
     def __set__(self, instance: S | None, value: R) -> None:
-        msg = f"can't set attribute {self._prop.__name__}"  # ty: ignore[unresolved-attribute]
+        msg = f"can't set attribute {self._prop.__name__}"  # ty: ignore[missing-attribute]
         raise AttributeError(msg)
 
 
@@ -352,7 +352,7 @@ def meth(  # ruff:ignore[complex-structure]
     """
 
     def cached_lookup(_func: C_meth[S, P, R]) -> C_meth[S, P, R]:  # ruff:ignore[complex-structure]
-        key_func = _func.__name__ if key is None else key  # ty: ignore[unresolved-attribute]
+        key_func = _func.__name__ if key is None else key  # ty: ignore[missing-attribute]
 
         # use signature
         sig = signature(_func)

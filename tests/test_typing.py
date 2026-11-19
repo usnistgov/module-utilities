@@ -14,7 +14,7 @@ from module_utilities.docfiller import DocFiller
 if sys.version_info >= (3, 11):
     from typing import assert_type
 else:
-    from typing_extensions import assert_type  # pyright: ignore[reportUnreachable]
+    from typing import assert_type  # pyright: ignore[reportUnreachable]
 
 if TYPE_CHECKING:
     from typing import Any, TypeVar
